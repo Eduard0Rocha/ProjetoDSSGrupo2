@@ -1,0 +1,45 @@
+Use Case 3 : "Adicionar um carro"
+
+Descrição: Administrador adiciona um carro
+
+Cenário 3
+Pré-condição: O utilizador está autenticado como administrador;
+Pós-condição: O carro fica disponível para ser utilizado em jogos
+
+Fluxo normal:
+
+    1. Administrador consulta as categorias disponíveis
+    2. Administrador escolhe a categoria
+    3. Administrador indica a marca, modelo, cilindrada e potência do motor de combustão
+    4. Sistema verifica que a cilindrada é válida considerando a categoria
+    5. Administrador adiciona motor elétrico
+    6. Administrador indica potência do motor elétrico
+    7. Administrador indica o PAC do carro
+    8. Sistema verifica que o PAC é válido
+    9. Sistema guarda a informação do carro
+
+Fluxo Alternativo 1 [cilindrada não é válida] (passo 4)
+    4.1 Sistema informa que a cilindrada indicada não é válida
+    4.2 Sistema pede a informação novamente
+    4.3 Administrador indica a informação pedida
+    4.4 Sistema verifica que a cilindrada é válida considerando a categoria
+    4.5 Regressa a 5
+
+Fluxo Exceção 2 [administrador cancela operação após o sistema não validar a cilindrada] (passo 4.3)
+    4.3.1 Administrador escolhe cancelar a operação
+    4.3.2 Sistema cancela a operação
+
+Fluxo Alternativo 3 [administrador não adiciona motor elétrico] (passo 5)
+    5.1 Administrador não adiciona motor elétrico
+    5.2 Regressa a 7
+
+Fluxo Alternativo 4 [PAC não é válido] (passo 8)
+    8.1 Sistema informa que o PAC indicado não é válido
+    8.2 Sistema pede a informação novamente
+    8.3 Administrador indica a informação pedida
+    8.4 Sistema verifica que o PAC é válido
+    8.5 Regressa a 9
+
+Fluxo Exceção 5 [administrador cancela operação após o sistema não validar o PAC] (passo 8.3)
+    8.3.1 Administrador escolhe cancelar a operação
+    8.3.2 Sistema cancela a operação
