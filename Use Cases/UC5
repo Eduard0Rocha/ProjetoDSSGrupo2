@@ -1,0 +1,23 @@
+Use Case 5 : "Configurar campeonato"
+
+Descrição: Jogador configura um campeonato para jogar
+Cenário: 5
+Pré-Condição: Existência de campeonatos, de carros e de pilotos.
+Pós-Condição: Campeonato configurado pelo utilizador para jogar
+
+Fluxo Normal:
+
+	1. Sistema apresenta a lista de campeonatos e pede ao jogador que escolha um
+	2. Jogador escolhe um campeonato da lista
+	3. Jogador analisa os circuitos que compõem o campeonato
+	4. Jogador escolhe um carro de uma dada categoria com base na análise realizada
+	5. Jogador analisa o desempenho dos pilotos
+	6. Jogador escolhe o piloto com base na análise
+	7. Outros utilizadores podem juntar-se ao campeonato configurado
+	
+Fluxo Alternativo 1 [Jogador não gosta das pistas no campeonato escolhido] (passo 3):
+	3.1 Jogador cancela o ação
+	3.2 Sistema mostra a lista de campeonatos ao jogador e pede que escolha outro
+	3.3 Jogador escolhe outro campeonato
+	3.4 Jogador analisa os circuitos que compõem o campeonato
+	3.5 Regressa a 4
