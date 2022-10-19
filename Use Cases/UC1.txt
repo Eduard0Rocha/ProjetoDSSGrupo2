@@ -1,0 +1,32 @@
+Use Case 1 :  "Criação de campeonatos"
+
+Pré-Condição: O utilizador está autenticado como administrador
+Pós-Condição: O sistema fica com um novo campeonato jogável
+
+Fluxo Normal:
+    1. Utilizador dá nome ao campeonato
+    2. Sistema verifica que o nome do campeonato é válido
+    3. Utilizador escolhe os circuitos que vão pertencer ao campeonato
+    4. Sistema verifica se os circuitos são válidos
+    5. Sistema cria campeonato
+
+Fluxo Alternativo 1 [nome de campeonato inválido] (passo 2):
+    2.1. Sistema informa do ocorrido
+    2.2. Administrador indica um novo nome
+    2.3. Sistema verifica que o nome é válido
+    2.4. Regressa a 3
+
+Fluxo de Exceção 2 [Utilizador cancela após atribuir um nome errado](passo 2):
+    2.1.1. Utilizador cancela criação de campeonato
+    2.1.2. Sistema abandona criação do campeonato    
+    
+
+Fluxo Alternativo 3 [Circuitos adicionados são inválidos] (passo 4):
+    4.1. Sistema informa utilizador dos circuitos inválidos
+    4.2. Utilizador escolhe novos circuitos
+    4.3. Sistema verifica que novos circuitos são válidos
+    4.4. Regressa a 5
+
+Fluxo de Exceção 4 [Utilizador cancela após introduzir circuitos inválidos] (passo 4)
+    4.2.1. Utilizador cancela criação do campeonato
+    4.2.2. Sistema cancela a operação
