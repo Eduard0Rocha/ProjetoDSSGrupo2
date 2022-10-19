@@ -1,0 +1,48 @@
+Use Case 4 :  "Adicionar Pilotos"
+
+Descrição : Administrador adiciona um piloto 
+Cenário 4
+Pré Condição : O utilizador está autenticado como administrador; 
+Pós Condição : O piloto fica disponível para ser utilizado em jogos
+
+Fluxo normal:
+    1. Administrador adiciona o nome do piloto 
+    2. Sistema verifica que o nome do piloto não existe no programa    
+    3. Administrador adiciona o nível de perícia CTS 
+    4. Sistema verifica que CTS é valido
+    5. Administrador adiciona o critério SVA
+    6. Sistema verifica que o SVA é válido 
+    7. Sistema guarda a informação do novo piloto
+
+Fluxo Alternativo 1 [Nome já existe ] (passo 2)
+    2.1 Sistema informa que o nome já existe
+    2.2 Sistema pede a informação novamente
+    2.3 Administrador indica a informação pedida
+    2.4 Sistema verifica que o nome é válido
+    2.5 Regressa a 5
+
+Fluxo Exceção 2 [administrador cancela operação após o sistema não validar o nome ] (passo 2.3)
+    2.3.1 Administrador escolhe cancelar a operação
+    2.3.2 Sistema cancela a operação
+
+Fluxo Alternativo 3 [CTS não é válido] (passo 4)
+    4.1 Sistema informa que o CTS indicado não é válido
+    4.2 Sistema pede a informação novamente
+    4.3 Administrador indica a informação pedida
+    4.4 Sistema verifica que o CTS é válido
+    4.5 Regressa a 5
+
+Fluxo Exceção 4 [administrador cancela operação após o sistema não validar o CTS ] (passo 4.3)
+    4.3.1 Administrador escolhe cancelar a operação
+    4.3.2 Sistema cancela a operação
+
+Fluxo Alternativo 5 [SVA não é válido] (passo 6)
+    6.1 Sistema informa que o SVA indicado não é válido
+    6.2 Sistema pede a informação novamente
+    6.3 Administrador indica a informação pedida
+    6.4 Sistema verifica que o SVA é válido
+    6.5 Regressa a 7
+
+Fluxo Exceção 6 [administrador cancela operação após o sistema não validar o SVA ] (passo 6.3)
+    6.3.1 Administrador escolhe cancelar a operação
+    6.3.2 Sistema cancela a operação
