@@ -1,0 +1,19 @@
+Use Case 6 : "Configurar corridas"
+
+Descrição: Jogador configura as corridas
+Cenário: 5
+Pré-Condição: Configuração de campeonato concluida
+Pós-Condição: O utilizador configurou as corridas para jogar
+
+Fluxo Normal:
+
+	1. Sistema dá início ao campeonato
+	2. Sistema apresenta o circuito e as condições meteorológicas da primeira corrida
+	3. O jogador altera as afinações do carro com base nas condições
+	4. O jogador escolhe o tipo de pneus e o modo do motor de acordo com as condições
+	
+Fluxo Alternativo 1 [O Jogador decide não afinar o carro] (passo 3):
+	3.1 Regressa a 4
+	
+Fluxo Alternativo 2 [O carro escolhido não pode ser afinado] (passo 3):
+	3.1 Regressa a 4
