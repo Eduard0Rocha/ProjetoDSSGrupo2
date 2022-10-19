@@ -1,0 +1,37 @@
+Use Case 0 :  "Autenticar"
+
+Descrição : Administrador ou Jogador(premium ou não) faz login no sistema
+Cenário 0
+	Pré Condição : True ;
+	Pós Condição : O utilizador está autenticado;
+
+Fluxo normal :
+1. O utilizador insere que é um utilizador já existente no sistema
+2. O utilizador seleciona se quer fazer login como jogador ou administrador;
+3. O utilizador insere as credenciais .
+4. Sistema verifica que as credenciais são válidas;
+5. O utilizador está autenticado no sistema como administrador/jogador;
+
+
+Fluxo Alternativo 1- [Utilizador insere  que é um jogador novo(passo 1)]
+1.1. Sistema pede credenciais novas
+1.2. Utilizador insere as credenciais 
+1.3. Sistema pede credenciais novamente
+1.4. Utilizador insere as credenciais novamente 
+1.5. Sistema verifica que as credenciais são iguais
+1.5. Sistema regista um novo utilizador  
+1.6. Regressa a 2
+
+
+Fluxo Alternativo 2- [Utilizador insere credenciais diferentes(passo 1.5)]
+1.5.1. Sistema informa que as credenciais são diferentes
+1.5.2. Regressa a 1.1
+
+
+Fluxo Exceção 3[[Utilizador cancela operação após ter inserido credenciais diferentes] (passo 1.5.1) 
+1.5.1.1  Utilizador decide cancelar operação
+1.5.1.2  Sistema Cancela operação
+
+Fluxo Exceção 4[[Utilizador cancela operação após o sistema não validar as credenciais] (passo 4)
+4.1 Utilizador decide cancelar operação
+4.2 Sistema Cancela operação
