@@ -1,0 +1,19 @@
+Use Case 7 : “ Apresentar Resultado Final”
+
+Descrição: Sistema apresenta o resultado final
+Cenário: 5
+Pré-Condição: Simulação de todas as corridas de um campeonato realizadas
+Pós-Condição: O Sistema apresenta o resultado final
+
+Fluxo Normal:
+	1. O sistema apresenta as classificações finais do campeonato
+	2. O jogador faz login no sistema
+	3. Com base na classificação do jogador o sistema adiciona os pontos respetivos à pontuação global
+	4. O jogador tem pontos suficientes para subir de posição no ranking global
+	
+Fluxo Exceção 1 [O jogador não tem conta ou não faz login] (passo 2):
+	2.1 O sistema não contabiliza os seus pontos
+	2.2 O sistema cancela a operação
+	
+Fluxo Alternativo 2[O jogador não tem pontos suficientes para subir de posição no ranking global] (passo 4):
+	4.1 O jogador mantém o ranking global
