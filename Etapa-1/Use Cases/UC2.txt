@@ -1,0 +1,50 @@
+Use Case 2 :  "Adicionar Circuito"
+
+Descrição : Administrador adiciona um circuito 
+Cenário 2
+	Pré Condição : O utilizador está autenticado como administrador;
+	Pós Condição : O circuito fica disponível para ser utilizado em Jogos
+
+Fluxo normal:
+    1. Administrador adiciona o nome do circuito
+    2. Sistema verifica que o nome do novo circuito não existe no programa    
+    3. Administrador adiciona a distância da pista, nº de curvas e nº de chicanes
+    4. Sistema verifica que a distância da pista, nº de curvas e nº de chicanes são válidos
+    5. Sistema informa qual o nº de retas e a lista das curvas
+    6. Administrador escolhe o GDU de cada curva
+    7. Sistema verifica que os GDU são válidos
+    8. Sistema indica o nº de voltas do circuito
+    9. Sistema regista o novo circuito
+
+Fluxo Alternativo 1 [Nome já existe]
+    2.1 Sistema informa que o nome já existe
+    2.2 Sistema pede a informação novamente
+    2.3 Administrador indica a informação pedida
+    2.4 Sistema verifica que o nome é válido
+    2.5 Regressa a 3
+
+Fluxo Exceção 2 [administrador cancela operação após o sistema não validar o nome]
+    2.3.1 Administrador escolhe cancelar a operação
+    2.3.2 Sistema cancela a operação
+
+Fluxo Alternativo 3 [ distância da pista, nº de curvas e nº de chicanes não válido]
+    4.1 Sistema informa que a informação indicada não é válida
+    4.2 Sistema pede a informação novamente
+    4.3 Administrador indica a informação pedida
+    4.4 Sistema verifica se é válida
+    4.5 Regressa a 5
+
+Fluxo Exceção 4 [administrador cancela operação após o sistema não validar a distância da pista, nº de curvas e nº de chicanes]
+    4.3.1 Administrador escolhe cancelar a operação
+    4.3.2 Sistema cancela a operação
+
+Fluxo Alternativo 5 [GDU não é válido]
+    7.1 Sistema informa que o GDU indicado não é válido
+    7.2 Sistema pede a informação novamente
+    7.3 Administrador indica a informação pedida
+    7.4 Sistema verifica que o GDU é válido
+    7.5 Regressa a 8
+
+Fluxo Exceção 6 [administrador cancela operação após o sistema não validar o GDU]
+    7.3.1 Administrador escolhe cancelar a operação
+    7.3.2 Sistema cancela a operação
