@@ -34,4 +34,30 @@ public class Jogador {
         this.pontosglobais = j.pontosglobais;
         this.codJogador = new String(j.codJogador);
     }
+
+    /**
+     * Adiciona pontos globais ao jogador
+     * @param pontos pontos a atribuir
+     */
+    public void addPontosGlob(int pontos) {
+
+        this.pontosglobais += pontos;
+    }
+
+    /**
+     * Adiciona pontos de corrida ao jogador
+     * @param pontos pontos a atribuir
+     */
+    public void addPontosCorr(int pontos) {
+
+        this.pontosCorr += pontos;
+    }
+
+    /**
+     * @return Valor dos pontos globais
+     */
+    public int getPontosGlob() {
+
+        return this.pontosglobais;
+    }
 }
