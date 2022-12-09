@@ -7,9 +7,9 @@ public class C2 extends Carro {
     private int afinacao_mecanica;
     private boolean isValid;
 
-    public C2(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, int PAC, String codCarro, int a_mecanica) {
+    public C2(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus, int a_mecanica) {
 
-        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro);
+        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
 
         this.afinacao_mecanica = a_mecanica;
         this.isValid = (cilindrada >= 3000 && cilindrada <= 5000);

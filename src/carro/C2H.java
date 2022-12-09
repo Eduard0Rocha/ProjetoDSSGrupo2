@@ -6,9 +6,9 @@ public class C2H extends C2 implements Hibrido {
 
     private int potencia_motor_eletrico;
 
-    public C2H(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, int PAC, String codCarro, int a_mecanica, int potencia_motor_eletrico) {
+    public C2H(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus, int a_mecanica, int potencia_motor_eletrico) {
 
-        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, a_mecanica);
+        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica);
 
         this.potencia_motor_eletrico = potencia_motor_eletrico;
     }

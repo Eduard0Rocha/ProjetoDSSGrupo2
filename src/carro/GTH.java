@@ -6,9 +6,9 @@ public class GTH extends GT implements Hibrido {
 
     private int potencia_motor_eletrico;
 
-    public GTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, int PAC, String codCarro, int potencia_motor_eletrico) {
+    public GTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus, int potencia_motor_eletrico) {
 
-        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro);
+        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
 
         this.potencia_motor_eletrico = potencia_motor_eletrico;
     }

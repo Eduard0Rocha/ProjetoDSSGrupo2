@@ -38,7 +38,7 @@ public abstract class Carro {
         }
     }
 
-    public Carro(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, int PAC, String codCarro) {
+    public Carro(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro) {
 
         this.marca = new String(marca);
         this.modelo = new String(modelo);
@@ -55,9 +55,31 @@ public abstract class Carro {
 
         for (int i = 0; i < 4; i++) {
 
-            this.pneus.add(new Pneu());
+            this.pneus.add(new Pneu(this.codCarro));
         }
     }
+
+    public Carro(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus) {
+
+        this.marca = new String(marca);
+        this.modelo = new String(modelo);
+        this.cilindrada = cilindrada;
+        this.potencia = potencia;
+        this.fiabilidade = fiabilidade;
+        this.PAC = PAC;
+        this.distPerc = 0;
+        this.DNF = false;
+        this.tempo = 0;
+        this.codCarro = new String(codCarro);
+
+        this.pneus = new ArrayList<Pneu>();
+
+        for (int i = 0; i < 4; i++) {
+
+            this.pneus.add(new Pneu(tipo_de_pneus, this.codCarro));
+        }
+    }
+
 
     public Carro(Carro c) {
 

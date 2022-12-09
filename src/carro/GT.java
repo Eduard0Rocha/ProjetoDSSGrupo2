@@ -6,9 +6,9 @@ public class GT extends Carro {
 
     private boolean isValid;
 
-    public GT(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, int PAC, String codCarro) {
+    public GT(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus) {
 
-        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro);
+        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
 
         this.isValid = (cilindrada >= 2000 && cilindrada <= 4000);
     }

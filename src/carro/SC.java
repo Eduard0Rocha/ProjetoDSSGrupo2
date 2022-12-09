@@ -8,9 +8,9 @@ public class SC extends Carro {
     private float piloto_sva;
     private boolean isValid;
 
-    public SC(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, int PAC, String codCarro) {
+    public SC(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus) {
 
-        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro);
+        super(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
 
         this.piloto_cts = 0.5F;
         this.piloto_sva = 0.5F;

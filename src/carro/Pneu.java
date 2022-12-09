@@ -13,6 +13,13 @@ public class Pneu {
         this.codCarro = null;
     }
 
+    public Pneu(String codCarro) {
+
+        this.tipo = null;
+        this.estado = 100;
+        this.codCarro = new String(codCarro);
+    }
+
     public Pneu(String tipo, String codCarro) {
 
         this.tipo = new String(tipo);
