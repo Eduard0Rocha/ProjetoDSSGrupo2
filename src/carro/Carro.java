@@ -93,6 +93,11 @@ public abstract class Carro {
 
     public abstract void setFiabilidade(int volta, int clima);
 
+    public int getCilindrada() {
+
+        return this.cilindrada;
+    }
+
     protected int getFiabilidade() {
 
         return this.fiabilidade;
