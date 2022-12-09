@@ -8,8 +8,8 @@ import users.Jogador;
 public class Piloto {
 
     private String nome;
-    private int cts;
-    private int sva;
+    private float cts;
+    private float sva;
     private String codPiloto;
 
     /**
@@ -30,7 +30,7 @@ public class Piloto {
      * @param sva avaliação sva do Piloto
      * @param codPiloto código identificador do piloto
      */
-    public Piloto(String nome, int cts, int sva, String codPiloto) {
+    public Piloto(String nome, float cts, float sva, String codPiloto) {
 
         this.nome = new String(nome);
         this.cts = cts;
@@ -55,12 +55,12 @@ public class Piloto {
         return new String(this.nome);
     }
 
-    public int getCTS() {
+    public float getCTS() {
 
         return this.cts;
     }
 
-    public int getSVA() {
+    public float getSVA() {
 
         return this.sva;
     }
@@ -88,9 +88,9 @@ public class Piloto {
         sb.append("\nNome: ");
         sb.append(new String(this.nome));
         sb.append("\nCTS: ");
-        sb.append(new String(Integer.toString(this.cts)));
+        sb.append(new String(Float.toString(this.cts)));
         sb.append("\nSVA: ");
-        sb.append(new String(Integer.toString(this.sva)));
+        sb.append(new String(Float.toString(this.sva)));
 
         return sb.toString();
     }

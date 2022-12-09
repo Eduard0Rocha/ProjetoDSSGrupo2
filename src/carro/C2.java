@@ -27,6 +27,11 @@ public class C2 extends Carro {
         return (x > fiabilidade);
     }
 
+    public int getAfinacao_mecanica() {
+
+        return this.afinacao_mecanica;
+    }
+
     @Override
     public void setFiabilidade(int volta, int clima) {
 
