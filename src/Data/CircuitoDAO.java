@@ -1,7 +1,7 @@
 package Data;
 
 import carro.Carro;
-import circuito.Ciruito;
+import circuito.Circuito;
 import circuito.CondicoesAtmosfericas;
 
 import java.sql.*;
@@ -37,8 +37,8 @@ public class CircuitoDAO {
             throw new NullPointerException(e.getMessage());
         }
     }
-    public Ciruito get(Object key) {
-        Ciruito t = new Ciruito();
+    public Circuito get(Object key) {
+        Circuito t = new Circuito();
         CondicoesAtmosfericas s=null;
         try {
 
@@ -49,7 +49,7 @@ public class CircuitoDAO {
             {
                 if (rs.next()) {  // A chave existe na tabela
 
-                    t=new Ciruito(Integer.toString(rs.getInt("codCirc")),
+                    t=new Circuito(Integer.toString(rs.getInt("codCirc")),
                             rs.getInt("nvoltas"),
                             rs.getString("nomeCircuto"),
                             rs.getString("localizacao"),
@@ -120,15 +120,15 @@ public class CircuitoDAO {
     }
 
     /*
-     *Verifica se existe uma turma existe na BD
+     *Verifica se existe um circuito existe na BD
      */
     public boolean containsValue(Object value) {
-        Ciruito t = (Ciruito) value;
+        Circuito t = (Circuito) value;
         return this.containsKey(t.getCodCircuito());
     }
 
-    public Ciruito put(String key, Ciruito t) {
-        Ciruito res = null;
+    public Circuito put(String key, Circuito t) {
+        Circuito res = null;
         CondicoesAtmosfericas s = t.getCondicoesATM();
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
