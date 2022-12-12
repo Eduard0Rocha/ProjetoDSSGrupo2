@@ -14,6 +14,10 @@ public class Main {
         a.get("10");
         System.out.println(c.get("1").toString());
 
+
+
+
+
         System.out.println("---------------TP-DSS-GRUPO2-FASE3-------------------");
         System.out.println("Insira as operações que pretende realizar  : ");
         System.out.println("1-> Adicionar um circuito à BD  : ");
@@ -37,7 +41,7 @@ public class Main {
 
             Random ll= new Random();
             String cod =Integer.toString(ll.nextInt());
-            Ciruito C = new Ciruito(cod,voltas,ncirc,local,dist,reta);
+            Circuito C = new Circuito(cod,voltas,ncirc,local,dist,reta);
             c.put(C.getCodCircuito(),C);
         }
     }
