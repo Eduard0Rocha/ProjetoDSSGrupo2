@@ -59,6 +59,7 @@ public abstract class Carro {
         }
     }
 
+
     public Carro(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus) {
 
         this.marca = new String(marca);
@@ -123,5 +124,9 @@ public abstract class Carro {
     protected int getFiabilidade() {
 
         return this.fiabilidade;
+    }
+
+    public void setPneus(ArrayList<Pneu> pneus) {
+        this.pneus = pneus;
     }
 }
