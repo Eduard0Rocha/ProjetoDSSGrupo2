@@ -1,5 +1,4 @@
-package src.campeonato;
-
+package campeonato;
 
 import circuito.Circuito;
 

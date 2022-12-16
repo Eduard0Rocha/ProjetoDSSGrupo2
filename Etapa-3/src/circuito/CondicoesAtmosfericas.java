@@ -1,4 +1,4 @@
-package src.circuito;
+package circuito;
 
 import java.util.Objects;
 

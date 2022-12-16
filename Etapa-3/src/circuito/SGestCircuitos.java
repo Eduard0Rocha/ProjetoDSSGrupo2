@@ -1,7 +1,8 @@
-package src.circuito;
+package circuito;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface SGestCircuitos {
-    public abstract boolean  createCicruito(int voltas, String nomeCirc, String local, float dist, List<Integer> curvas, List<Integer> retas, List<Integer> chicanes, float temperatura, int humidade, float temp_Asf, String estado_climaterico,int drs);
+    public abstract boolean  createCicruito(int voltas, String nomeCirc, String local, float dist, List<Integer> curvas, List<Integer> retas, List<Integer> chicanes, float temperatura, int humidade, float temp_Asf, String estado_climaterico,int drs) throws SQLException;
 }

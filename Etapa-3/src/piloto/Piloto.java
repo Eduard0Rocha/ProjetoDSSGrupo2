@@ -1,6 +1,6 @@
-package src.piloto;
+package piloto;
 
-import src.users.Jogador;
+import users.Jogador;
 
 /**
  * Classe responsável por armazenar e operar sobre a informação do piloto
@@ -90,15 +90,7 @@ public class Piloto {
 
     public String toString() {
 
-        StringBuilder sb = new StringBuilder("Piloto ");
-
-        sb.append(new String(this.codPiloto));
-        sb.append("\nNome: ");
-        sb.append(new String(this.nome));
-        sb.append("\nCTS: ");
-        sb.append(new String(Float.toString(this.cts)));
-        sb.append("\nSVA: ");
-        sb.append(new String(Float.toString(this.sva)));
+        String sb = ("Piloto: " + this.codPiloto + " |Nome: " + this.nome + " |SVA: " + this.sva + " |CTS: "+this.cts +"\n");
 
         return sb.toString();
     }

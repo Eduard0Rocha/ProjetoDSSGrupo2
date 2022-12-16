@@ -1,15 +1,17 @@
-package src.campeonato;
+package campeonato;
 
 
-import src.carro.Carro;
-import src.carro.CarrosFacade;
-import src.carro.Pneu;
-import src.circuito.Circuito;
-import src.circuito.CircuitosFacade;
-import src.piloto.Piloto;
-import src.piloto.PilotoFacade;
-import src.users.*;
+import carro.Carro;
+import carro.CarrosFacade;
+import carro.Pneu;
+import circuito.Circuito;
+import circuito.CircuitosFacade;
+import circuito.Exceptions.NonExistantKey;
+import piloto.Piloto;
+import piloto.PilotoFacade;
+import users.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +104,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
      * @return Retorna true se a corrida foi adicionada com sucesso, false caso contrário
      */
     @Override
-    public boolean addCorrida(String codCamp, String codCorr, String codCirc) {
+    public boolean addCorrida(String codCamp, String codCorr, String codCirc) throws SQLException, NonExistantKey {
         if(codCamp==null || codCorr==null || codCirc==null || !this.campeonatos.containsKey(codCamp)) return false;
         Campeonato c = this.campeonatos.get(codCamp);
         CircuitosFacade x = new CircuitosFacade();
@@ -177,7 +179,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
      * @return true se o Registo foi adicionado com sucesso, false caso contrário
      */
     @Override
-    public boolean addRegisto(String codJog, String codPiloto, String codCarro, String codCamp) {
+    public boolean addRegisto(String codJog, String codPiloto, String codCarro, String codCamp) throws SQLException {
         if(codJog==null || codPiloto==null || codCarro==null || codCamp==null || !this.campeonatos.containsKey(codCamp)) return false;
         Campeonato c = this.campeonatos.get(codCamp);
         UserFacade u = new UserFacade();

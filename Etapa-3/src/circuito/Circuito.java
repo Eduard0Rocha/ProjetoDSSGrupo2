@@ -1,4 +1,4 @@
-package src.circuito;
+package circuito;
 
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class Circuito {
         this.curvasGDU= new ArrayList<Integer>();
         this.chicanesGDU= new ArrayList<Integer>();
     }
-    public Circuito(String codCicruito,int nvoltas,String nomeCircuito,String localizacao,float distancia,int DRS){
+    public Circuito(String codCicruito,int nvoltas,String nomeCircuito,String localizacao,float distancia,int DRS,List<Integer>curvas ,List<Integer>retas,List<Integer>chicanes ){
         this.nvoltas=nvoltas;
         this.nomeCircuito=nomeCircuito;
         this.localizacao=localizacao;
@@ -40,9 +40,9 @@ public class Circuito {
         this.DRS= DRS;
         this.codCircuito=new String(codCicruito);
         this.condicoesATM = new CondicoesAtmosfericas();
-        this.retasGDU= new ArrayList<Integer>();
-        this.curvasGDU= new ArrayList<Integer>();
-        this.chicanesGDU= new ArrayList<Integer>();
+        this.retasGDU= retas;
+        this.curvasGDU= curvas;
+        this.chicanesGDU= chicanes;
     }
     public Circuito(Circuito c){
         this.nvoltas=c.getNvoltas();
@@ -83,6 +83,10 @@ public class Circuito {
 
     public String getCodCircuito() {
         return this.codCircuito;
+    }
+    public int getCodCircuitoInt() {
+
+        return Integer.parseInt(this.codCircuito);
     }
 
     public int getDRS() {
@@ -159,7 +163,6 @@ public class Circuito {
                 ", chicanesGDU=" + chicanesGDU +
                 ", distancia=" + distancia +
                 ", DRS=" + DRS +
-                ", condicoesATM=" + this.condicoesATM.toString() +
-                '}';
+                ", condicoesATM=" + this.condicoesATM.toString() +"\n";
     }
 }

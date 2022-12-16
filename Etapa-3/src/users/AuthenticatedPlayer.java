@@ -1,5 +1,4 @@
-package src.users;
-
+package users;
 
 /**
  * Classe que extende a classe jogador para jogadores autenticados

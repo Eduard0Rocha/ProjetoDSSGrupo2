@@ -1,5 +1,4 @@
-package src.campeonato;
-
+package campeonato;
 
 import java.util.ArrayList;
 import java.util.HashMap;

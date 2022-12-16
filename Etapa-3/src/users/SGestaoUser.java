@@ -1,5 +1,4 @@
-package src.users;
-
+package users;
 
 public interface SGestaoUser {
 

@@ -1,5 +1,4 @@
-package src.users;
-
+package users;
 
 /**
  * Classe responsável pelas credenciais dos utilizadores

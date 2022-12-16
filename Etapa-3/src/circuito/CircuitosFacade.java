@@ -1,32 +1,39 @@
-package src.circuito;
+package circuito;
 
-import src.carro.C1;
+import Data.CircuitoDAO;
+import carro.C1;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import src.circuito.Exceptions.*;
+import circuito.Exceptions.*;
 
 public class CircuitosFacade implements SGestCircuitos {
 
     private HashMap <String,Circuito> Circuitos;
     private  int circuitosCounter;
+    private  CircuitoDAO circuitoDAO;
 
     public CircuitosFacade(){
         this.Circuitos=new HashMap<>();
-        this.circuitosCounter=0;
+        this.circuitoDAO=new CircuitoDAO();
+        this.circuitosCounter= this.circuitoDAO.getmaxkey();
     }
 
-    public boolean  createCicruito(int voltas, String nomeCirc, String local, float dist, List<Integer> curvas, List<Integer> retas, List<Integer> chicanes, float temperatura, int humidade, float temp_Asf, String estado_climaterico,int drs){
-        String codCirc = new String("Circuito" + Integer.toString(this.circuitosCounter));
+    public boolean  createCicruito(int voltas, String nomeCirc, String local, float dist, List<Integer> curvas, List<Integer> retas, List<Integer> chicanes, float temperatura, int humidade, float temp_Asf, String estado_climaterico,int drs) throws SQLException {
         this.circuitosCounter++;
-        if (this.Circuitos.containsKey(codCirc)){
-            Circuito c= new Circuito(codCirc,voltas,nomeCirc,local,dist,drs);
+        String codCirc = new String( Integer.toString(this.circuitosCounter));
+        this.Circuitos =  this.circuitoDAO.getCircuitosDB();
+        if (!this.Circuitos.containsKey(codCirc)){
+            Circuito c= new Circuito(codCirc,voltas,nomeCirc,local,dist,drs,curvas,retas,chicanes);
             c.setCondicoesATM(new CondicoesAtmosfericas(temp_Asf,temperatura,humidade,estado_climaterico));
             this.Circuitos.put(codCirc  ,c.clone());
+            this.circuitoDAO.put(codCirc,c.clone());
             return true;
         }
+
         return false;
     }
     public boolean changeCondicoesATM(String codCirc, float temperatura, int humidade, float temp_Asf, String estado_climaterico){
@@ -36,15 +43,26 @@ public class CircuitosFacade implements SGestCircuitos {
         }
         return false;
       }
-      public  Circuito getCircuito(String codCirc) throws NonExistantKey{
-          if (Circuitos.containsKey(codCirc)){
-              return this.Circuitos.get(codCirc).clone();
-          }
-          else throw new NonExistantKey("Chave inexistente");
+      public  HashMap<String, Circuito> getCircuitos() throws NonExistantKey, SQLException {
+            this.Circuitos=circuitoDAO.getCircuitosDB();
+
+              return new HashMap<>(this.Circuitos);
+
       }
-      public Map<String,Circuito> getCircuitos(){
+     /* public Map<String,Circuito> getCircuitos(){
         Map<String,Circuito> copy = new HashMap<>();
         copy.putAll(Circuitos);
         return  copy;
-      }
+      }*/
+
+    public boolean removeCircuito(String codCirc){
+
+        if (circuitoDAO.containsKey(codCirc)){
+            circuitoDAO.remove(codCirc);
+            return true;
+        }
+        else return false;
+    }
+
+
 }

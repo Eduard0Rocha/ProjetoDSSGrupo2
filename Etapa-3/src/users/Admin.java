@@ -1,4 +1,4 @@
-package src.users;
+package users;
 
 /**
  * Classe responsável armazenar a informação sobre um admin e operar sobre a informação

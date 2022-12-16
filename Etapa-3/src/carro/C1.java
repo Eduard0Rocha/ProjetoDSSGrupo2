@@ -1,4 +1,4 @@
-package src.carro;
+package carro;
 
 import java.util.Random;
 

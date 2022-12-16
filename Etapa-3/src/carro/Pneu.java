@@ -1,5 +1,4 @@
-package src.carro;
-
+package carro;
 
 public class Pneu {
 

@@ -1,4 +1,4 @@
-package src.circuito.Exceptions;
+package circuito.Exceptions;
 
 public class NonExistantKey extends Exception {
     public NonExistantKey(String errorMessage) {
