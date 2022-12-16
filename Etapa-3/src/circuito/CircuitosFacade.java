@@ -1,12 +1,12 @@
-package circuito;
+package src.circuito;
 
-import carro.C1;
+import src.carro.C1;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import circuito.Exceptions.*;
+import src.circuito.Exceptions.*;
 
 public class CircuitosFacade implements SGestCircuitos {
 

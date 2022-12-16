@@ -1,4 +1,4 @@
-package circuito;
+package src.circuito;
 
 import java.util.List;
 

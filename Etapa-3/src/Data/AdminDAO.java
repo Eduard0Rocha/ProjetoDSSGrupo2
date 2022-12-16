@@ -1,21 +1,21 @@
-package src.users;
+package src.Data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class JogadorDAO {
-    public JogadorDAO(){
+public class AdminDAO {
+    public AdminDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS jogador (" +
-                    "codJogador int auto_increment primary key," +
-                    "pontosCorr int NOT NULL," +
-                    "pontosglobais int NOT NULL," +
+                    "codAdmin int auto_increment primary key," +
+                    "email varchar[45] NOT NULL," +
+                    "contactoTLM varchar[45] NOT NULL," +
                     "nome varchar[45] NOT NULL," +
                     "username varchar[45] NOT NULL," +
-                    "password varchar[45] NOT NULL";;
+                    "password varchar[45] NOT NULL";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {

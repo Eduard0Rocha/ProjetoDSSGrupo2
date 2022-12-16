@@ -4,7 +4,8 @@
  *  Ã‰ disponibilizado para auxiliar o processo de estudo. Os alunos sÃ£o encorajados a testar adequadamente o
  *  cÃ³digo fornecido e a procurar soluÃ§Ãµes alternativas, Ã  medida que forem adquirindo mais conhecimentos.
  */
-package Data;
+package src.Data;
+
 
 public class DAOConfig {
     static final String USERNAME = "admin";                       // Actualizar

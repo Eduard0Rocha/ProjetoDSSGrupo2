@@ -1,14 +1,14 @@
-package campeonato;
+package src.campeonato;
 
 
-import carro.Carro;
-import carro.CarrosFacade;
-import carro.Pneu;
-import circuito.Circuito;
-import circuito.CircuitosFacade;
-import piloto.Piloto;
-import piloto.PilotoFacade;
-import users.*;
+import src.carro.Carro;
+import src.carro.CarrosFacade;
+import src.carro.Pneu;
+import src.circuito.Circuito;
+import src.circuito.CircuitosFacade;
+import src.piloto.Piloto;
+import src.piloto.PilotoFacade;
+import src.users.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

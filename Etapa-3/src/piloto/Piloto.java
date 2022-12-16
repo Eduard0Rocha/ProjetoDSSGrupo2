@@ -1,6 +1,6 @@
-package piloto;
+package src.piloto;
 
-import users.Jogador;
+import src.users.Jogador;
 
 /**
  * Classe responsável por armazenar e operar sobre a informação do piloto

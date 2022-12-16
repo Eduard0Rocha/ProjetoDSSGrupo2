@@ -1,8 +1,9 @@
-package campeonato;
+package src.campeonato;
+
 
 import carro.Carro;
 import piloto.Piloto;
-import users.Jogador;
+import src.users.Jogador;
 
 /**
  * Classe responsável armazenar a informação sobre um registo e operar sobre a sua informação

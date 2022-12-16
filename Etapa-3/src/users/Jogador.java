@@ -1,4 +1,5 @@
-package users;
+package src.users;
+
 
 /**
  * Classe responsável armazenar a informação sobre um jogador e operar sobre a informação

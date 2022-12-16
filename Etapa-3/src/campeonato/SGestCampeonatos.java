@@ -1,8 +1,9 @@
-package campeonato;
+package src.campeonato;
+
 
 import carro.Pneu;
 import circuito.Circuito;
-import users.Jogador;
+import src.users.Jogador;
 
 import java.util.ArrayList;
 import java.util.HashMap;

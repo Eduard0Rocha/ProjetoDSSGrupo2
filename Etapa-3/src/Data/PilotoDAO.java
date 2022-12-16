@@ -1,8 +1,9 @@
-package Data;
+package src.Data;
 
-import circuito.Circuito;
-import circuito.CondicoesAtmosfericas;
-import piloto.Piloto;
+
+import src.circuito.Circuito;
+import src.circuito.CondicoesAtmosfericas;
+import src.piloto.Piloto;
 
 import java.sql.*;
 
