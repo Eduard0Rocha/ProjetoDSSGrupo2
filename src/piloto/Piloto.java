@@ -70,6 +70,14 @@ public class Piloto {
         this.nome = new String(nome);
     }
 
+    public String getCodPiloto() {
+        return codPiloto;
+    }
+
+    public void setCodPiloto(String codPiloto) {
+        this.codPiloto = codPiloto;
+    }
+
     public void setCTS(int cts) {
 
         this.cts = cts;
@@ -97,6 +105,6 @@ public class Piloto {
 
     public Piloto clone() {
 
-        return new Piloto(this.nome, this.cts, this.sva, this.codPiloto);
+        return new Piloto(this);
     }
 }

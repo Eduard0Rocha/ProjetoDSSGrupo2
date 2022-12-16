@@ -2,6 +2,7 @@ package piloto;
 
 import java.util.HashMap;
 import java.util.Map;
+import Data.*;
 
 /**
  * Classe que serve de interface para a manipulação da informação sobre os pilotos
@@ -10,6 +11,7 @@ public class PilotoFacade implements SGestPiloto {
 
     private HashMap<String, Piloto> pilotos;
     private int pilotosCounter;
+    private PilotoDAO pilotoDAO;
 
     /**
      * Construtor da classe
@@ -18,6 +20,8 @@ public class PilotoFacade implements SGestPiloto {
 
         this.pilotos = new HashMap<String, Piloto>();
         this.pilotosCounter = 0;
+        this.pilotoDAO=new PilotoDAO();
+
     }
 
     /**
@@ -42,12 +46,14 @@ public class PilotoFacade implements SGestPiloto {
 
         if (nome == null) return false;
 
-        String codPiloto = new String("Piloto" + Integer.toString(this.pilotosCounter));
+        String codPiloto = new String( Integer.toString(this.pilotosCounter));
 
         pilotosCounter++;
 
-        this.pilotos.put(codPiloto, new Piloto(nome, cts, sva, codPiloto));
+        Piloto aux=  new Piloto(nome, cts, sva, codPiloto);
+        this.pilotos.put(codPiloto, aux.clone());
 
+        this.pilotoDAO.put(Integer.toString(this.pilotosCounter), aux.clone());
         return true;
     }
 
@@ -75,10 +81,8 @@ public class PilotoFacade implements SGestPiloto {
         HashMap<String, Piloto> res = new HashMap<String, Piloto>();
 
         for (Map.Entry<String,Piloto> set : this.pilotos.entrySet()) {
-
             res.put(set.getKey(), set.getValue());
         }
-
         return res;
     }
 
@@ -90,5 +94,6 @@ public class PilotoFacade implements SGestPiloto {
     public boolean existsPiloto(String codPiloto) {
 
         return this.pilotos.containsKey(codPiloto);
+
     }
 }
