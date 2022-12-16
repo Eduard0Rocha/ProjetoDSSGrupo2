@@ -20,4 +20,34 @@ public class AuthenticatedPlayer extends Jogador {
 
         this.credenciais = new Credenciais(cred_username, cred_password);
     }
+
+
+    @Override
+    public int getPontosGlob() {
+        return super.getPontosGlob();
+    }
+
+    @Override
+    public String getNome() {
+        return super.getNome();
+    }
+
+    @Override
+    public int getPontosCorr() {
+        return super.getPontosCorr();
+    }
+
+    @Override
+    public String getCodJogador() {
+        return super.getCodJogador();
+    }
+
+    public String getUsername() {
+        return credenciais.getUsername();
+    }
+
+    public String getPassword() {
+        return credenciais.getPassword();
+    }
+
 }

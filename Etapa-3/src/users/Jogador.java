@@ -64,4 +64,13 @@ public class Jogador {
 
         return this.pontosglobais;
     }
+
+    public int getPontosCorr() {
+        return pontosCorr;
+    }
+
+
+    public String getNome() {
+        return nome;
+    }
 }

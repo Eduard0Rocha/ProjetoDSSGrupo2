@@ -27,4 +27,12 @@ public class Credenciais {
 
         this.password = new String(newpass);
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 }

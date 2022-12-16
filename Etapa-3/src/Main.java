@@ -3,6 +3,7 @@ import Data.*;
 import circuito.*;
 import circuito.Exceptions.NonExistantKey;
 import  piloto.*;
+import users.UserFacade;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,10 +18,13 @@ public class Main  {
     private static PilotoFacade pil;
     private static  CircuitosFacade circ;
 
+    private static UserFacade users;
+
     static {
         try {
             pil = new PilotoFacade();
             circ=new CircuitosFacade();
+            //users = new UserFacade();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

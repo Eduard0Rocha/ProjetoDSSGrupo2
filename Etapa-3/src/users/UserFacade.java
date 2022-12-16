@@ -1,6 +1,7 @@
 package users;
 
 import java.util.HashMap;
+import Data.*;
 
 /**
  * Classe responsável pela interação com a informação relativa aos usuários
@@ -14,10 +15,18 @@ public class UserFacade implements SGestaoUser {
     private int jogadorCounter;
     private int guestCounter;
 
+    private JogadorAutenticadoDAO JogadorAutenticadoDAO;
+    private JogadorDAO JogadorDAO;
+    private GuestDAO GuestDAO;
+
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação dos usuários
      */
     public UserFacade() {
+
+        this.GuestDAO = new GuestDAO();
+        this.JogadorDAO = new JogadorDAO();
+        this.JogadorAutenticadoDAO = new JogadorAutenticadoDAO();
 
         this.admins = new HashMap<String,Admin>();
         this.jogadores = new HashMap<String, Jogador>();
@@ -35,7 +44,7 @@ public class UserFacade implements SGestaoUser {
      * @return true se foi bem sucedido, false caso contrário
      */
     @Override
-    public boolean createAPlayer(String nome, String username, String password) {
+    public boolean createAPlayer(String nome, String username, String password) throws CloneNotSupportedException {
 
         if (nome == null || username == null || password == null) return false;
 
@@ -43,8 +52,9 @@ public class UserFacade implements SGestaoUser {
 
         this.jogadorCounter++;
 
-        this.jogadores.put(codJogador,new AuthenticatedPlayer(nome, codJogador, username, password));
-
+        AuthenticatedPlayer aux = new AuthenticatedPlayer(nome, codJogador, username, password);
+        this.jogadores.put(codJogador,aux);
+        this.JogadorAutenticadoDAO.put(Integer.toString(this.jogadorCounter), aux);
         return true;
     }
 

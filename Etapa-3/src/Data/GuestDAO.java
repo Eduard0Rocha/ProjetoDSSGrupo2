@@ -1,5 +1,7 @@
 package Data;
 
+import users.Guest;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -12,7 +14,7 @@ public class GuestDAO {
             String sql = "CREATE TABLE IF NOT EXISTS jogadorAutenticado (" +
                     "idGuest int auto_increment primary key," +
                     "codJogador int," +
-                    "foreign key (codJogador) references jogador (codJogador)";
+                    "foreign key(codJogador) references jogador(codJogador)";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
