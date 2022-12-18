@@ -43,6 +43,24 @@ public class Campeonato {
 
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação de um campeonato
+     * @param nomeCamp nome do campeonato
+     * @param codCamp código identificador do campeonato
+     * @param classificacao classificações
+     * @param classificacaoH classificações dos hibridos
+     * @param registo Lista de registos
+     * @param corridas HashMap de Corridas
+     */
+    public Campeonato(String nomeCamp, String codCamp, HashMap<String, Integer> classificacao, HashMap<String, Integer> classificacaoH, ArrayList<Registo> registo, HashMap<String, Corrida> corridas){
+        this.nomeCamp = nomeCamp;
+        this.codCamp = codCamp;
+        this.classificacao = classificacao;
+        this.classificacaoH = classificacaoH;
+        this.registo = registo;
+        this.corridas = corridas;
+    }
+
+    /**
+     * Contrutor da classe que inicializa as estruturas de dados que contém a informação de um campeonato
      * @param c Campeonato
      */
     public Campeonato(Campeonato c) {
