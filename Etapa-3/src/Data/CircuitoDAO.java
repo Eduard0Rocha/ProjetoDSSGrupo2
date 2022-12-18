@@ -59,6 +59,14 @@ public class CircuitoDAO {
             throw new NullPointerException(e.getMessage());
         }
     }
+
+    public static CircuitoDAO getInstance() {
+        if (CircuitoDAO.singleton == null) {
+            CircuitoDAO.singleton = new CircuitoDAO();
+        }
+        return CircuitoDAO.singleton;
+    }
+
     public Circuito get(Object key) {
         Circuito t = new Circuito();
         String codCirc="0";
