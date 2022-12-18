@@ -2,20 +2,17 @@ package Data;
 
 import users.AuthenticatedPlayer;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class JogadorAutenticadoDAO {
     public JogadorAutenticadoDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS jogadorAutenticado (" +
-                    "codJogador int primary key," +
-                    "nome varchar[45] NOT NULL," +
-                    "password varchar[45] NOT NULL" +
-                    "foreign key(codJogador) references jogador(codJogador)";
+                    "nome varchar(45) primary key not null," +
+                    "codJogador int NOT NULL," +
+                    "password varchar(45) NOT NULL," +
+                    "foreign key(codJogador) references jogador(codJogador))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
@@ -44,5 +41,30 @@ public class JogadorAutenticadoDAO {
             throw new NullPointerException(e.getMessage());
         }
         return res;
+    }
+
+    public static String search_password(String username){
+
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+
+            ResultSet rs = stm.executeQuery("SELECT * FROM jogadorAutenticado");
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+
+                if(username.equals(name)){
+                    String password = rs.getString("password");
+                    return password;
+                }
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+
+        return "NOT FOUND";
     }
 }

@@ -8,14 +8,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JogadorDAO {
+
+    private static PilotoDAO singleton = null;
+
     public JogadorDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS jogador (" +
-                    "codJogador int auto_increment primary key," +
+                    "codJogador int auto_increment primary key not null," +
                     "pontosCorr int NOT NULL," +
-                    "pontosglobais int NOT NULL," +
-                    "username varchar[45] NOT NULL,";
+                    "pontosGlobais int NOT NULL," +
+                    "username varchar(45) NOT NULL)";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {

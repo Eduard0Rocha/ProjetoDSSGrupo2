@@ -24,7 +24,7 @@ public class Main  {
         try {
             pil = new PilotoFacade();
             circ=new CircuitosFacade();
-            //users = new UserFacade();
+            users = new UserFacade();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -86,6 +86,92 @@ public class Main  {
             menuPilotos();
         }
        else menuadmin();
+
+
+    }
+
+    public static int menuLogin() throws SQLException, NonExistantKey{
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Como pretende efetuar login                         |");
+        System.out.println("|1-> Jogador                                         |");
+        System.out.println("|2-> Admin                                           |");
+        System.out.println("|3-> Guest                                           |");
+        System.out.println("------------------------------------------------------");
+        int p=ler.nextInt();
+
+        String username;
+        String np;
+
+        switch (p){
+            case 1:
+                System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+                System.out.println("|Insira Username                                     |");
+                System.out.println("------------------------------------------------------");
+
+                username=ler.nextLine();
+
+                np = JogadorAutenticadoDAO.search_password(username);
+
+                if(np.equals("NOT FOUND")){
+                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+                    System.out.println("|User not found                                      |");
+                    System.out.println("------------------------------------------------------");
+
+                    return -1;
+                }
+
+                else{
+                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+                    System.out.println("|Insira Password                                     |");
+                    System.out.println("------------------------------------------------------");
+
+                    String password=ler.nextLine();
+
+                    if(password.equals(np)){
+                        return 0;
+                    }
+                }
+                return 1;
+
+
+            case 2:
+                System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+                System.out.println("|Insira Username                                     |");
+                System.out.println("------------------------------------------------------");
+
+                username=ler.nextLine();
+
+                np = AdminDAO.search_password(username);
+
+                if(np.equals("NOT FOUND")){
+                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+                    System.out.println("|User not found                                      |");
+                    System.out.println("------------------------------------------------------");
+
+                    return -1;
+                }
+
+                else{
+                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+                    System.out.println("|Insira Password                                     |");
+                    System.out.println("------------------------------------------------------");
+
+                    String password=ler.nextLine();
+
+                    if(password.equals(np)){
+                        return 0;
+                    }
+                }
+                return 1;
+
+            case 3:
+                // Guest
+                return 0;
+
+            default:
+                return 1;
+
+        }
 
 
     }

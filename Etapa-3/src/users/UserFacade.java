@@ -24,8 +24,8 @@ public class UserFacade implements SGestaoUser {
      */
     public UserFacade() {
 
-        this.GuestDAO = new GuestDAO();
         this.JogadorDAO = new JogadorDAO();
+        this.GuestDAO = new GuestDAO();
         this.JogadorAutenticadoDAO = new JogadorAutenticadoDAO();
 
         this.admins = new HashMap<String,Admin>();

@@ -11,10 +11,11 @@ public class GuestDAO {
     public GuestDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            String sql = "CREATE TABLE IF NOT EXISTS jogadorAutenticado (" +
-                    "idGuest int auto_increment primary key," +
-                    "codJogador int," +
-                    "foreign key(codJogador) references jogador(codJogador)";
+            String sql = "CREATE TABLE IF NOT EXISTS guest (" +
+                    "idGuest int auto_increment primary key not null," +
+                    "codJogador int not null," +
+                    "username varchar(45) primary key not null," +
+                    "foreign key(codJogador) references jogador(codJogador))";
             stm.executeUpdate(sql);
 
         } catch (SQLException e) {
