@@ -129,4 +129,8 @@ public abstract class Carro {
     public void setPneus(ArrayList<Pneu> pneus) {
         this.pneus = pneus;
     }
+
+    public String getCodCarro() {
+        return this.codCarro;
+    }
 }
