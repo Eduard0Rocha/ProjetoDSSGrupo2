@@ -3,6 +3,7 @@ package Data;
 import campeonato.Campeonato;
 import campeonato.Corrida;
 import campeonato.Registo;
+import piloto.Piloto;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class CampeonatoDAO {
                     "foreign key(codCarro) references carro(codCarro)," +
                     "codPiloto int not null," +
                     "foreign key(codPiloto) references piloto(codPiloto)," +
-                    "nrAfinacoes int)";
+                    "nrAfinacoes int," +
+                    "codCamp int not null," +
+                    "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS corrida (" +
@@ -50,7 +53,7 @@ public class CampeonatoDAO {
                     "id int primary key not null," +
                     "classificacao varchar(45) not null," +
                     "codCorr int not null," +
-                    "foreign key(codCorr) references corrida(codCorr)";
+                    "foreign key(codCorr) references corrida(codCorr))";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS classificacao(" +
@@ -63,22 +66,6 @@ public class CampeonatoDAO {
             sql = "CREATE TABLE IF NOT EXISTS classificacaoH(" +
                     "chave int primary key not null," +
                     "classificacaoH integer not null," +
-                    "codCamp int not null," +
-                    "foreign key(codCamp) references campeonato(codCamp))";
-            stm.executeUpdate(sql);
-
-            sql = "CREATE TABLE IF NOT EXISTS registos(" +
-                    "id int primary key not null," +
-                    "codRegisto int not null," +
-                    "foreign key(codRegisto) references registo(codRegisto)," +
-                    "codCamp int not null," +
-                    "foreign key(codCamp) references campeonato(codCamp))";
-            stm.executeUpdate(sql);
-
-            sql = "CREATE TABLE IF NOT EXISTS corridas(" +
-                    "chave int primary key not null," +
-                    "codCorr int not null," +
-                    "foreign key(codCorr) references corrida(codCorr)," +
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
@@ -129,19 +116,20 @@ public class CampeonatoDAO {
                         }
                     }
 
-                    try (ResultSet cr3 = stm.executeQuery("select * from registos where codCamp" + "='"+key+"'");)
+                    try (ResultSet cr3 = stm.executeQuery("select * from registo where codCamp" + "='"+key+"'");)
                     {
                         while (cr3.next()) {
                             int n = cr3.getInt("codRegisto");
                             try(ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='"+n+"'");){
-                                Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
+                                /*Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
                                 aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
-                                registo.add(aux);
+                                registo.add(aux);*/
                             }
                         }
                     }
 
-                    try (ResultSet cr4 = stm.executeQuery("select * from corridas where codCamp" + "='"+key+"'");)
+
+                    try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='"+key+"'");)
                     {
                         while (cr4.next()) {
                             int n = cr4.getInt("codCorr");
@@ -172,6 +160,88 @@ public class CampeonatoDAO {
             throw new NullPointerException(e.getMessage());
         }
         return c;
+    }
+
+    public HashMap<String, Campeonato> getCampeonatosDB() throws SQLException {
+        Campeonato c = new Campeonato();
+        String nomeCamp = "";
+        String codCamp = "0";
+        HashMap<String, Integer> classificacao = new HashMap<>();
+        HashMap<String, Integer> classificacaoH = new HashMap<>();
+        ArrayList<Registo> registo = new ArrayList<>();
+        HashMap<String, Corrida> corridas = new HashMap<>();
+        HashMap<String, Campeonato> campeonatos = new HashMap<>();
+
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement stm = conn.createStatement();
+            try(ResultSet rs = stm.executeQuery("SELECT * FROM campeonato");) {
+                while(rs.next()) {
+                    int key = rs.getInt("codCamp");
+                    try(ResultSet rt = stm.executeQuery("SELECT * FROM campeonato WHERE codCamp"+"='"+key+"'");)
+                    {
+                        if(rt.next()) {
+                            nomeCamp = rt.getString("nomeCamp");
+                            codCamp = Integer.toString(rt.getInt("codCamp"));
+                        }
+                        {
+                            try (ResultSet cr1 = stm.executeQuery("select * from classificacao where codCamp" + "='" + key + "'");) {
+                                while (cr1.next()) {
+                                    classificacao.put(Integer.toString(cr1.getInt("chave")), cr1.getInt("classificacao"));
+                                }
+                            }
+
+                            try (ResultSet cr2 = stm.executeQuery("select * from classificacaoH where codCamp" + "='" + key + "'");) {
+                                while (cr2.next()) {
+                                    classificacaoH.put(Integer.toString(cr2.getInt("chave")), cr2.getInt("classificacaoH"));
+                                }
+                            }
+
+                            try (ResultSet cr3 = stm.executeQuery("select * from registo where codCamp" + "='" + key + "'");) {
+                                while (cr3.next()) {
+                                    int n = cr3.getInt("codRegisto");
+                                    try (ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='" + n + "'");) {
+                                /*Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
+                                aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
+                                registo.add(aux);*/
+                                    }
+                                }
+                            }
+
+
+                            try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='" + key + "'");) {
+                                while (cr4.next()) {
+                                    int n = cr4.getInt("codCorr");
+                                    try (ResultSet co = stm.executeQuery("select * from corrida where codCorr" + "='" + n + "'");
+                                         ResultSet tp = stm.executeQuery("select * from tempos where codCorr" + "='" + n + "'");
+                                         ResultSet cl = stm.executeQuery("select * from classificacaoCorr where codCorr" + "='" + n + "'");) {
+                                        Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")), Integer.toString(co.getInt("codCirc")), CircuitoDAO.getInstance().get(co.getInt("codCirc")));
+                                        HashMap<String, Float> tempos = new HashMap<>();
+                                        while (tp.next()) {
+                                            tempos.put(Integer.toString(tp.getInt("chave")), tp.getFloat("tempo"));
+                                        }
+                                        ArrayList<String> classCorr = new ArrayList<>();
+                                        while (cl.next()) {
+                                            classCorr.add(cl.getString("classificacao"));
+                                        }
+                                        aux.setTempos(tempos);
+                                        aux.setClassificacao(classCorr);
+                                        corridas.put(Integer.toString(cr4.getInt("chave")), aux);
+                                    }
+                                }
+                            }
+                            c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas);
+                            campeonatos.put(Integer.toString(key), c);
+                        }
+                    }
+                }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return campeonatos;
     }
 
     /*
@@ -224,10 +294,10 @@ public class CampeonatoDAO {
                 stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+t.getCodCamp()+"')");
             }
             for(int i=0;i<registo.size();i++) {
-                stm.executeUpdate("INSERT INTO registo VALUES ('"+ i +"', '"+registo.get(i)+"', '"+t.getCodCamp()+"')");
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ i +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+t.getCodCamp()+"')");
             }
             for(int i=0;i<corridas.size();i++) {
-                stm.executeUpdate("INSERT INTO corridas VALUES ('"+ i +"', '"+corridas.get(i)+"', '"+t.getCodCamp()+"')");
+                stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+t.getCodCamp()+"', '"+corridas.get(i).getCodCirc()+"')");
             }
         } catch (SQLException e) {
             // Database error!
