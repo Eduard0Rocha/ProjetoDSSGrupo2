@@ -13,13 +13,13 @@ public class GTH extends GT implements Hibrido {
         this.potencia_motor_eletrico = potencia_motor_eletrico;
     }
 
-    @Override
+
     public int getPotEletrico() {
 
         return this.potencia_motor_eletrico;
     }
 
-    @Override
+
     public boolean DNF(int volta,int totalvoltas,int clima) {
         Random rand=new Random();
         int x=rand.nextInt(70);

@@ -2,7 +2,8 @@ package carro;
 
 import java.util.Random;
 
-public class C1 extends Carro {
+public class C1 extends Carro
+{
 
     private boolean isValid;
 
@@ -13,7 +14,7 @@ public class C1 extends Carro {
         this.isValid = (cilindrada == 6000);
     }
 
-    @Override
+
     public boolean DNF(int volta, int totalVoltas, int clima) {
 
         Random rand = new Random();
@@ -23,9 +24,14 @@ public class C1 extends Carro {
         return (x > super.getFiabilidade());
     }
 
-    @Override
-    public void setFiabilidade(int volta, int clima) {
 
-        // TODO
+
+    @Override
+    public String toString() {
+        String k=super.toString();
+        return k+
+                "C1{" +
+                "isValid=" + isValid +
+                '}';
     }
 }

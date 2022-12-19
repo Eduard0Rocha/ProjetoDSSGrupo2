@@ -3,7 +3,8 @@ package carro;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public abstract class Carro {
+public abstract class Carro
+{
 
     private String marca;
     private String modelo;
@@ -59,7 +60,6 @@ public abstract class Carro {
         }
     }
 
-
     public Carro(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro, String tipo_de_pneus) {
 
         this.marca = new String(marca);
@@ -105,32 +105,133 @@ public abstract class Carro {
         }
     }
 
-    // TODO
-    // falta a classe circuito
-    /*public long tempoProxVolta(Circuito c, int clima, int volta) {
 
-        return -1;
-    }*/
+ //   public abstract boolean DNF(int volta, int totalVoltas, int clima);
 
-    public abstract boolean DNF(int volta, int totalVoltas, int clima);
-
-    public abstract void setFiabilidade(int volta, int clima);
+ //   public abstract void setFiabilidade(int volta, int clima);
 
     public int getCilindrada() {
 
         return this.cilindrada;
     }
 
-    protected int getFiabilidade() {
 
+
+    @Override
+    public String toString() {
+        return "Carro{" +
+                "marca='" + marca + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", cilindrada=" + cilindrada +
+                ", potencia=" + potencia +
+                ", fiabilidade=" + fiabilidade +
+                ", PAC=" + PAC +
+                ", distPerc=" + distPerc +
+                ", DNF=" + DNF +
+                ", tempo=" + tempo +
+                ", codCarro='" + codCarro + '\'' +
+                ", pneus=" + pneus +
+                '}';
+    }
+    public String getCategoria()
+    {
+
+        if (this == null) return null;
+
+        return this .getClass().toString();
+    }
+
+
+    public String getMarca() {
+        return this.marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return this.modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setCilindrada(int cilindrada) {
+        this.cilindrada = cilindrada;
+    }
+
+    public int getPotencia() {
+        return this.potencia;
+    }
+
+    public void setPotencia(int potencia) {
+        this.potencia = potencia;
+    }
+
+    public void setFiabilidade(int fiabilidade)
+    {
+        this.fiabilidade = fiabilidade;
+    }
+
+    public int getFiabilidade()
+    {
         return this.fiabilidade;
+    }
+
+    public float getPAC() {
+        return this.PAC;
+    }
+
+    public void setPAC(float PAC) {
+        this.PAC = PAC;
+    }
+
+    public float getDistPerc() {
+        return this.distPerc;
+    }
+
+    public void setDistPerc(float distPerc) {
+        this.distPerc = distPerc;
+    }
+
+    public boolean getDNF() {
+        return this.DNF;
+    }
+
+    public void setDNF(boolean DNF) {
+        this.DNF = DNF;
+    }
+
+    public long getTempo() {
+        return this.tempo;
+    }
+
+    public void setTempo(long tempo) {
+        this.tempo = tempo;
+    }
+
+    public String getCodCarro() {
+        return this.codCarro;
+    }
+
+    public void setCodCarro(String codCarro) {
+        this.codCarro = codCarro;
+    }
+
+    public ArrayList<Pneu> getPneus() {
+        return this.pneus;
     }
 
     public void setPneus(ArrayList<Pneu> pneus) {
         this.pneus = pneus;
     }
 
-    public String getCodCarro() {
-        return this.codCarro;
+    public String getclasse()
+    {
+        String aux = this .getClass().toString();
+        return aux.substring(aux.length()-2);
     }
+
 }

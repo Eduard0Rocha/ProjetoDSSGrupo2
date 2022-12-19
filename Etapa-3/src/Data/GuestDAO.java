@@ -14,7 +14,7 @@ public class GuestDAO {
             String sql = "CREATE TABLE IF NOT EXISTS guest (" +
                     "idGuest int auto_increment primary key not null," +
                     "codJogador int not null," +
-                    "username varchar(45) primary key not null," +
+                    "username varchar(45) not null," +
                     "foreign key(codJogador) references jogador(codJogador))";
             stm.executeUpdate(sql);
 

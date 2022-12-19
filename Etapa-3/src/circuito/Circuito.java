@@ -141,13 +141,13 @@ public class Circuito {
         this.distancia = distancia;
     }
 
-
+/*
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Circuito ciruito)) return false;
         return nvoltas == ciruito.nvoltas && Float.compare(ciruito.distancia, distancia) == 0 && DRS == ciruito.DRS && Objects.equals(codCircuito, ciruito.codCircuito) && Objects.equals(nomeCircuito, ciruito.nomeCircuito) && Objects.equals(localizacao, ciruito.localizacao) && Objects.equals(retasGDU, ciruito.retasGDU) && Objects.equals(curvasGDU, ciruito.curvasGDU) && Objects.equals(chicanesGDU, ciruito.chicanesGDU) && Objects.equals(condicoesATM, ciruito.condicoesATM);
     }
-
+*/
     public Circuito clone(){
         return  new Circuito(this);
     }

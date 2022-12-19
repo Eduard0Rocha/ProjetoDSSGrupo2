@@ -18,6 +18,7 @@ public class Main  {
     private static PilotoFacade pil;
     private static  CircuitosFacade circ;
 
+    private static CarrosFacade carr;
     private static UserFacade users;
 
     static {
@@ -25,6 +26,8 @@ public class Main  {
             pil = new PilotoFacade();
             circ=new CircuitosFacade();
             users = new UserFacade();
+            carr = new CarrosFacade();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +41,7 @@ public class Main  {
         System.out.println("|2-> Operações relativas a pilotos                   |");
         System.out.println("|3-> Operações relativas a Jogadores                 |");
         System.out.println("|4-> Operações relativas a Campeonatos               |");
-        System.out.println("|                                                    |");
+        System.out.println("|5-> Operações relativas a Carros                    |");
         System.out.println("|Outro-> Sair                                        |");
         System.out.println("-----------------------------------------------------|");
         int p=ler.nextInt();
@@ -49,6 +52,10 @@ public class Main  {
         if (p==2)
         {
          menuPilotos();
+        }
+        if(p==5)
+        {
+            menuCarros();
         }
         else return;
     }
@@ -175,6 +182,212 @@ public class Main  {
 
 
     }
+
+    public static void  menuCarros () throws SQLException,NonExistantKey {
+        System.out.println("---------------Menu-Carros---------------------------");
+        System.out.println("|Insira as operações que pretende realizar  :        |");
+        System.out.println("|1-> Adicionar um carro ao Programa                  |");
+        System.out.println("|2-> Obter a lista de carros disponívei              |");
+        System.out.println("|3-> Remover um carro                                |");
+        System.out.println("|                                                    |");
+        System.out.println("|Outro -> Voltar                                     |");
+        System.out.println("-----------------------------------------------------|");
+
+
+        int p = ler.nextInt();
+        ler.nextLine();
+        if (p == 1)
+        {
+
+            System.out.println("Insira a classe do Carro");
+            String classe = ler.nextLine();
+
+            if (classe.equals("C1")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+
+                carr.createC1(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+            }
+
+            if (classe.equals("C1H")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+                System.out.println("Insira a potencia do motor eletrico do Carro a adicionar : ");
+                int potencia_motor_eletrico = ler.nextInt();
+                ler.nextLine();
+
+                carr.createC1H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
+            }
+
+            if (classe.equals("C2")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+                System.out.println("Insira a afinacao mecanica do Carro a adicionar : ");
+                int afinacao_mecanica = ler.nextInt();
+                ler.nextLine();
+
+                carr.createC2(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica);
+            }
+
+            if (classe.equals("C2H")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+                System.out.println("Insira a afinacao mecanica do Carro a adicionar : ");
+                int afinacao_mecanica = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do motor eletrico do Carro a adicionar : ");
+                int potencia_motor_eletrico = ler.nextInt();
+                ler.nextLine();
+
+                carr.createC2H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica, potencia_motor_eletrico);
+            }
+
+            if (classe.equals("GT")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+
+                carr.createGT(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+            }
+
+            if (classe.equals("GTH")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+                System.out.println("Insira a potencia do motor eletrico do Carro a adicionar : ");
+                int potencia_motor_eletrico = ler.nextInt();
+
+                carr.createGTH(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
+            }
+
+            if (classe.equals("SC")) {
+                System.out.println("Insira a marca do Carro a adicionar : ");
+                String marca = ler.nextLine();
+                System.out.println("Insira o modelo do Carro a adicionar : ");
+                String modelo = ler.nextLine();
+                System.out.println("Insira a cilindrada do Carro a adicionar : ");
+                int cilindrada = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a potencia do Carro a adicionar : ");
+                int potencia = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira a fiabilidade do Carro a adicionar : ");
+                int fiabilidade = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o PAC do Carro a adicionar : ");
+                int pac = ler.nextInt();
+                ler.nextLine();
+                System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
+                String tipoPneus = ler.nextLine();
+
+
+
+                carr.createSC(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+            }
+        }
+        if (p==2)
+        {
+
+        }
+        if (p==3)
+        {
+
+        }
+    }
+
+
+
     public static void menuCircuitos() throws SQLException, NonExistantKey {
 
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");

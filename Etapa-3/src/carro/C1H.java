@@ -2,7 +2,8 @@ package carro;
 
 import java.util.Random;
 
-public class C1H extends C1 implements Hibrido {
+public class C1H extends C1 implements Hibrido
+{
 
     private int potencia_motor_eletrico;
 

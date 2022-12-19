@@ -27,7 +27,7 @@ public class C2H extends C2 implements Hibrido {
         return (x > fiabilidade);
     }
 
-    @Override
+
     public void setFiabilidade(int volta, int clima) {
 
         // TODO

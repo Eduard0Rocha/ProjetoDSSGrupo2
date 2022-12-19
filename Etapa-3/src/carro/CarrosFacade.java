@@ -3,17 +3,21 @@ package carro;
 import java.nio.charset.CharacterCodingException;
 import java.util.HashMap;
 import java.util.Map;
+import Data.*;
 
 public class CarrosFacade implements SGestCarros {
 
     private HashMap<String,Carro> carros;
 
     private int carrosCounter;
+    private CarroDAO carroAcess;
 
     public CarrosFacade() {
 
         this.carros = new HashMap<String,Carro>();
-        this.carrosCounter = 0;
+        this.carroAcess = new CarroDAO();
+        this.carrosCounter = this.carroAcess.getmaxkey();
+
     }
 
 
@@ -22,9 +26,9 @@ public class CarrosFacade implements SGestCarros {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
 
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String( Integer.toString(this.carrosCounter));
+
 
         this.carros.put(codCarro, new C1(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus));
 
@@ -35,10 +39,10 @@ public class CarrosFacade implements SGestCarros {
     public boolean createC1H(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String tipo_de_pneus, int potencia_motor_eletrico) {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
-
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String( Integer.toString(this.carrosCounter));
+
+
 
         this.carros.put(codCarro, new C1H(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, potencia_motor_eletrico));
 
@@ -50,9 +54,10 @@ public class CarrosFacade implements SGestCarros {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
 
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String( Integer.toString(this.carrosCounter));
+
+
 
         this.carros.put(codCarro, new C2(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica));
 
@@ -64,9 +69,9 @@ public class CarrosFacade implements SGestCarros {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
 
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String(Integer.toString(this.carrosCounter));
+
 
         this.carros.put(codCarro, new C2H(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica, potencia_motor_eletrico));
 
@@ -78,9 +83,10 @@ public class CarrosFacade implements SGestCarros {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
 
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String( Integer.toString(this.carrosCounter));
+
+
 
         this.carros.put(codCarro, new GT(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus));
 
@@ -92,9 +98,10 @@ public class CarrosFacade implements SGestCarros {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
 
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String(Integer.toString(this.carrosCounter));
+
+
 
         this.carros.put(codCarro, new GTH(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, potencia_motor_eletrico));
 
@@ -106,11 +113,15 @@ public class CarrosFacade implements SGestCarros {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
 
-        String codCarro = new String("Carro" + Integer.toString(this.carrosCounter));
-
         this.carrosCounter++;
+        String codCarro = new String( Integer.toString(this.carrosCounter));
 
-        this.carros.put(codCarro, new GT(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus));
+
+        SC teste = new SC(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
+        //System.out.println(teste.toString());
+
+        this.carros.put(codCarro, teste);
+        this.carroAcess.put(teste);
 
         return true;
     }
@@ -121,7 +132,6 @@ public class CarrosFacade implements SGestCarros {
         this.carros.remove(codCarro);
     }
 
-    // TODO (falta a classe circuito)
     @Override
     public long getTempoCorrida(String codCarro) {
         return 0;

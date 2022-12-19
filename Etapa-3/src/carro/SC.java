@@ -22,12 +22,24 @@ public class SC extends Carro {
         this.piloto_cts = cts;
     }
 
+    public float getPiloto_cts() {
+        return piloto_cts;
+    }
+
+    public float getPiloto_sva() {
+        return piloto_sva;
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
     public void setPiloto_sva(int sva) {
 
         this.piloto_sva = sva;
     }
 
-    @Override
+
     public boolean DNF(int volta, int totalVoltas, int clima) {
 
         Random rand=new Random();
@@ -46,9 +58,4 @@ public class SC extends Carro {
         return (x > fiabilidade);
     }
 
-    @Override
-    public void setFiabilidade(int volta, int clima) {
-
-        // TODO
-    }
 }

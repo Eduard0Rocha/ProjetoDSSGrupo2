@@ -15,7 +15,7 @@ public class C2 extends Carro {
         this.isValid = (cilindrada >= 3000 && cilindrada <= 5000);
     }
 
-    @Override
+
     public boolean DNF(int volta, int totalVoltas, int clima) {
 
         Random rand=new Random();
@@ -32,9 +32,5 @@ public class C2 extends Carro {
         return this.afinacao_mecanica;
     }
 
-    @Override
-    public void setFiabilidade(int volta, int clima) {
 
-        // TODO
-    }
 }

@@ -8,9 +8,9 @@ package Data;
 
 public class DAOConfig {
     static final String USERNAME = "admin";                       // Actualizar
-    static final String PASSWORD = "SportingB16b";                       // Actualizar
+    static final String PASSWORD = "benfica8";                       // Actualizar
     private static final String DATABASE = "f1manager";          // Actualizar
     //private static final String DRIVER = "jdbc:mariadb";        // Usar para MariaDB
     private static final String DRIVER = "jdbc:mysql";        // Usar para MySQL
-    static final String URL = DRIVER+"://127.0.0.1:4000/"+DATABASE + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    static final String URL = DRIVER+"://192.168.1.19:3306/"+DATABASE + "?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 }
