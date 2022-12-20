@@ -41,9 +41,6 @@ public C1 clone(){
     @Override
     public String toString() {
         String k=super.toString();
-        return k+
-                "C1{" +
-                "isValid=" + isValid +
-                '}';
+        return k +'\n';
     }
 }

@@ -38,4 +38,10 @@ public class GTH extends GT implements Hibrido {
     public GTH clone(){
         return new GTH(this);
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "potencia_motor_eletrico=" + potencia_motor_eletrico +'\n';
+    }
 }

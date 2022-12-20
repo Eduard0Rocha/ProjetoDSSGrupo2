@@ -85,4 +85,10 @@ public class SC extends Carro {
         return new SC(this);
     }
 
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "piloto_cts=" + piloto_cts +
+                ", piloto_sva=" + piloto_sva +'\n';
+    }
 }

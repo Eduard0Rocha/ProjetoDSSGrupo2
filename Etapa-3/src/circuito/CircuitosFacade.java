@@ -16,10 +16,10 @@ public class CircuitosFacade implements SGestCircuitos {
     private  int circuitosCounter;
     private  CircuitoDAO circuitoDAO;
 
-    public CircuitosFacade(){
-        this.Circuitos=new HashMap<>();
+    public CircuitosFacade() throws SQLException, NonExistantKey {
         this.circuitoDAO=new CircuitoDAO();
         this.circuitosCounter= this.circuitoDAO.getmaxkey();
+        this.Circuitos=new HashMap<>(this.getCircuitos());
     }
 
     public boolean  createCicruito(int voltas, String nomeCirc, String local, float dist, List<Integer> curvas, List<Integer> retas, List<Integer> chicanes, float temperatura, int humidade, float temp_Asf, String estado_climaterico,int drs) throws SQLException {

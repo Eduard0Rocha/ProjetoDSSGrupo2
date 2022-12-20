@@ -1,6 +1,7 @@
 package carro;
 
 import java.nio.charset.CharacterCodingException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import Data.*;
@@ -12,11 +13,12 @@ public class CarrosFacade implements SGestCarros {
     private int carrosCounter;
     private CarroDAO carroAcess;
 
-    public CarrosFacade() {
+    public CarrosFacade() throws SQLException {
 
-        this.carros = new HashMap<String,Carro>();
+
         this.carroAcess = new CarroDAO();
         this.carrosCounter = this.carroAcess.getmaxkey();
+        this.carros = new HashMap<String,Carro>(this.carroAcess.getCarrosDB());
 
     }
 
@@ -121,35 +123,20 @@ public class CarrosFacade implements SGestCarros {
         SC teste = new SC(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
         //System.out.println(teste.toString());
 
-        this.carros.put(codCarro, teste);
-        this.carroAcess.put(teste);
+        this.carros.put(codCarro, teste.clone());
+        this.carroAcess.put(teste.clone());
 
         return true;
     }
 
-    @Override
-    public void removerCarro(String codCarro) {
 
-        this.carros.remove(codCarro);
-    }
 
     @Override
     public long getTempoCorrida(String codCarro) {
         return 0;
     }
 
-    @Override
-    public HashMap<String, Carro> getCarros() {
 
-        HashMap<String,Carro> result = new HashMap<String, Carro>();
-
-        for (Map.Entry<String,Carro> set : this.carros.entrySet()) {
-
-            result.put(set.getKey(),set.getValue());
-        }
-
-        return result;
-    }
 
     @Override
     public String getCategoria(String codCarro) {
@@ -164,7 +151,23 @@ public class CarrosFacade implements SGestCarros {
     @Override
     public Carro getCarro(String codCarro) {
 
-        return this.carros.get(codCarro);
+        return this.carroAcess.get(codCarro);
     }
+
+    public HashMap<String,Carro> getCarros() throws SQLException {
+        this.carroAcess.getCarrosDB();
+        return new HashMap<>(this.carros);
+    }
+
+    public boolean removeCarro(String codCirc){
+
+        if (carroAcess.containsKey(codCirc)){
+            this.carros.remove(codCirc);
+            carroAcess.remove(codCirc);
+            return true;
+        }
+        else return false;
+    }
+
 
 }

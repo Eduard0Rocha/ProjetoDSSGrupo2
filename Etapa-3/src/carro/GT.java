@@ -43,4 +43,8 @@ public class GT extends Carro
         return new GT(this);
     }
 
+    @Override
+    public String toString() {
+        return super.toString()+'\n';
+    }
 }

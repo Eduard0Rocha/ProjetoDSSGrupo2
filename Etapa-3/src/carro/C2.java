@@ -44,5 +44,9 @@ public class C2 extends Carro {
         return  new C2(this);
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString()+
+                "afinacao_mecanica=" + afinacao_mecanica +'\n';
+    }
 }

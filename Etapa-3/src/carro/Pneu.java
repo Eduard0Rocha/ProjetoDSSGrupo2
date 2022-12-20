@@ -3,7 +3,7 @@ package carro;
 public class Pneu {
 
     private String tipo;
-    private short estado;
+    private int estado;
     private String codCarro;
 
     public Pneu() {
@@ -26,7 +26,7 @@ public class Pneu {
         this.codCarro = new String(codCarro);
     }
 
-    public Pneu(String tipo, short estado, String codCarro) {
+    public Pneu(String tipo, int estado, String codCarro) {
 
         this.tipo = new String(tipo);
         this.estado = estado;
@@ -38,8 +38,17 @@ public class Pneu {
         return new String(this.tipo);
     }
 
-    public short getEstado() {
+    public int getEstado() {
 
         return this.estado;
+    }
+
+    @Override
+    public String toString() {
+        return "Pneu{" +
+                "tipo='" + tipo + '\'' +
+                ", estado=" + estado +
+                ", codCarro='" + codCarro + '\'' +
+                '}';
     }
 }

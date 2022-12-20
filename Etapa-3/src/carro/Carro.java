@@ -119,7 +119,8 @@ public abstract class Carro
 
     @Override
     public String toString() {
-        return "Carro{" +
+        return "Carro : " +codCarro +
+                "Classe: "+this.getclasse()+" "+
                 "marca='" + marca + '\'' +
                 ", modelo='" + modelo + '\'' +
                 ", cilindrada=" + cilindrada +
@@ -129,9 +130,7 @@ public abstract class Carro
                 ", distPerc=" + distPerc +
                 ", DNF=" + DNF +
                 ", tempo=" + tempo +
-                ", codCarro='" + codCarro + '\'' +
-                ", pneus=" + pneus +
-                '}';
+                ", pneus=" + pneus.toString() ;
     }
     public String getCategoria()
     {

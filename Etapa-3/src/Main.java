@@ -30,6 +30,8 @@ public class Main  {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (NonExistantKey e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -89,7 +91,8 @@ public class Main  {
         if (p==3){
             System.out.println("Insira o código do piloto que pretende remover");
             String codigo=ler.nextLine();
-            pil.removePiloto(codigo);
+                if (pil.removePiloto(codigo)) System.out.println("Piloto removido com sucesso");
+                else System.out.println("Piloto inexistente");
             menuPilotos();
         }
        else menuadmin();
@@ -187,7 +190,7 @@ public class Main  {
         System.out.println("---------------Menu-Carros---------------------------");
         System.out.println("|Insira as operações que pretende realizar  :        |");
         System.out.println("|1-> Adicionar um carro ao Programa                  |");
-        System.out.println("|2-> Obter a lista de carros disponívei              |");
+        System.out.println("|2-> Obter a lista de carros disponíveis             |");
         System.out.println("|3-> Remover um carro                                |");
         System.out.println("|                                                    |");
         System.out.println("|Outro -> Voltar                                     |");
@@ -198,7 +201,7 @@ public class Main  {
         ler.nextLine();
         if (p == 1)
         {
-            System.out.println("Insira a classe do Carro");
+            System.out.println("Insira a classe do Carro (C1 | C1H | C2 | C2H | GT | GTH | SC )");
             String classe = ler.nextLine();
 
             if (classe.equals("C1")) {
@@ -378,22 +381,32 @@ public class Main  {
                 carr.createSC(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
                 menuCarros();
             }
+            else System.out.println("Valor inválido");
         }
         if (p==2)
         {
-
+            System.out.println(carr.getCarros());
+            menuCarros();
         }
         if (p==3)
         {
+            System.out.println("Insira o código do carro que pretende remover");
+            String cod = ler.nextLine();
+
+           if ( carr.removeCarro(cod))
+               System.out.println("Carro removido com sucesso");
+           else System.out.println("Carro inexistente");
+           menuCarros();
 
         }
+        else  menuadmin();
     }
 
 
 
     public static void menuCircuitos() throws SQLException, NonExistantKey {
 
-        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("---------------Menu-Circuitos------------------------");
         System.out.println("|Insira as operações que pretende realizar  :        |");
         System.out.println("|1-> Adicionar Ciruito                               |");
         System.out.println("|2-> Obter lista de Circuitos                        |");
@@ -459,16 +472,19 @@ public class Main  {
             String  estado_climaterico =ler.nextLine();
 
             circ.createCicruito(voltas,ncirc,local,dist,curvasList,retaslist,chicaneList,temperatura,humidade,temperatura_asf,estado_climaterico,DRS);
-
+            menuCircuitos();
         }
         if (p==2){
             System.out.println(circ.getCircuitos().values());
+            menuCircuitos();
         }
         if (p==3){
             System.out.println("Insira o codigo do circuito que pretente remover  ");
             String cod =ler.nextLine();
             boolean aux = circ.removeCircuito(cod);
-            if (!aux) System.out.println("Circuito nao removido");
+            if (!aux) System.out.println("Circuito inexistente");
+            else System.out.println("Circuito removido ");
+            menuCircuitos();
         }
         else menuadmin();
     }

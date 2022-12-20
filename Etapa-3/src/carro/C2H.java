@@ -36,6 +36,12 @@ public class C2H extends C2 implements Hibrido {
         // TODO
     }
 
+    @Override
+    public String toString() {
+        return  super.toString() +
+                "potencia_motor_eletrico=" + potencia_motor_eletrico+'\n';
+    }
+
     public C2H clone(){
         return  new C2H(this);
     }

@@ -36,4 +36,10 @@ public class C1H extends C1 implements Hibrido
     public C1H clone(){
         return new C1H(this);
     }
+
+    @Override
+    public String toString() {
+        return  super.toString()+
+                "potencia_motor_eletrico=" + potencia_motor_eletrico+'\n' ;
+    }
 }
