@@ -1,6 +1,9 @@
 package campeonato;
 
 
+import Data.CampeonatoDAO;
+import Data.PilotoDAO;
+import carro.C2;
 import carro.Carro;
 import carro.CarrosFacade;
 import carro.Pneu;
@@ -23,13 +26,18 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
     private HashMap<String, Campeonato> campeonatos;
     private int campCounter;
+    private CampeonatoDAO campeonatoDAO;
 
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação dos campeonatos
      */
-    public CampeonatosFacade(){
-        this.campeonatos = new HashMap<String, Campeonato>();
-        this.campCounter = 0;
+    public CampeonatosFacade() throws SQLException{
+
+        this.campeonatoDAO=new CampeonatoDAO();
+        this.campeonatos = campeonatoDAO.getCampeonatosDB();
+
+
+        this.campCounter = campeonatoDAO.getmaxkey();
     }
 
     /**
@@ -37,11 +45,13 @@ public class CampeonatosFacade implements SGestCampeonatos{
      * @return HashMap com todos os campeonatos existentes
      */
     @Override
-    public HashMap<String, Campeonato> getCampeonatos() {
-        HashMap<String, Campeonato> result = new HashMap<>();
+    public HashMap<String, Campeonato> getCampeonatos() throws SQLException{
+        HashMap<String, Campeonato> result = campeonatoDAO.getCampeonatosDB();
+        /*
         for (Map.Entry<String, Campeonato> x : this.campeonatos.entrySet()){
             result.put(x.getKey(), x.getValue());
         }
+         */
         return result;
     }
 
@@ -59,41 +69,6 @@ public class CampeonatosFacade implements SGestCampeonatos{
             result.add(x.getValue().getCircuito());
         }
         return result;
-    }
-
-    /**
-     * Método que dá início a um campeonato
-     * @param codCamp código identificador do Campeonato
-     * @return Retorna true se o campeonato foi iniciado com sucesso, false caso contrário
-     */
-    //@TODO
-    @Override
-    public boolean startCampeonato(String codCamp) {
-        if(codCamp == null || !this.campeonatos.containsKey(codCamp)) return false;
-
-        return true;
-    }
-
-    /**
-     * Método que finaliza um campeonato
-     * @param codCamp código identificador do Campeonato
-     * @return Retorna true se o campeonato foi terminado com sucesso, false caso contrário
-     */
-    //@TODO
-    @Override
-    public boolean fimCampeonato(String codCamp) {
-        if(codCamp == null || !this.campeonatos.containsKey(codCamp)) return false;
-        return true;
-    }
-
-    /**
-     * Método que dá início a uma corrida
-     * @return Circuito associado à corrida iniciada
-     */
-    //@TODO
-    @Override
-    public Circuito startCorrida() {
-        return null;
     }
 
     /**
@@ -167,6 +142,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
         this.campCounter++;
 
         this.campeonatos.put(codCamp,new Campeonato(codCamp, nomeCamp));
+        this.campeonatoDAO.put(codCamp, new Campeonato(codCamp, nomeCamp));
         return true;
     }
 
@@ -202,15 +178,19 @@ public class CampeonatosFacade implements SGestCampeonatos{
      */
     //@TODO
     @Override
-    public boolean afinacoes(String codCamp, String codJog, double downforce) {
+    public boolean afinacoes(String codCamp, String codJog, int downforce) {
         if (codCamp==null || codJog==null) return false;
         Campeonato c = this.campeonatos.get(codCamp);
         int n = (2 * c.getCorridas().size()) / 3;
         for(Registo r : c.getRegisto()){
             if(r.getJogador().getCodJogador()==codJog){
-                if(r.getNrAfinacoes() == n) return false;
-                r.setNrAfinacoes(r.getNrAfinacoes()+1);
-                //falta dar set da downforce
+                if(r.getCarro().getCategoria() == "C2") {
+                    if (r.getNrAfinacoes() == n) return false;
+                    r.setNrAfinacoes(r.getNrAfinacoes() + 1);
+                    C2 nc2 = new C2((C2) r.getCarro());
+                    nc2.setAfinacao_mecanica(downforce);
+                    r.setCarro(nc2);
+                }else return false;
             }
         }
         return true;
@@ -234,4 +214,19 @@ public class CampeonatosFacade implements SGestCampeonatos{
         }
         return true;
     }
+
+    /**
+     * Remove um Campeonato
+     * @param codCamp código do campeonato
+     * @return true se for bem sucedido, false caso contrário
+     */
+    @Override
+     public boolean removeCampeonato(String codCamp){
+
+         if (campeonatoDAO.containsKey(codCamp)){
+             campeonatoDAO.remove(codCamp);
+             return true;
+         }
+         else return false;
+     }
 }
