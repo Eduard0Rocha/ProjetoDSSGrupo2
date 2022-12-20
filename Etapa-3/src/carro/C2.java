@@ -35,6 +35,11 @@ public class C2 extends Carro {
 
         return this.afinacao_mecanica;
     }
+
+    public void setAfinacao_mecanica(int afinacao_mecanica) {
+        this.afinacao_mecanica = afinacao_mecanica;
+    }
+
     public  int getISvalid(){
         if (this.isValid) return 1;
         return 0;
