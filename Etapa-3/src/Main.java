@@ -1,3 +1,4 @@
+import campeonato.CampeonatosFacade;
 import carro.*;
 import Data.*;
 import circuito.*;
@@ -20,6 +21,7 @@ public class Main  {
 
     private static CarrosFacade carr;
     private static UserFacade users;
+    private static CampeonatosFacade camp;
 
     static {
         try {
@@ -27,6 +29,7 @@ public class Main  {
             circ=new CircuitosFacade();
             users = new UserFacade();
             carr = new CarrosFacade();
+            camp = new CampeonatosFacade();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,6 +57,10 @@ public class Main  {
         if (p==2)
         {
          menuPilotos();
+        }
+        if (p==4)
+        {
+            menuCampeonatos();
         }
         if(p==5)
         {
@@ -408,7 +415,7 @@ public class Main  {
 
         System.out.println("---------------Menu-Circuitos------------------------");
         System.out.println("|Insira as operações que pretende realizar  :        |");
-        System.out.println("|1-> Adicionar Ciruito                               |");
+        System.out.println("|1-> Adicionar Circuito                              |");
         System.out.println("|2-> Obter lista de Circuitos                        |");
         System.out.println("|3-> Remover Circuito                                |");
         System.out.println("|                                                    |");
@@ -485,6 +492,93 @@ public class Main  {
             if (!aux) System.out.println("Circuito inexistente");
             else System.out.println("Circuito removido ");
             menuCircuitos();
+        }
+        else menuadmin();
+    }
+
+    public static void menuCampeonatos() throws SQLException, NonExistantKey {
+
+        System.out.println("---------------Menu-Campeonatos-----------------------");
+        System.out.println("|Insira as operações que pretende realizar:          |");
+        System.out.println("|1-> Adicionar Campeonato                            |");
+        System.out.println("|2-> Obter lista de Campeonatos                      |");
+        System.out.println("|3-> Remover Campeonato                              |");
+        System.out.println("|4-> Obter lista de Circuitos de um Campeonato       |");
+        System.out.println("|5-> Obter lista de Jogadores de um Campeonato       |");
+        System.out.println("|6-> Obter Classificações de um Campeonato           |");
+        System.out.println("|7-> Adicionar Registo a Campeonato                  |");
+        System.out.println("|8-> Adicionar Corrida a Campeonato                  |");
+        System.out.println("|                                                    |");
+        System.out.println("|Outro -> voltar                                     |");
+        System.out.println("-----------------------------------------------------|");
+        int p=ler.nextInt();
+        ler.nextLine();
+        if (p==1){
+            System.out.println("Insira o nome do Campeonato a adicionar: ");
+            String ncamp=ler.nextLine();
+            camp.createCampeonato(ncamp);
+            menuCampeonatos();
+        }
+        if (p==2){
+            System.out.println(camp.getCampeonatos().values());
+            menuCampeonatos();
+        }
+        if (p==3){
+            System.out.println("Insira o codigo do campeonato que pretente remover: ");
+            String cod =ler.nextLine();
+            boolean aux = camp.removeCampeonato(cod);
+            if (!aux) System.out.println("Campeonato não existe!");
+            else System.out.println("Campeonato removido!");
+            menuCampeonatos();
+        }
+        if (p==4){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod =ler.nextLine();
+            System.out.println(camp.getCircuitos(cod));
+            menuCampeonatos();
+        }
+        if (p==5){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod =ler.nextLine();
+            System.out.println(camp.getJogadores(cod));
+            menuCampeonatos();
+        }
+        if (p==6){
+            System.out.println("Classificação de carros Hibridos?(Sim/Nao): ");
+            String ans = ler.nextLine();
+            if(ans == "Nao") {
+                System.out.println("Insira o codigo do campeonato  : ");
+                String cod = ler.nextLine();
+                System.out.println(camp.getClassificacaoC(cod));
+                menuCampeonatos();
+            }else{
+                System.out.println("Insira o codigo do campeonato  : ");
+                String cod = ler.nextLine();
+                System.out.println(camp.getClassificacaoCH(cod));
+                menuCampeonatos();
+            }
+        }
+        if (p==7){
+            System.out.println("Insira o código do Campeonato onde pertende adiconar o Registo : ");
+            String cCamp=ler.nextLine();
+            System.out.println("Insira o código do Jogador a adicionar : ");
+            String cJog=ler.nextLine();
+            System.out.println("Insira o código do Piloto a adicionar : ");
+            String cPl=ler.nextLine();
+            System.out.println("Insira o código do Carro a adicionar : ");
+            String cCar=ler.nextLine();
+            camp.addRegisto(cJog, cPl, cCar, cCamp);
+            menuCampeonatos();
+        }
+        if (p==8){
+            System.out.println("Insira o código do Campeonato onde pertende adiconar a Corrida : ");
+            String cCamp=ler.nextLine();
+            System.out.println("Insira o código da Corrida a adicionar : ");
+            String cCor=ler.nextLine();
+            System.out.println("Insira o código do Circuito da Corrida a adicionar : ");
+            String cCir=ler.nextLine();
+            camp.addCorrida(cCamp, cCor, cCir);
+            menuCampeonatos();
         }
         else menuadmin();
     }
