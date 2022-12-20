@@ -12,7 +12,10 @@ public class C2H extends C2 implements Hibrido {
 
         this.potencia_motor_eletrico = potencia_motor_eletrico;
     }
-
+    public C2H(C2H a){
+        super(a);
+        this.potencia_motor_eletrico=a.potencia_motor_eletrico;
+    }
     @Override
     public int getPotEletrico() {
 
@@ -31,5 +34,9 @@ public class C2H extends C2 implements Hibrido {
     public void setFiabilidade(int volta, int clima) {
 
         // TODO
+    }
+
+    public C2H clone(){
+        return  new C2H(this);
     }
 }

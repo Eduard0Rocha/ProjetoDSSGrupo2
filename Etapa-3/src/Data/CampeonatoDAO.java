@@ -128,7 +128,7 @@ public class CampeonatoDAO {
                         }
                     }
 
-
+                    /*
                     try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='"+key+"'");)
                     {
                         while (cr4.next()) {
@@ -136,7 +136,7 @@ public class CampeonatoDAO {
                             try(ResultSet co = stm.executeQuery("select * from corrida where codCorr" + "='"+n+"'");
                                 ResultSet tp = stm.executeQuery("select * from tempos where codCorr" + "='"+n+"'");
                                 ResultSet cl = stm.executeQuery("select * from classificacaoCorr where codCorr" + "='"+n+"'");){
-                                Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")),Integer.toString(co.getInt("codCirc")), CircuitoDAO.getInstance().get(co.getInt("codCirc")));
+                                //Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")),Integer.toString(co.getInt("codCirc")), CircuitoDAO.getInstance().get(co.getInt("codCirc")));
                                 HashMap<String, Float> tempos = new HashMap<>();
                                 while(tp.next()){
                                     tempos.put(Integer.toString(tp.getInt("chave")),tp.getFloat("tempo"));
@@ -151,7 +151,8 @@ public class CampeonatoDAO {
                             }
                         }
                     }
-                    c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas);
+                    */
+                     c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas);
                 }
             }
         }
@@ -208,7 +209,7 @@ public class CampeonatoDAO {
                                 }
                             }
 
-
+                            /*
                             try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='" + key + "'");) {
                                 while (cr4.next()) {
                                     int n = cr4.getInt("codCorr");
@@ -229,7 +230,7 @@ public class CampeonatoDAO {
                                         corridas.put(Integer.toString(cr4.getInt("chave")), aux);
                                     }
                                 }
-                            }
+                            }*/
                             c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas);
                             campeonatos.put(Integer.toString(key), c);
                         }

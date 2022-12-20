@@ -3,13 +3,11 @@ package Data;
 import carro.*;
 import circuito.Circuito;
 import circuito.CondicoesAtmosfericas;
+import piloto.Piloto;
 
 import java.sql.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+
 import static java.util.stream.Collectors.toList;
 
 import static java.util.stream.Collectors.*;
@@ -70,7 +68,7 @@ public class CarroDAO {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS carro (" +
-                    "codCarro int auto_increment primary key," +
+                    "codCarro int  primary key," +
                     "marca varchar(45) NOT NULL," +
                     "modelo varchar(45) NOT NULL," +
                     "cilindrada int NOT NULL," +
@@ -78,7 +76,7 @@ public class CarroDAO {
                     "fiabilidade int," +
                     "PAC float ," +
                     "distPerc float ," +
-                    "DNF boolean," +
+                    "DNF int(1)," +
                     "tempo long ,"+
                     "classe varchar(10))";
             stm.executeUpdate(sql);
@@ -98,7 +96,6 @@ public class CarroDAO {
 
             sql = "CREATE TABLE IF NOT EXISTS C2 ("+
                     "afinacao_mecanica int NOT NULL,"+
-                    "isValid boolean NOT NULL,"+
                     "idCarro int primary key,"+
                     "foreign key(idCarro) references carro(codCarro))";
             stm.executeUpdate(sql);
@@ -112,7 +109,6 @@ public class CarroDAO {
 
 
             sql = "CREATE TABLE IF NOT EXISTS GT ("+
-                    "isValid boolean NOT NULL,"+
                     "idCarro int primary key,"+
                     "foreign key(idCarro) references carro(codCarro))";
             stm.executeUpdate(sql);
@@ -128,14 +124,12 @@ public class CarroDAO {
             sql = "CREATE TABLE IF NOT EXISTS SC ("+
                     "piloto_cts float NOT NULL,"+
                     "piloto_sva float NOT NULL,"+
-                    "isValid boolean NOT NULL,"+
                     "idCarro int primary key,"+
                     "foreign key(idCarro) references carro(codCarro))";
             stm.executeUpdate(sql);
 
 
             sql = "CREATE TABLE IF NOT EXISTS Pneu ("+
-                    "idPneu int auto_increment primary key,"+
                     "tipo varchar(30) NOT NULL,"+
                     "estado int NOT NULL,"+
                     "idCarro int NOT NULL,"+
@@ -222,7 +216,28 @@ public class CarroDAO {
         return null;
     }
 
+    //TODO getcarrosDB E ELIMINAR
+    /*
+    public HashMap<String, Piloto> getCarrosDB() throws SQLException {
 
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement s = conn.createStatement();
+            try (ResultSet rs = s.executeQuery("select * from carro")) {
+                HashMap<String,Piloto> pilotos = new HashMap<>();
+                while (rs.next()) {
+                    pilotos.put(Integer.toString(rs.getInt("codPiloto")),new Piloto(rs.getString("nome"),rs.getFloat("cts"),rs.getFloat("sva"),Integer.toString(rs.getInt("codPiloto"))));
+                }
+
+                return pilotos;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+*/
     public void put(Carro c)
     {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
@@ -239,20 +254,69 @@ public class CarroDAO {
                             c.getFiabilidade()+"', '"+
                             c.getPAC()+"', '"+
                             c.getDistPerc()+"', '"+
-                            c.getDNF()+"', '"+
+                            c.getDNFINT()+"', '"+
                             c.getTempo()+"', '"+
                             c.getclasse()+"') ");
-
-
 
             if (c.getCategoria().equals("class carro.SC"))
             {
                SC aux = (SC) c;
 
                stm.executeUpdate(
-                  "INSERT INTO sc VALUES ('"+aux.getPiloto_cts()+"', '"+aux.getPiloto_sva()+"', '"+aux.isValid()+"', '"+c.getCodCarro()+"') ");
-
+                  "INSERT INTO sc VALUES ('"+aux.getPiloto_cts()+"', '"+aux.getPiloto_sva()+"', '"+c.getCodCarro()+"') ");
             }
+            if (c.getCategoria().equals("class carro.C1"))
+            {
+                C1 aux = (C1) c;
+
+                stm.executeUpdate(
+                        "INSERT INTO c1 VALUES ('"+c.getCodCarro()+"') ");
+            }
+            if (c.getCategoria().equals("class carro.C1H"))
+            {
+                C1H aux = (C1H) c;
+
+                stm.executeUpdate(
+                        "INSERT INTO c1h VALUES ('"+aux.getPotEletrico()+"', '"+c.getCodCarro()+"') ");
+            }
+            if (c.getCategoria().equals("class carro.C2"))
+            {
+                C2 aux = (C2) c;
+
+                stm.executeUpdate(
+                        "INSERT INTO c2 VALUES ('"+aux.getAfinacao_mecanica()+"', '"+c.getCodCarro()+"') ");
+            }
+            if (c.getCategoria().equals("class carro.C2H"))
+            {
+                C2H aux = (C2H) c;
+
+                stm.executeUpdate(
+                        "INSERT INTO c2H VALUES ('"+aux.getPotEletrico()+"', '"+c.getCodCarro()+"') ");
+            }
+            if (c.getCategoria().equals("class carro.GT"))
+            {
+                GT aux = (GT) c;
+
+                stm.executeUpdate(
+                        "INSERT INTO gt VALUES ('"+c.getCodCarro()+"') ");
+            }
+            if (c.getCategoria().equals("class carro.GTH"))
+            {
+                GTH aux = (GTH) c;
+
+                stm.executeUpdate(
+                        "INSERT INTO gth VALUES ('"+aux.getPotEletrico()+"', '"+c.getCodCarro()+"') ");
+            }
+
+            ArrayList<Pneu> pneu= c.getPneus();
+            for(int i=0;i<pneu.size();i++) {
+                stm.executeUpdate("INSERT INTO pneu " +
+                        "VALUES ('" + pneu.get(i).getTipo() + "', '" +
+                        pneu.get(i).getEstado() + "', '" +
+                        c.getCodCarro() + "')");
+            }
+
+
 
 
 

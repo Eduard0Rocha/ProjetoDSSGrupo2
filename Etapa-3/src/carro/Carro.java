@@ -221,7 +221,7 @@ public abstract class Carro
     }
 
     public ArrayList<Pneu> getPneus() {
-        return this.pneus;
+        return new ArrayList<>(this.pneus);
     }
 
     public void setPneus(ArrayList<Pneu> pneus) {
@@ -230,8 +230,34 @@ public abstract class Carro
 
     public String getclasse()
     {
-        String aux = this .getClass().toString();
-        return aux.substring(aux.length()-2);
+        if (this.getCategoria().equals("class carro.C1")) {
+            return ("C1");
+        }
+        if (this.getCategoria().equals("class carro.C1H")) {
+            return ("C1H");
+        }
+        if (this.getCategoria().equals("class carro.C2")) {
+            return ("C2");
+        }
+        if (this.getCategoria().equals("class carro.C2H")) {
+            return ("C2H");
+        }
+        if (this.getCategoria().equals("class carro.GT")){
+            return ("GT");
+        }
+        if (this.getCategoria().equals("class carro.GTH")) {
+            return ("GTH");
+        }
+        if (this.getCategoria().equals("class carro.SC")) {
+            return ("SC");
+        }
+        else return ("None");
+
+    }
+
+    public  int getDNFINT(){
+        if (this.DNF) return 1;
+        return 0;
     }
 
 }

@@ -14,6 +14,14 @@ public class C1 extends Carro
         this.isValid = (cilindrada == 6000);
     }
 
+    public C1(C1 a) {
+        super(a);
+        this.isValid = a.isValid();
+    }
+
+    public boolean isValid() {
+        return isValid;
+    }
 
     public boolean DNF(int volta, int totalVoltas, int clima) {
 
@@ -24,6 +32,10 @@ public class C1 extends Carro
         return (x > super.getFiabilidade());
     }
 
+
+public C1 clone(){
+        return  new C1(this);
+}
 
 
     @Override

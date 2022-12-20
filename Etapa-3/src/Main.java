@@ -198,7 +198,6 @@ public class Main  {
         ler.nextLine();
         if (p == 1)
         {
-
             System.out.println("Insira a classe do Carro");
             String classe = ler.nextLine();
 
@@ -221,8 +220,8 @@ public class Main  {
                 ler.nextLine();
                 System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
                 String tipoPneus = ler.nextLine();
-
                 carr.createC1(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+                menuCarros();
             }
 
             if (classe.equals("C1H")) {
@@ -247,8 +246,8 @@ public class Main  {
                 System.out.println("Insira a potencia do motor eletrico do Carro a adicionar : ");
                 int potencia_motor_eletrico = ler.nextInt();
                 ler.nextLine();
-
                 carr.createC1H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
+                menuCarros();
             }
 
             if (classe.equals("C2")) {
@@ -273,8 +272,8 @@ public class Main  {
                 System.out.println("Insira a afinacao mecanica do Carro a adicionar : ");
                 int afinacao_mecanica = ler.nextInt();
                 ler.nextLine();
-
                 carr.createC2(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica);
+                menuCarros();
             }
 
             if (classe.equals("C2H")) {
@@ -302,8 +301,8 @@ public class Main  {
                 System.out.println("Insira a potencia do motor eletrico do Carro a adicionar : ");
                 int potencia_motor_eletrico = ler.nextInt();
                 ler.nextLine();
-
                 carr.createC2H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica, potencia_motor_eletrico);
+                menuCarros();
             }
 
             if (classe.equals("GT")) {
@@ -328,6 +327,7 @@ public class Main  {
                 String tipoPneus = ler.nextLine();
 
                 carr.createGT(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+                menuCarros();
             }
 
             if (classe.equals("GTH")) {
@@ -337,18 +337,23 @@ public class Main  {
                 String modelo = ler.nextLine();
                 System.out.println("Insira a cilindrada do Carro a adicionar : ");
                 int cilindrada = ler.nextInt();
+                ler.nextLine();
                 System.out.println("Insira a potencia do Carro a adicionar : ");
                 int potencia = ler.nextInt();
+                ler.nextLine();
                 System.out.println("Insira a fiabilidade do Carro a adicionar : ");
                 int fiabilidade = ler.nextInt();
+                ler.nextLine();
                 System.out.println("Insira o PAC do Carro a adicionar : ");
                 int pac = ler.nextInt();
+                ler.nextLine();
                 System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
                 String tipoPneus = ler.nextLine();
                 System.out.println("Insira a potencia do motor eletrico do Carro a adicionar : ");
                 int potencia_motor_eletrico = ler.nextInt();
-
+                ler.nextLine();
                 carr.createGTH(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
+                menuCarros();
             }
 
             if (classe.equals("SC")) {
@@ -370,10 +375,8 @@ public class Main  {
                 ler.nextLine();
                 System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
                 String tipoPneus = ler.nextLine();
-
-
-
                 carr.createSC(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+                menuCarros();
             }
         }
         if (p==2)

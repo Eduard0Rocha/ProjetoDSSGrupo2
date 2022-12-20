@@ -15,6 +15,10 @@ public class C2 extends Carro {
         this.isValid = (cilindrada >= 3000 && cilindrada <= 5000);
     }
 
+    public C2(C2 a){
+        super(a);
+        this.afinacao_mecanica=a.getAfinacao_mecanica();
+    }
 
     public boolean DNF(int volta, int totalVoltas, int clima) {
 
@@ -30,6 +34,14 @@ public class C2 extends Carro {
     public int getAfinacao_mecanica() {
 
         return this.afinacao_mecanica;
+    }
+    public  int getISvalid(){
+        if (this.isValid) return 1;
+        return 0;
+    }
+
+    public C2 clone(){
+        return  new C2(this);
     }
 
 

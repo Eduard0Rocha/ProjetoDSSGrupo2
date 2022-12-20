@@ -29,6 +29,8 @@ public class PilotoDAO {
         }
     }
 
+
+
     public static PilotoDAO getInstance() {
         if (PilotoDAO.singleton == null) {
             PilotoDAO.singleton = new PilotoDAO();

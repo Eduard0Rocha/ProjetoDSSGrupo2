@@ -17,6 +17,25 @@ public class SC extends Carro {
         this.isValid = (cilindrada == 6000);
     }
 
+    public void setPiloto_cts(float piloto_cts) {
+        this.piloto_cts = piloto_cts;
+    }
+
+    public void setPiloto_sva(float piloto_sva) {
+        this.piloto_sva = piloto_sva;
+    }
+
+    public void setValid(boolean valid) {
+        isValid = valid;
+    }
+
+    public SC(SC a){
+        super(a);
+        this.isValid=a.getISvalid();
+        this.piloto_cts=a.getPiloto_cts();
+        this.piloto_sva=a.getPiloto_sva();
+    }
+
     public void setPiloto_cts(int cts) {
 
         this.piloto_cts = cts;
@@ -56,6 +75,14 @@ public class SC extends Carro {
         int fiabilidade = (int)(qualidade*0.75) + (int)((super.getCilindrada()/10)*0.25);
 
         return (x > fiabilidade);
+    }
+
+    public  boolean getISvalid(){
+       return this.isValid;
+    }
+
+    public SC clone(){
+        return new SC(this);
     }
 
 }

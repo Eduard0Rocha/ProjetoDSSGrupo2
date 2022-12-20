@@ -13,7 +13,14 @@ public class GT extends Carro
 
         this.isValid = (cilindrada >= 2000 && cilindrada <= 4000);
     }
+    public GT(GT a){
+        super(a);
+        this.isValid=a.isValid();
+    }
 
+    public boolean isValid() {
+        return isValid;
+    }
 
     public boolean DNF(int volta, int totalVoltas, int clima) {
 
@@ -26,6 +33,14 @@ public class GT extends Carro
         int desgaste = (int)((volta+1)*0.5);
 
         return (x > (fiabilidade - desgaste));
+    }
+    public  int getISvalid(){
+        if (this.isValid) return 1;
+        return 0;
+    }
+
+    public GT clone(){
+        return new GT(this);
     }
 
 }

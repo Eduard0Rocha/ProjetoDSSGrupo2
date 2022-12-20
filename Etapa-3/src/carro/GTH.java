@@ -13,6 +13,12 @@ public class GTH extends GT implements Hibrido {
         this.potencia_motor_eletrico = potencia_motor_eletrico;
     }
 
+    public GTH(GTH a){
+        super(a);
+        this.potencia_motor_eletrico=a.getPotEletrico();
+    }
+
+
 
     public int getPotEletrico() {
 
@@ -27,5 +33,9 @@ public class GTH extends GT implements Hibrido {
         int fiabilidade = (int)((100000/super.getCilindrada())*2.55);
         int desgaste = (int)((volta+1)*0.5);
         return (x > (fiabilidade - desgaste - motorh));
+    }
+
+    public GTH clone(){
+        return new GTH(this);
     }
 }

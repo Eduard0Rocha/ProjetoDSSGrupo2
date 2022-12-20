@@ -29,9 +29,9 @@ public class CarrosFacade implements SGestCarros {
         this.carrosCounter++;
         String codCarro = new String( Integer.toString(this.carrosCounter));
 
-
-        this.carros.put(codCarro, new C1(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus));
-
+        C1 aux = new C1(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
+        this.carros.put(codCarro,aux.clone() );
+        this.carroAcess.put(aux.clone());
         return true;
     }
 
@@ -43,9 +43,9 @@ public class CarrosFacade implements SGestCarros {
         String codCarro = new String( Integer.toString(this.carrosCounter));
 
 
-
-        this.carros.put(codCarro, new C1H(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, potencia_motor_eletrico));
-
+        C1H aux = new C1H(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus,potencia_motor_eletrico);
+        this.carros.put(codCarro, aux.clone());
+        this.carroAcess.put(aux.clone());
         return true;
     }
 
@@ -58,8 +58,9 @@ public class CarrosFacade implements SGestCarros {
         String codCarro = new String( Integer.toString(this.carrosCounter));
 
 
-
-        this.carros.put(codCarro, new C2(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica));
+        C2 aux = new C2(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica);
+        this.carros.put(codCarro, aux.clone());
+        this.carroAcess.put(aux.clone());
 
         return true;
     }
@@ -72,9 +73,9 @@ public class CarrosFacade implements SGestCarros {
         this.carrosCounter++;
         String codCarro = new String(Integer.toString(this.carrosCounter));
 
-
-        this.carros.put(codCarro, new C2H(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica, potencia_motor_eletrico));
-
+        C2H aux = new C2H(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, a_mecanica, potencia_motor_eletrico);
+        this.carros.put(codCarro,aux.clone());
+        this.carroAcess.put(aux.clone());
         return true;
     }
 
@@ -86,14 +87,13 @@ public class CarrosFacade implements SGestCarros {
         this.carrosCounter++;
         String codCarro = new String( Integer.toString(this.carrosCounter));
 
-
-
-        this.carros.put(codCarro, new GT(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus));
-
+        GT aux=  new GT(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus);
+        this.carros.put(codCarro, aux.clone());
+        this.carroAcess.put(aux.clone());
         return true;
     }
 
-    @Override
+
     public boolean createGTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String tipo_de_pneus, int potencia_motor_eletrico) {
 
         if (marca == null || modelo == null || tipo_de_pneus == null) return false;
@@ -102,8 +102,9 @@ public class CarrosFacade implements SGestCarros {
         String codCarro = new String(Integer.toString(this.carrosCounter));
 
 
-
-        this.carros.put(codCarro, new GTH(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, potencia_motor_eletrico));
+        GTH a = new GTH(marca, modelo, cilindrada, potencia, fiabilidade, PAC, codCarro, tipo_de_pneus, potencia_motor_eletrico);
+        this.carros.put(codCarro, a.clone());
+        this.carroAcess.put(a.clone());
 
         return true;
     }

@@ -14,6 +14,11 @@ public class C1H extends C1 implements Hibrido
         this.potencia_motor_eletrico = potencia_motor_eletrico;
     }
 
+    public C1H(C1H a){
+        super(a);
+        this.potencia_motor_eletrico=a.getPotEletrico();
+    }
+
     @Override
     public int getPotEletrico() {
 
@@ -26,5 +31,9 @@ public class C1H extends C1 implements Hibrido
         int x=rand.nextInt(85);
         int motorh = this.potencia_motor_eletrico/20;
         return (x > (super.getFiabilidade()-motorh));
+    }
+
+    public C1H clone(){
+        return new C1H(this);
     }
 }
