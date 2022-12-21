@@ -107,83 +107,161 @@ public class Main  {
 
     }
 
-    public static int menuLogin() throws SQLException, NonExistantKey{
+    public static void imprimeMenuLogin(){
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
         System.out.println("|Como pretende efetuar login                         |");
         System.out.println("|1-> Jogador                                         |");
         System.out.println("|2-> Admin                                           |");
         System.out.println("|3-> Guest                                           |");
+        System.out.println("|4-> Criar Jogador                                   |");
         System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeUsernamePrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Insira Username                                     |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeInvalidUserPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|User not found                                      |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimePasswordPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Insira Password                                     |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeGuestCreatedPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Guest criado com sucesso                            |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimePlayerCreatedPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Jogador criado com sucesso                          |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeGuestUnsuccessfulPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Erro na criação do Guest                            |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeJogadorUnsuccessfulPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Erro na criação do Jogador                          |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeNamePrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Insira Nome                                         |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static int menuLogin() throws SQLException, NonExistantKey, CloneNotSupportedException {
+        imprimeMenuLogin();
         int p=ler.nextInt();
 
         String username;
         String np;
+        String password;
+        boolean valid;
+
+        int tentativas = 0;
 
         switch (p){
-            case 1:
-                System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-                System.out.println("|Insira Username                                     |");
-                System.out.println("------------------------------------------------------");
+            case 1: // jogador
+                imprimeUsernamePrompt();
 
                 username=ler.nextLine();
 
                 np = JogadorAutenticadoDAO.search_password(username);
 
                 if(np.equals("NOT FOUND")){
-                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-                    System.out.println("|User not found                                      |");
-                    System.out.println("------------------------------------------------------");
-
-                    return -1;
+                    imprimeInvalidUserPrompt();
                 }
 
                 else{
-                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-                    System.out.println("|Insira Password                                     |");
-                    System.out.println("------------------------------------------------------");
+                    imprimePasswordPrompt();
 
-                    String password=ler.nextLine();
-
-                    if(password.equals(np)){
-                        return 0;
+                    while(!(ler.nextLine().equals(np)) && tentativas<3){
+                        tentativas++;
                     }
+
+                    if(tentativas == 3) return -1;
+
+                    return 0;
                 }
-                return 1;
+
+                return -1;
 
 
-            case 2:
-                System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-                System.out.println("|Insira Username                                     |");
-                System.out.println("------------------------------------------------------");
+            case 2: // admin
+                imprimeUsernamePrompt();
 
                 username=ler.nextLine();
 
                 np = AdminDAO.search_password(username);
 
                 if(np.equals("NOT FOUND")){
-                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-                    System.out.println("|User not found                                      |");
-                    System.out.println("------------------------------------------------------");
+                    imprimeInvalidUserPrompt();
 
-                    return -1;
                 }
 
                 else{
-                    System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-                    System.out.println("|Insira Password                                     |");
-                    System.out.println("------------------------------------------------------");
+                    imprimePasswordPrompt();
 
-                    String password=ler.nextLine();
-
-                    if(password.equals(np)){
-                        return 0;
+                    while(!(ler.nextLine().equals(np)) && tentativas<3){
+                        tentativas++;
                     }
+
+                    if(tentativas == 3) return -1;
+
+                    return 1;
                 }
+                return -1;
+
+            case 3: // Guest
+                imprimeUsernamePrompt();
+
+                username = ler.nextLine();
+                valid = users.createGuest(username);
+
+                if(valid) {
+                    imprimeGuestCreatedPrompt();
+                    return 2;
+                }
+                imprimeGuestUnsuccessfulPrompt();
                 return 1;
 
-            case 3:
-                // Guest
-                return 0;
+            case 4: // new jogador
+                imprimeUsernamePrompt();
+                username = ler.nextLine();
+
+                imprimeNamePrompt();
+                String name = ler.nextLine();
+
+                imprimePasswordPrompt();
+                password = ler.nextLine();
+
+                valid = users.createAPlayer(name,username,password);
+
+                if(valid){
+                    imprimePlayerCreatedPrompt();
+                    return 0;
+                }
+
+                imprimeJogadorUnsuccessfulPrompt();
+
+
+                return 1;
 
             default:
                 return 1;
@@ -583,8 +661,21 @@ public class Main  {
         else menuadmin();
     }
 
-    public static void main(String[] args) throws SQLException,NonExistantKey
-    {
-        menuadmin();
+    public static void main(String[] args) throws SQLException, NonExistantKey, CloneNotSupportedException {
+        int type = -1;
+        while(type<0){
+            type = menuLogin();
+        }
+        switch (type){
+            case 0:
+                //menujogador
+                break;
+            case 1:
+                menuadmin();
+                break;
+            case 2:
+                //menuguest
+                break;
+        }
     }
 }
