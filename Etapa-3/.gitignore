@@ -7,6 +7,7 @@
 /dataSources/
 /dataSources.local.xml
 /out
+src/out
 *.iml
 Etapa-3/src/Data/DAOConfig.java
 
