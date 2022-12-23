@@ -18,6 +18,7 @@ public class UserFacade implements SGestaoUser {
     private JogadorAutenticadoDAO JogadorAutenticadoDAO;
     private JogadorDAO JogadorDAO;
     private GuestDAO GuestDAO;
+    private AdminDAO AdminDAO;
 
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação dos usuários
@@ -27,6 +28,7 @@ public class UserFacade implements SGestaoUser {
         this.JogadorDAO = new JogadorDAO();
         this.GuestDAO = new GuestDAO();
         this.JogadorAutenticadoDAO = new JogadorAutenticadoDAO();
+
 
         this.admins = new HashMap<String,Admin>();
         this.jogadores = new HashMap<String, Jogador>();
@@ -76,7 +78,10 @@ public class UserFacade implements SGestaoUser {
 
         this.adminCounter++;
 
-        this.admins.put(codAdmin, new Admin(nome, ctcto, email, codAdmin, username, password));
+        Admin aux = new Admin(nome, ctcto, email, codAdmin, username, password);
+
+        this.admins.put(codAdmin, aux);
+        this.AdminDAO.put(Integer.toString(this.adminCounter), aux);
 
         return true;
     }

@@ -6,6 +6,9 @@ import circuito.Exceptions.NonExistantKey;
 import  piloto.*;
 import users.UserFacade;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -165,7 +168,8 @@ public class Main  {
         System.out.println("------------------------------------------------------");
     }
 
-    public static int menuLogin() throws SQLException, NonExistantKey, CloneNotSupportedException {
+    public static int menuLogin() throws IOException {
+        BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));
         imprimeMenuLogin();
         int p=ler.nextInt();
 
@@ -180,7 +184,7 @@ public class Main  {
             case 1: // jogador
                 imprimeUsernamePrompt();
 
-                username=ler.nextLine();
+                username=systemIn.readLine();
 
                 np = JogadorAutenticadoDAO.search_password(username);
 
@@ -206,7 +210,7 @@ public class Main  {
             case 2: // admin
                 imprimeUsernamePrompt();
 
-                username=ler.nextLine();
+                username=systemIn.readLine();
 
                 np = AdminDAO.search_password(username);
 
@@ -218,7 +222,7 @@ public class Main  {
                 else{
                     imprimePasswordPrompt();
 
-                    while(!(ler.nextLine().equals(np)) && tentativas<3){
+                    while(!(systemIn.readLine().equals(np)) && tentativas<3){
                         tentativas++;
                     }
 
@@ -231,7 +235,7 @@ public class Main  {
             case 3: // Guest
                 imprimeUsernamePrompt();
 
-                username = ler.nextLine();
+                username = systemIn.readLine();
                 valid = users.createGuest(username);
 
                 if(valid) {
@@ -241,17 +245,21 @@ public class Main  {
                 imprimeGuestUnsuccessfulPrompt();
                 return 1;
 
-            case 4: // new jogador
+            case 4: // new player
                 imprimeUsernamePrompt();
-                username = ler.nextLine();
+                username = systemIn.readLine();
 
                 imprimeNamePrompt();
-                String name = ler.nextLine();
+                String name = systemIn.readLine();
 
                 imprimePasswordPrompt();
-                password = ler.nextLine();
+                password = systemIn.readLine();
 
-                valid = users.createAPlayer(name,username,password);
+                try {
+                    valid = users.createAPlayer(name,username,password);
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
 
                 if(valid){
                     imprimePlayerCreatedPrompt();
@@ -661,7 +669,7 @@ public class Main  {
         else menuadmin();
     }
 
-    public static void main(String[] args) throws SQLException, NonExistantKey, CloneNotSupportedException {
+    public static void main(String[] args) throws SQLException, NonExistantKey, IOException {
         int type = -1;
         while(type<0){
             type = menuLogin();

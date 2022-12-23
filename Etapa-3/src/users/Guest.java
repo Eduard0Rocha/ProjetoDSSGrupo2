@@ -19,4 +19,28 @@ public class Guest extends Jogador {
 
         this.idGuest = new String(idGuest);
     }
+
+    @Override
+    public String getCodJogador() {
+        return super.getCodJogador();
+    }
+
+    @Override
+    public int getPontosGlob() {
+        return super.getPontosGlob();
+    }
+
+    @Override
+    public int getPontosCorr() {
+        return super.getPontosCorr();
+    }
+
+    public String getIdGuest() {
+        return idGuest;
+    }
+
+    @Override
+    public String getNome() {
+        return super.getNome();
+    }
 }

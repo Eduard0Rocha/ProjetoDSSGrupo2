@@ -5,6 +5,8 @@ import users.AuthenticatedPlayer;
 import java.sql.*;
 
 public class JogadorAutenticadoDAO {
+
+
     public JogadorAutenticadoDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
@@ -36,7 +38,6 @@ public class JogadorAutenticadoDAO {
 
 
         } catch (SQLException e) {
-            // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }

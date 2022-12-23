@@ -28,4 +28,28 @@ public class Admin {
         this.codAdmin = new String(codAdmin);
         this.credenciais = new Credenciais(username, password);
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCodAdmin() {
+        return codAdmin;
+    }
+
+    public String getContactoTLM() {
+        return contactoTLM;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getUsername() {
+        return credenciais.getUsername();
+    }
+
+    public String getPassword() {
+        return credenciais.getPassword();
+    }
 }

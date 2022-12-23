@@ -3,6 +3,8 @@ package Data;
 import java.sql.*;
 
 import users.Admin;
+import users.AuthenticatedPlayer;
+
 public class AdminDAO {
     public AdminDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
@@ -20,6 +22,23 @@ public class AdminDAO {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
+    }
+
+    public Admin put(String key, Admin t) {
+        Admin res = null;
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+
+            stm.executeUpdate(
+                    "INSERT INTO admin VALUES ('"+t.getCodAdmin()+"', '"+t.getEmail()+"', '"+t.getContactoTLM() + "', '"+t.getNome()+ "', '"+t.getUsername()+ "', '"+t.getPassword()+"') ");
+
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return res;
     }
 
     public static String search_password(String username){
@@ -46,4 +65,6 @@ public class AdminDAO {
 
         return "NOT FOUND";
     }
+
+
 }
