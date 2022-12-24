@@ -74,20 +74,21 @@ public class CampeonatosFacade implements SGestCampeonatos{
     /**
      * Método que adiciona uma nova corrida a um dado campeonato
      * @param codCamp código identificador do Campeonato
-     * @param codCorr código identificador da Corrida
      * @param codCirc código identificador do Circuito
      * @return Retorna true se a corrida foi adicionada com sucesso, false caso contrário
      */
     @Override
-    public boolean addCorrida(String codCamp, String codCorr, String codCirc) throws SQLException, NonExistantKey {
-        if(codCamp==null || codCorr==null || codCirc==null || !this.campeonatos.containsKey(codCamp)) return false;
-        Campeonato c = this.campeonatos.get(codCamp);
+    public boolean addCorrida(String codCamp, String codCirc) throws SQLException, NonExistantKey {
+        if(codCamp==null || codCirc==null || !this.campeonatoDAO.containsKey(codCamp)) return false;
+        //Campeonato c = this.campeonatos.get(codCamp);
         CircuitosFacade x = new CircuitosFacade();
         Map<String, Circuito> circuitos = x.getCircuitos();
         Circuito circuito = circuitos.get(codCirc);
         if(circuito==null) return false;
-        Corrida nova = new Corrida(codCorr, codCamp, codCirc, circuito);
-        c.addCorrida(codCorr, nova);
+        int codCorr = this.campeonatoDAO.sizeCorr() + 1;
+        Corrida nova = new Corrida(Integer.toString(codCorr), codCamp, codCirc, circuito);
+        //c.addCorrida(codCorr, nova);
+        this.campeonatoDAO.addCorr(nova);
         return true;
     }
 
@@ -141,7 +142,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
         this.campCounter++;
 
-        this.campeonatos.put(codCamp,new Campeonato(codCamp, nomeCamp));
+        //this.campeonatos.put(codCamp,new Campeonato(codCamp, nomeCamp));
         this.campeonatoDAO.put(codCamp, new Campeonato(codCamp, nomeCamp));
         return true;
     }
@@ -156,8 +157,8 @@ public class CampeonatosFacade implements SGestCampeonatos{
      */
     @Override
     public boolean addRegisto(String codJog, String codPiloto, String codCarro, String codCamp) throws SQLException {
-        if(codJog==null || codPiloto==null || codCarro==null || codCamp==null || !this.campeonatos.containsKey(codCamp)) return false;
-        Campeonato c = this.campeonatos.get(codCamp);
+        if(codJog==null || codPiloto==null || codCarro==null || codCamp==null || !this.campeonatoDAO.containsKey(codCamp)) return false;
+        /*Campeonato c = this.campeonatos.get(codCamp);
         UserFacade u = new UserFacade();
         Jogador j = u.getJogador(codJog);
         PilotoFacade p = new PilotoFacade();
@@ -165,7 +166,8 @@ public class CampeonatosFacade implements SGestCampeonatos{
         CarrosFacade carros = new CarrosFacade();
         Carro carro = carros.getCarro(codCarro);
         Registo novo = new Registo(j, carro, p1);
-        c.addRegisto(novo);
+        c.addRegisto(novo);*/
+        this.campeonatoDAO.addReg(codJog, codPiloto, codCarro, codCamp);
         return true;
     }
 
@@ -176,7 +178,6 @@ public class CampeonatosFacade implements SGestCampeonatos{
      * @param downforce valor da downforce
      * @return true se as afinações foram realizadas, false caso contrário
      */
-    //@TODO
     @Override
     public boolean afinacoes(String codCamp, String codJog, int downforce) {
         if (codCamp==null || codJog==null) return false;

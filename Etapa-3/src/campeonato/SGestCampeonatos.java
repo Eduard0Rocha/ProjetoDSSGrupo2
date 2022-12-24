@@ -12,7 +12,7 @@ import java.util.HashMap;
 public interface SGestCampeonatos {
     public abstract HashMap<String, Campeonato> getCampeonatos() throws SQLException;
     public abstract ArrayList<Circuito> getCircuitos(String codCamp);
-    public abstract boolean addCorrida(String codCamp, String codCorr, String codCirc) throws SQLException, NonExistantKey;
+    public abstract boolean addCorrida(String codCamp, String codCirc) throws SQLException, NonExistantKey;
     public abstract HashMap<String, Integer> getClassificacaoC(String codCamp);
     public abstract HashMap<String, Integer>  getClassificacaoCH(String codCamp);
     public abstract ArrayList<Jogador> getJogadores(String codCamp);
