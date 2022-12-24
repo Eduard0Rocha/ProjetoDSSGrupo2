@@ -3,6 +3,7 @@ package Data;
 import campeonato.Campeonato;
 import campeonato.Corrida;
 import campeonato.Registo;
+import circuito.Circuito;
 import piloto.Piloto;
 
 import java.sql.*;
@@ -121,9 +122,9 @@ public class CampeonatoDAO {
                         while (cr3.next()) {
                             int n = cr3.getInt("codRegisto");
                             try(ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='"+n+"'");){
-                                /*Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
+                                Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
                                 aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
-                                registo.add(aux);*/
+                                registo.add(aux);
                             }
                         }
                     }
@@ -202,14 +203,14 @@ public class CampeonatoDAO {
                                 while (cr3.next()) {
                                     int n = cr3.getInt("codRegisto");
                                     try (ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='" + n + "'");) {
-                                /*Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
+                                Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
                                 aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
-                                registo.add(aux);*/
+                                registo.add(aux);
                                     }
                                 }
                             }
 
-                            /*
+
                             try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='" + key + "'");) {
                                 while (cr4.next()) {
                                     int n = cr4.getInt("codCorr");
@@ -230,7 +231,7 @@ public class CampeonatoDAO {
                                         corridas.put(Integer.toString(cr4.getInt("chave")), aux);
                                     }
                                 }
-                            }*/
+                            }
                             c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas);
                             campeonatos.put(Integer.toString(key), c);
                         }
@@ -286,19 +287,19 @@ public class CampeonatoDAO {
         HashMap<String, Corrida> corridas = t.getCorridas();
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            stm.executeUpdate("INSERT INTO campeonato VALUES ('"+t.getCodCamp()+"', '"+t.getNomeCamp()+"')");
+            stm.executeUpdate("INSERT INTO campeonato VALUES ('"+Integer.parseInt(t.getCodCamp())+"', '"+t.getNomeCamp()+"')");
 
             for(int i=0;i<classificacao.size();i++) {
-                stm.executeUpdate("INSERT INTO classificacao VALUES ('"+ i +"', '"+classificacao.get(i)+"', '"+t.getCodCamp()+"')");
+                stm.executeUpdate("INSERT INTO classificacao VALUES ('"+ i +"', '"+classificacao.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<classificacaoH.size();i++) {
-                stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+t.getCodCamp()+"')");
+                stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<registo.size();i++) {
-                stm.executeUpdate("INSERT INTO registo VALUES ('"+ i +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+t.getCodCamp()+"')");
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ i +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<corridas.size();i++) {
-                stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+t.getCodCamp()+"', '"+corridas.get(i).getCodCirc()+"')");
+                stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+Integer.parseInt(t.getCodCamp())+"', '"+Integer.parseInt(corridas.get(i).getCodCirc())+"')");
             }
         } catch (SQLException e) {
             // Database error!
@@ -342,5 +343,71 @@ public class CampeonatoDAO {
             throw new NullPointerException(e.getMessage());
         }
         return k;
+    }
+
+    public int sizeCorr() {
+        int i = 0;
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT count(*) FROM corrida")) {
+            if(rs.next()) {
+                i = rs.getInt(1);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return i;
+    }
+
+    public void addCorr(Corrida cr) {
+        HashMap<String, Float> tempos = cr.getTempos();
+        ArrayList<String> classificacaoCorr = cr.getClassificacao();
+
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            stm.executeUpdate("INSERT INTO corrida VALUES ('"+Integer.parseInt(cr.getCodCorr())+"', '"+Integer.parseInt(cr.getCodCamp())+"', '"+Integer.parseInt(cr.getCodCirc())+"')");
+
+            for(int i=0; i<tempos.size(); i++){
+                stm.executeUpdate("INSERT INTO tempos VALUES ('"+ i +"', '"+tempos.get(i)+"', '"+Integer.parseInt(cr.getCodCorr())+"')");
+            }
+
+            for(int i=0; i<classificacaoCorr.size(); i++){
+                stm.executeUpdate("INSERT INTO classificacaoCorr VALUES ('"+ i +"', '"+classificacaoCorr.get(i)+"', '"+Integer.parseInt(cr.getCodCorr())+"')");
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public int sizeReg() {
+        int i = 0;
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT count(*) FROM registo")) {
+            if(rs.next()) {
+                i = rs.getInt(1);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return i;
+    }
+
+    public void addReg(String codJog, String codPiloto, String codCarro, String codCamp) {
+        int sReg = sizeReg() + 1;
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            stm.executeUpdate("INSERT INTO registo VALUES ('"+sReg+"', '"+Integer.parseInt(codJog)+"', '"+Integer.parseInt(codCarro)+"', '"+Integer.parseInt(codPiloto)+"', '"+0+"', '"+Integer.parseInt(codCamp)+"')");
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
     }
 }
