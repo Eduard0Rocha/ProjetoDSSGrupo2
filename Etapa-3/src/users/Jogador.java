@@ -11,6 +11,17 @@ public class Jogador {
     private String codJogador;
 
     /**
+     * Construtor da classe jogador que não recebe atributos como input
+     */
+    public Jogador() {
+
+        this.nome = "";
+        this.pontosCorr = 0;
+        this.pontosglobais = 0;
+        this.codJogador = "";
+    }
+
+    /**
      * Contrutor da classe jogador que recebe os seus atributos como input
      * @param username nome do jogador
      * @param codJogador código identificador do jogador
