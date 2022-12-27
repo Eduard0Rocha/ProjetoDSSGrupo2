@@ -22,6 +22,20 @@ public class AuthenticatedPlayer extends Jogador {
     }
 
 
+    public AuthenticatedPlayer(String username, String codJogador, String cred_username, String cred_password,int pontoscorr,int pontosGlob) {
+
+        super(username, codJogador,pontoscorr,pontosGlob);
+
+        this.credenciais = new Credenciais(cred_username, cred_password);
+    }
+    public AuthenticatedPlayer(AuthenticatedPlayer a) {
+
+        super(a);
+
+        this.credenciais = new Credenciais(a.getCredenciais().getUsername(), a.getCredenciais().getPassword());
+    }
+
+
     @Override
     public int getPontosGlob() {
         return super.getPontosGlob();
@@ -50,4 +64,17 @@ public class AuthenticatedPlayer extends Jogador {
         return credenciais.getPassword();
     }
 
+    public Credenciais getCredenciais() {
+        return credenciais.clone();
+    }
+
+    public AuthenticatedPlayer clone (){
+        return new AuthenticatedPlayer(this);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "credenciais=" + credenciais.toString() ;
+    }
 }

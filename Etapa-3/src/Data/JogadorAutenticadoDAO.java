@@ -1,6 +1,8 @@
 package Data;
 
+import piloto.Piloto;
 import users.AuthenticatedPlayer;
+import users.*;
 
 import java.sql.*;
 
@@ -11,7 +13,7 @@ public class JogadorAutenticadoDAO {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS jogadorAutenticado (" +
-                    "nome varchar(45) primary key not null," +
+                    "nome varchar(45) not null," +
                     "codJogador int NOT NULL," +
                     "password varchar(45) NOT NULL," +
                     "foreign key(codJogador) references jogador(codJogador))";
@@ -23,18 +25,19 @@ public class JogadorAutenticadoDAO {
         }
     }
 
-    public AuthenticatedPlayer put(String key, AuthenticatedPlayer t) {
+    public AuthenticatedPlayer put( AuthenticatedPlayer t) {
+        System.out.println(t.getCodJogador());
         AuthenticatedPlayer res = null;
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
 
             stm.executeUpdate(
-                    "INSERT INTO jogador VALUES ('"+t.getCodJogador()+"', '"+t.getPontosCorr()+"', '"+t.getPontosGlob() + "', '"+t.getUsername()+"') ");
+                    "INSERT INTO jogador VALUES ('"+t.getCodJogador()+"', '"+t.getPontosCorr()+"', '"+t.getPontosGlob() +"', '"+t.getclasse() +  "', '"+t.getUsername()+"') ");
 
 
 
             stm.executeUpdate(
-                    "INSERT INTO jogadorAutenticado VALUES ('"+t.getCodJogador()+"', '"+t.getNome()+"', '"+t.getPassword()+"') ");
+                    "INSERT INTO jogadorAutenticado VALUES ('"+t.getNome()+"', '"+t.getCodJogador()+"', '"+t.getPassword()+"') ");
 
 
         } catch (SQLException e) {
@@ -44,28 +47,81 @@ public class JogadorAutenticadoDAO {
         return res;
     }
 
-    public static String search_password(String username){
+    public AuthenticatedPlayer get(String key) {
+        AuthenticatedPlayer t ;
+        try {
 
-        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
-             Statement stm = conn.createStatement()) {
-
-            ResultSet rs = stm.executeQuery("SELECT * FROM jogadorAutenticado");
-
-            while (rs.next()) {
-                String name = rs.getString("name");
-
-                if(username.equals(name)){
-                    String password = rs.getString("password");
-                    return password;
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM jogador WHERE codJogador" +
+                    "='"+key+"'");
+            {
+                String username = "";
+                int pontosCorr = 0;
+                int pontosGlobais=0;
+                String nome="";
+                String pass="";
+                if (rs.next()) {
+                    username = rs.getString("username");
+                    pontosCorr= rs.getInt("pontosCorr");
+                    pontosGlobais= rs.getInt("pontosGlobais");
                 }
+
+                ResultSet rs2 = stm.executeQuery("SELECT * FROM jogadorautenticado WHERE codJogador" +
+                        "='"+key+"'");
+                if (rs2.next()){
+                    nome = rs2.getString("nome");
+                    pass = rs2.getString("password");
+                }
+                t=new AuthenticatedPlayer(username,key,nome,pass,pontosCorr,pontosGlobais);
             }
-
-
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
+        return t;
+    }
 
-        return "NOT FOUND";
+
+    public boolean validUser (String username, String password) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT * FROM jogador WHERE username" +
+                "='"+username+"'");
+        {
+            if (rs.next()) {
+            int codigo = rs.getInt("codJogador");
+                ResultSet rs2 = stm.executeQuery("SELECT * FROM jogadorautenticado WHERE codJogador" +
+                        "='"+codigo+"'");
+                 if (rs2.next()){
+                     if (rs2.getString("password").equals(password)) return true;
+                 }
+
+            }
+            return false;
+        }
+    }
+
+    public boolean existsUser (String username) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT * FROM jogador WHERE username" +
+                "='"+username+"'");
+        {
+            if (rs.next()) {
+                if (rs.getString("classe").equals("AP")) return true;
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "JogadorAutenticadoDAO{}";
     }
 }
+
+

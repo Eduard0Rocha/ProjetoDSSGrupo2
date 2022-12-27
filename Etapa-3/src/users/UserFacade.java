@@ -1,5 +1,6 @@
 package users;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import Data.*;
 
@@ -11,9 +12,9 @@ public class UserFacade implements SGestaoUser {
     private HashMap<String,Admin> admins;
     private HashMap<String,Jogador> jogadores;
 
-    private int adminCounter;
-    private int jogadorCounter;
-    private int guestCounter;
+    private int Jogaadorcounter;
+    private int Admincounter;
+    private int GuestCounter;
 
     private JogadorAutenticadoDAO JogadorAutenticadoDAO;
     private JogadorDAO JogadorDAO;
@@ -23,19 +24,20 @@ public class UserFacade implements SGestaoUser {
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação dos usuários
      */
-    public UserFacade() {
+    public UserFacade() throws SQLException {
 
         this.JogadorDAO = new JogadorDAO();
         this.GuestDAO = new GuestDAO();
+        this.AdminDAO= new AdminDAO();
         this.JogadorAutenticadoDAO = new JogadorAutenticadoDAO();
 
 
-        this.admins = new HashMap<String,Admin>();
-        this.jogadores = new HashMap<String, Jogador>();
+        this.admins = AdminDAO.getAdminsDB();
+        this.jogadores =JogadorDAO.getJogadoresDB();
 
-        this.adminCounter = 0;
-        this.jogadorCounter = 0;
-        this.guestCounter = 0;
+        this.Jogaadorcounter = JogadorDAO.getmaxkey();
+        this.Admincounter=AdminDAO.getmaxkey();
+        this.GuestCounter=GuestDAO.getmaxkey();
     }
 
     /**
@@ -50,13 +52,15 @@ public class UserFacade implements SGestaoUser {
 
         if (nome == null || username == null || password == null) return false;
 
-        String codJogador = new String("P" + Integer.toString(jogadorCounter));
+        this.Jogaadorcounter++;
+        String codJogador = new String( Integer.toString(this.Jogaadorcounter));
 
-        this.jogadorCounter++;
+
 
         AuthenticatedPlayer aux = new AuthenticatedPlayer(nome, codJogador, username, password);
-        this.jogadores.put(codJogador,aux);
-        this.JogadorAutenticadoDAO.put(Integer.toString(this.jogadorCounter), aux);
+        this.jogadores.put(codJogador,aux.clone());
+        this.JogadorAutenticadoDAO.put(aux.clone());
+        //System.out.println(aux);
         return true;
     }
 
@@ -74,15 +78,16 @@ public class UserFacade implements SGestaoUser {
 
         if (nome == null || ctcto == null || email == null || username == null || password == null) return false;
 
-        String codAdmin = new String("A" + Integer.toString(this.adminCounter));
+        this.Admincounter++;
+        String codAdmin = new String( Integer.toString(this.Admincounter));
 
-        this.adminCounter++;
+
 
         Admin aux = new Admin(nome, ctcto, email, codAdmin, username, password);
 
-        this.admins.put(codAdmin, aux);
-        this.AdminDAO.put(Integer.toString(this.adminCounter), aux);
-
+        this.admins.put(codAdmin, aux.clone());
+        this.AdminDAO.put(Integer.toString(this.Admincounter), aux.clone());
+       // System.out.println(aux);
         return true;
     }
 
@@ -95,17 +100,14 @@ public class UserFacade implements SGestaoUser {
     public boolean createGuest(String nome) {
 
         if (nome == null) return false;
+        this.Jogaadorcounter++;
+        String codJogador = new String( Integer.toString(Jogaadorcounter));
 
-        String codJogador = new String("P" + Integer.toString(jogadorCounter));
-
-        this.jogadorCounter++;
-
-        String idGuest = new String("G" + Integer.toString(this.guestCounter));
-
-        this.guestCounter++;
-
-        this.jogadores.put(codJogador,new Guest(nome, codJogador, idGuest));
-
+        this.GuestCounter++;
+        String codGuest = new String(Integer.toString(GuestCounter));;
+        Guest a=new Guest(nome, codJogador, codGuest);
+        this.jogadores.put(codJogador,a.clone());
+        this.GuestDAO.put(a.clone());
         return true;
     }
 
@@ -176,4 +178,50 @@ public class UserFacade implements SGestaoUser {
 
         return this.jogadores.get(codJogador);
     }
+
+
+    public boolean validUser(String userName,String pass) throws SQLException {
+
+
+            return JogadorAutenticadoDAO.validUser(userName, pass);
+
+    }
+
+    public boolean existeUser(String userName) throws SQLException {
+        if (JogadorAutenticadoDAO.existsUser(userName)) {
+            return true;
+        }
+        return false;
+        }
+
+    public boolean existeAdmin(String userName) throws SQLException {
+        if (AdminDAO.existsAdmin(userName)) {
+            return true;
+        }
+        return false;
+    }
+    public boolean validPasswordAdmin(String userName,String pass) throws SQLException {
+
+
+        return AdminDAO.validAdmin(userName, pass);
+
+    }
+    public boolean validGuest(String userName) throws SQLException {
+        return GuestDAO.validGuest(userName);
+    }
+
+    public boolean containsUNAME(String  u){
+        return JogadorDAO.containsUsername(u);
+    }
+
+    public HashMap<String,Admin> getAdmins() throws SQLException {
+        this.admins=AdminDAO.getAdminsDB();
+        return new HashMap<>(this.admins);
+    }
+
+    public HashMap<String,Jogador> getPlayers() throws SQLException {
+        this.jogadores=JogadorDAO.getJogadoresDB();
+        return new HashMap<>(this.jogadores);
+    }
+
 }

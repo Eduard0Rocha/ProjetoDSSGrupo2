@@ -29,6 +29,16 @@ public class Admin {
         this.credenciais = new Credenciais(username, password);
     }
 
+    public Admin(Admin a) {
+        this.nome=a.getNome();
+        this.contactoTLM=a.getContactoTLM();
+        this.email=a.getEmail();
+        this.codAdmin=a.getCodAdmin();
+        this.credenciais=a.getCredenciais();
+
+
+    }
+
     public String getNome() {
         return nome;
     }
@@ -52,4 +62,24 @@ public class Admin {
     public String getPassword() {
         return credenciais.getPassword();
     }
+
+
+    public Credenciais getCredenciais() {
+        return  this.credenciais.clone();
+    }
+
+    @Override
+    public String toString() {
+        return "Admin" +
+                "nome='" + nome + '\'' +
+                ", contactoTLM='" + contactoTLM + '\'' +
+                ", email='" + email + '\'' +
+                ", codAdmin='" + codAdmin + '\'' +
+                ", credenciais=" + credenciais ;
+    }
+
+    public Admin clone(){
+        return new Admin(this);
+
+}
 }

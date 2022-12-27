@@ -18,6 +18,11 @@ public class Credenciais {
         this.username = new String(username);
         this.password = new String(password);
     }
+    public Credenciais(Credenciais c) {
+
+        this.username = c.getUsername();
+        this.password = c.getPassword();
+    }
 
     /**
      * Método que altera a password
@@ -34,5 +39,16 @@ public class Credenciais {
 
     public String getUsername() {
         return username;
+    }
+
+
+    public Credenciais clone(){
+        return new Credenciais(this);
+    }
+    @Override
+    public String toString() {
+        return
+                "username='" + username + '\'' +
+                ", password='" + password + '\n';
     }
 }

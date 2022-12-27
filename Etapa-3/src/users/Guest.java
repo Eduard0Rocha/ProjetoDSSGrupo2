@@ -20,6 +20,19 @@ public class Guest extends Jogador {
         this.idGuest = new String(idGuest);
     }
 
+    public Guest(String username, String codJogador, String idGuest,int pontoscorr,int pontosglob) {
+
+        super(username, codJogador,pontoscorr,pontosglob);
+
+        this.idGuest = new String(idGuest);
+    }
+
+
+    public Guest (Guest g) {
+        super(g);
+        this.idGuest=g.getIdGuest();
+    }
+
     @Override
     public String getCodJogador() {
         return super.getCodJogador();
@@ -39,8 +52,18 @@ public class Guest extends Jogador {
         return idGuest;
     }
 
-    @Override
+
     public String getNome() {
         return super.getNome();
+    }
+
+    public Guest clone(){
+        return new Guest(this);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "idGuest='" + idGuest + '\n';
     }
 }

@@ -122,9 +122,9 @@ public class CampeonatoDAO {
                         while (cr3.next()) {
                             int n = cr3.getInt("codRegisto");
                             try(ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='"+n+"'");){
-                                Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
-                                aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
-                                registo.add(aux);
+                              //  Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
+                              //  aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
+                              //  registo.add(aux);
                             }
                         }
                     }
@@ -203,9 +203,9 @@ public class CampeonatoDAO {
                                 while (cr3.next()) {
                                     int n = cr3.getInt("codRegisto");
                                     try (ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='" + n + "'");) {
-                                Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
-                                aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
-                                registo.add(aux);
+                                //Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
+                                //aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
+                                //registo.add(aux);
                                     }
                                 }
                             }

@@ -18,7 +18,6 @@ import java.util.Scanner;
 public class Main  {
 
      private static Scanner ler = new Scanner(System.in);
-     private static CarroDAO a = new CarroDAO();
     private static PilotoFacade pil;
     private static  CircuitosFacade circ;
 
@@ -43,7 +42,7 @@ public class Main  {
 
     public static void menuadmin() throws SQLException,NonExistantKey {
 
-        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("---------------Menu-Admin-----------------------------");
         System.out.println("|Insira as operações que pretende realizar  :        |");
         System.out.println("|1-> Operações relativas a circuitos                 |");
         System.out.println("|2-> Operações relativas a pilotos                   |");
@@ -110,13 +109,35 @@ public class Main  {
 
     }
 
-    public static void imprimeMenuLogin(){
+
+    public static void imprimeMenuLogin0(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Bem-Vindo ao F1Manager                              |");
+        System.out.println("------------------------------------------------------");
+        System.out.println("|Insira a opção que pretende realizar                |");
+        System.out.println("|1->Efetuar Login                                    |");
+        System.out.println("|2->Registar-me                                      |");
+        System.out.println("|3->Obter Lista de Administradores                   |");
+        System.out.println("|4->Obter lista de Jogadores                         |");
+        System.out.println("------------------------------------------------------");
+    }
+    public static void imprimeMenuLogin1(){
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
         System.out.println("|Como pretende efetuar login                         |");
         System.out.println("|1-> Jogador                                         |");
         System.out.println("|2-> Admin                                           |");
         System.out.println("|3-> Guest                                           |");
-        System.out.println("|4-> Criar Jogador                                   |");
+        System.out.println("|Outro->Voltar                                       |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeMenuRegisto(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Como pretende Registar-se ?                         |");
+        System.out.println("|1-> Jogador                                         |");
+        System.out.println("|2-> Admin                                           |");
+        System.out.println("|3-> Guest                                           |");
+        System.out.println("|Outro-> voltar                                      |");
         System.out.println("------------------------------------------------------");
     }
 
@@ -131,6 +152,19 @@ public class Main  {
         System.out.println("|User not found                                      |");
         System.out.println("------------------------------------------------------");
     }
+
+    public static void imprimeContactoPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Insira Contacto De telemóel                         |");
+        System.out.println("------------------------------------------------------");
+    }
+
+    public static void imprimeemailPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Insira email                                        |");
+        System.out.println("------------------------------------------------------");
+    }
+
 
     public static void imprimePasswordPrompt(){
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
@@ -150,6 +184,13 @@ public class Main  {
         System.out.println("------------------------------------------------------");
     }
 
+    public static void imprimeAdminCreatedPrompt(){
+        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
+        System.out.println("|Admin   criado com sucesso                          |");
+        System.out.println("------------------------------------------------------");
+    }
+
+
     public static void imprimeGuestUnsuccessfulPrompt(){
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
         System.out.println("|Erro na criação do Guest                            |");
@@ -168,115 +209,204 @@ public class Main  {
         System.out.println("------------------------------------------------------");
     }
 
-    public static int menuLogin() throws IOException {
+    public static void imprimeMenuPlayer(){
+        System.out.println("---------------Menu-Player---------------------------");
+        System.out.println("|Insira a opcao que pretende Realizar                 |");
+        System.out.println("|1->Entrar num Campeonato                             |");
+        System.out.println("|2->Obter lista de Camepeonatos existentes            |");
+        System.out.println("|3->Criar Campeonato                                  |");
+        System.out.println("|4->Apagar Campeonato                                 |");
+        System.out.println("|                                                     |");
+        System.out.println("------------------------------------------------------");
+        int i = ler.nextInt();
+        ler.nextLine();
+        if (i==1){
+
+        }
+        if (i==2){
+
+        }
+        if (i==3){
+
+        }
+    }
+
+    public static int menuLogin() throws IOException, SQLException, NonExistantKey {
         BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));
-        imprimeMenuLogin();
+        imprimeMenuLogin0();
         int p=ler.nextInt();
+        ler.nextLine();
+
 
         String username;
         String np;
         String password;
         boolean valid;
+            if (p==1) {// login
 
-        int tentativas = 0;
+                imprimeMenuLogin1();
+                int k = ler.nextInt();
+                ler.nextLine();
+                switch (k) {
+                    case 1:
+                        imprimeUsernamePrompt();
+                        username = systemIn.readLine();
+                        if (users.existeUser(username) ){
+                        int i = 0;
+                        while (i < 3) {
+                            imprimePasswordPrompt();
+                            password = ler.nextLine();
+                            if (users.validUser(username, password)) {
+                                System.out.println("Login efetuado com sucesso como jogador");
+                                imprimeMenuPlayer();
+                                break;
+                            }
+                            i++;
+                            System.out.println("Invalido ");
+                        }
 
-        switch (p){
-            case 1: // jogador
-                imprimeUsernamePrompt();
+                        }
+                        else {
+                            System.out.println("User Inexistente");
+                            menuLogin();
+                        }
+                        break;
 
-                username=systemIn.readLine();
+                    case 2:
 
-                np = JogadorAutenticadoDAO.search_password(username);
+                        imprimeUsernamePrompt();
+                        username = systemIn.readLine();
+                        if (users.existeAdmin(username) ){
+                            int i = 0;
+                            while (i < 3) {
+                                imprimePasswordPrompt();
+                                password = ler.nextLine();
+                                if (users.validPasswordAdmin(username, password)) {
+                                    System.out.println("Login efetuado com sucesso como Admin");
+                                    menuadmin();
+                                    break;
+                                }
+                                i++;
+                                System.out.println("Invalido ");
+                            }
 
-                if(np.equals("NOT FOUND")){
-                    imprimeInvalidUserPrompt();
+                        }
+                        else {
+                            System.out.println("Admin Inexistente");
+                            menuLogin();
+                        }
+                        break;
+                    case 3: // Guest
+                        imprimeUsernamePrompt();
+                        username = systemIn.readLine();
+                       if (users.validGuest(username)){
+                          menuGuest();
+                       }
+                       else {
+                           System.out.println("Guest Inexistente");
+                           menuLogin();
+                       }
+                       break;
                 }
+            }
 
-                else{
+            else if (p== 2) {
+                imprimeMenuRegisto();
+                int leu = ler.nextInt();
+                ler.nextLine();
+                if (leu == 1) {
+                    imprimeUsernamePrompt();
+                    username = systemIn.readLine();
+                    while (users.containsUNAME(username)){
+                        System.out.println("Username Inválido ");
+                        imprimeUsernamePrompt();
+                        username = systemIn.readLine();
+                    }
+                    imprimeNamePrompt();
+                    String name = systemIn.readLine();
+
                     imprimePasswordPrompt();
+                    password = systemIn.readLine();
 
-                    while(!(ler.nextLine().equals(np)) && tentativas<3){
-                        tentativas++;
+                    try {
+                        valid = users.createAPlayer(name, username, password);
+                    } catch (CloneNotSupportedException e) {
+                        throw new RuntimeException(e);
                     }
 
-                    if(tentativas == 3) return -1;
-
-                    return 0;
+                    if (valid) {
+                        imprimePlayerCreatedPrompt();
+                        menuLogin();
+                        return 0;
+                    }
+                    else {
+                        imprimeJogadorUnsuccessfulPrompt();
+                        menuLogin();
+                    }
                 }
+                else if (leu == 2)
+                {
+                    imprimeUsernamePrompt();
+                    username = systemIn.readLine();
 
-                return -1;
+                    imprimeNamePrompt();
+                    String name = systemIn.readLine();
 
-
-            case 2: // admin
-                imprimeUsernamePrompt();
-
-                username=systemIn.readLine();
-
-                np = AdminDAO.search_password(username);
-
-                if(np.equals("NOT FOUND")){
-                    imprimeInvalidUserPrompt();
-
-                }
-
-                else{
                     imprimePasswordPrompt();
+                    password = systemIn.readLine();
 
-                    while(!(systemIn.readLine().equals(np)) && tentativas<3){
-                        tentativas++;
+                    imprimeemailPrompt();
+                    String email=ler.nextLine();
+
+                    imprimeContactoPrompt();
+                    String contacto=ler.nextLine();
+
+                    valid = users.createAdmin(name,contacto,email,username,password);
+
+                    if (valid) {
+                        imprimeAdminCreatedPrompt();
+                        menuLogin();
+                        return 0;
+                    }
+                    else {
+                        System.out.println("Admin não criado");
+                        menuLogin();
+                    }
+                }
+                else if (leu == 3) {
+                    imprimeUsernamePrompt();
+                    username = systemIn.readLine();
+                    while (users.containsUNAME(username)){
+                        System.out.println("Username Inválido");
+                        imprimeUsernamePrompt();
+                        username = systemIn.readLine();
                     }
 
-                    if(tentativas == 3) return -1;
+                    valid = users.createGuest(username);
+                    if (valid) {
 
-                    return 1;
+                        imprimeGuestCreatedPrompt();
+                        menuLogin();
+                        return 0;
+                    }
+                    else {
+                        imprimeGuestUnsuccessfulPrompt();
+                        menuLogin();
+                    }
                 }
-                return -1;
+                else menuLogin();
 
-            case 3: // Guest
-                imprimeUsernamePrompt();
+            }
+            if (p==3) {
+                System.out.println( users.getAdmins());
+                menuLogin();
+            }
+            if (p==4){
+                System.out.println(users.getPlayers());
+                menuLogin();
+            }
 
-                username = systemIn.readLine();
-                valid = users.createGuest(username);
-
-                if(valid) {
-                    imprimeGuestCreatedPrompt();
-                    return 2;
-                }
-                imprimeGuestUnsuccessfulPrompt();
-                return 1;
-
-            case 4: // new player
-                imprimeUsernamePrompt();
-                username = systemIn.readLine();
-
-                imprimeNamePrompt();
-                String name = systemIn.readLine();
-
-                imprimePasswordPrompt();
-                password = systemIn.readLine();
-
-                try {
-                    valid = users.createAPlayer(name,username,password);
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                if(valid){
-                    imprimePlayerCreatedPrompt();
-                    return 0;
-                }
-
-                imprimeJogadorUnsuccessfulPrompt();
-
-
-                return 1;
-
-            default:
-                return 1;
-
-        }
-
-
+            return 0;
     }
 
     public static void  menuCarros () throws SQLException,NonExistantKey {
@@ -496,6 +626,27 @@ public class Main  {
     }
 
 
+    public static void menuGuest() throws SQLException, NonExistantKey {
+
+        System.out.println("---------------Menu-Guest-----------------------------");
+        System.out.println("|Insira as operações que pretende realizar  :        |");
+        System.out.println("|1-> Entrar num campeonato                           |");
+        System.out.println("|2-> Obter lista de Campeonatos                      |");
+        System.out.println("|3-> Sair de um campeonato                           |");
+        System.out.println("|Outro -> voltar                                     |");
+        System.out.println("-----------------------------------------------------|");
+        int p = ler.nextInt();
+        ler.nextLine();
+        if (p == 1) {
+            System.out.println("entrar num campeonato");
+        } else if (p == 2) {
+            System.out.println("obter lista de camponatos");
+
+        } else if (p == 3) {
+            System.out.println("sair de um camponato");
+        }
+    }
+
 
     public static void menuCircuitos() throws SQLException, NonExistantKey {
 
@@ -659,11 +810,9 @@ public class Main  {
         if (p==8){
             System.out.println("Insira o código do Campeonato onde pertende adiconar a Corrida : ");
             String cCamp=ler.nextLine();
-            System.out.println("Insira o código da Corrida a adicionar : ");
-            String cCor=ler.nextLine();
             System.out.println("Insira o código do Circuito da Corrida a adicionar : ");
             String cCir=ler.nextLine();
-            camp.addCorrida(cCamp, cCor, cCir);
+            camp.addCorrida(cCamp, cCir);
             menuCampeonatos();
         }
         else menuadmin();
