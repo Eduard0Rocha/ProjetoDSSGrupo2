@@ -67,7 +67,7 @@ public class CircuitoDAO {
         return CircuitoDAO.singleton;
     }
 
-    public Circuito get(Object key) {
+    public static Circuito get(Object key) {
         Circuito t = new Circuito();
         String codCirc="0";
         int voltas=0;

@@ -138,15 +138,16 @@ public class CarroDAO {
         }
     }
 
+    /*
     public static CarroDAO getInstance() {
         if (CarroDAO.singleton == null) {
             CarroDAO.singleton = new CarroDAO();
         }
         return CarroDAO.singleton;
     }
+*/
 
-
-    public Carro get(Object key) {
+    public static Carro get(Object key) {
         try {
 
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);

@@ -30,15 +30,16 @@ public class PilotoDAO {
     }
 
 
-
+/*
     public static PilotoDAO getInstance() {
         if (PilotoDAO.singleton == null) {
             PilotoDAO.singleton = new PilotoDAO();
         }
         return PilotoDAO.singleton;
     }
+    */
 
-    public Piloto get(Object key) {
+    public static Piloto get(Object key) {
         Piloto t = new Piloto();
         try {
 
@@ -103,7 +104,7 @@ public class PilotoDAO {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement();
              ResultSet rs =
-                     stm.executeQuery("SELECT Id FROM piloto WHERE codPiloto='"+key.toString()+"'")) {
+                     stm.executeQuery("SELECT * FROM piloto WHERE codPiloto='"+key.toString()+"'")) {
             r = rs.next();
         } catch (SQLException e) {
             e.printStackTrace();

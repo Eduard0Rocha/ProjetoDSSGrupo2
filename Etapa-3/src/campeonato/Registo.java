@@ -96,4 +96,14 @@ public class Registo {
     public void setNrAfinacoes(int nrAfinacoes) {
         this.nrAfinacoes = nrAfinacoes;
     }
+
+    @Override
+    public String toString() {
+        return "Registo{" +
+                "jogador=" + jogador +
+                ", carro=" + carro +
+                ", piloto=" + piloto +
+                ", nrAfinacoes=" + nrAfinacoes +
+                '}';
+    }
 }

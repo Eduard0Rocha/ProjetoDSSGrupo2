@@ -134,4 +134,15 @@ public class Corrida {
     public void setCircuito(Circuito circuito) {
         this.circuito = circuito;
     }
+
+    @Override
+    public String toString() {
+        return "Corrida : " +
+                "codCorr='" + codCorr + '\'' +
+                ", codCamp='" + codCamp + '\'' +
+                ", codCirc='" + codCirc + '\'' +
+                ", tempos=" + tempos +
+                ", classificacao=" + classificacao.toString() +
+                ", circuito=" + circuito.toString()  +"\n";
+    }
 }

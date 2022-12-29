@@ -5,13 +5,14 @@ import users.AuthenticatedPlayer;
 import users.Guest;
 import users.Jogador;
 
+import javax.swing.*;
 import java.sql.*;
 import java.util.HashMap;
 
 public class JogadorDAO {
 
-    private JogadorAutenticadoDAO jogadorAutenticadoDAO = new JogadorAutenticadoDAO();
-    private GuestDAO guestDAO = new GuestDAO();
+    private static JogadorAutenticadoDAO jogadorAutenticadoDAO = new JogadorAutenticadoDAO();
+    private static GuestDAO guestDAO = new GuestDAO();
     private static JogadorDAO singleton = null;
 
     public JogadorDAO(){
@@ -39,6 +40,32 @@ public class JogadorDAO {
     }
 
 
+    public static Jogador get(String key) {
+        Jogador t = null;
+        try {
+
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM jogador WHERE codJogador" +
+                    "='"+key+"'");
+            if (rs.next())
+            {
+               String classe = rs.getString("classe");
+               if (classe.equals("AP")){
+                     return  jogadorAutenticadoDAO.get(key);
+
+               }
+               else  if (classe.equals("G")){
+                  return  guestDAO.get(key);
+                }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return t;
+    }
 
     public int size() {
         int i = 0;

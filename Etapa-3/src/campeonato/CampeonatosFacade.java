@@ -135,17 +135,27 @@ public class CampeonatosFacade implements SGestCampeonatos{
      */
     @Override
     public boolean createCampeonato(String nomeCamp) {
-        for(Map.Entry<String, Campeonato> c : this.campeonatos.entrySet()){
-            if(c.getValue().getNomeCamp() == nomeCamp) return false;
-        }
-        String codCamp = new String("Campeonato" + Integer.toString(this.campCounter));
-
         this.campCounter++;
+        String codCamp = new String( Integer.toString(this.campCounter));
 
-        //this.campeonatos.put(codCamp,new Campeonato(codCamp, nomeCamp));
-        this.campeonatoDAO.put(codCamp, new Campeonato(codCamp, nomeCamp));
-        return true;
+        if (this.campeonatoDAO.containsKey(codCamp)) return false;
+
+        else {
+            Campeonato c = new Campeonato(nomeCamp,codCamp);
+            System.out.println("vou por :"+c.toString());
+            this.campeonatos.put(c.getCodCamp(),c.clone());
+            this.campeonatoDAO.put( c.clone());
+            return true;
+        }
     }
+
+    public boolean existsCampeonato(String cod){
+        if (campeonatoDAO.containsKey(cod)) {
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * Método que adiciona um Registo novo a um dado Campeonato

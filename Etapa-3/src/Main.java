@@ -231,7 +231,7 @@ public class Main  {
         }
     }
 
-    public static int menuLogin() throws IOException, SQLException, NonExistantKey {
+    public static void  menuLogin() throws IOException, SQLException, NonExistantKey {
         BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));
         imprimeMenuLogin0();
         int p=ler.nextInt();
@@ -307,6 +307,8 @@ public class Main  {
                            menuLogin();
                        }
                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -337,7 +339,6 @@ public class Main  {
                     if (valid) {
                         imprimePlayerCreatedPrompt();
                         menuLogin();
-                        return 0;
                     }
                     else {
                         imprimeJogadorUnsuccessfulPrompt();
@@ -366,7 +367,7 @@ public class Main  {
                     if (valid) {
                         imprimeAdminCreatedPrompt();
                         menuLogin();
-                        return 0;
+
                     }
                     else {
                         System.out.println("Admin não criado");
@@ -387,7 +388,6 @@ public class Main  {
 
                         imprimeGuestCreatedPrompt();
                         menuLogin();
-                        return 0;
                     }
                     else {
                         imprimeGuestUnsuccessfulPrompt();
@@ -405,8 +405,7 @@ public class Main  {
                 System.out.println(users.getPlayers());
                 menuLogin();
             }
-
-            return 0;
+            else menuLogin();
     }
 
     public static void  menuCarros () throws SQLException,NonExistantKey {
@@ -753,6 +752,7 @@ public class Main  {
         if (p==1){
             System.out.println("Insira o nome do Campeonato a adicionar: ");
             String ncamp=ler.nextLine();
+            System.out.println(ncamp);
             camp.createCampeonato(ncamp);
             menuCampeonatos();
         }
@@ -798,15 +798,33 @@ public class Main  {
         if (p==7){
             System.out.println("Insira o código do Campeonato onde pertende adiconar o Registo : ");
             String cCamp=ler.nextLine();
-            System.out.println("Insira o código do Jogador a adicionar : ");
-            String cJog=ler.nextLine();
-            System.out.println("Insira o código do Piloto a adicionar : ");
-            String cPl=ler.nextLine();
-            System.out.println("Insira o código do Carro a adicionar : ");
-            String cCar=ler.nextLine();
-            camp.addRegisto(cJog, cPl, cCar, cCamp);
-            menuCampeonatos();
-        }
+            if (camp.existsCampeonato(cCamp)) {
+                System.out.println("Insira o código do Jogador a adicionar : ");
+                String cJog = ler.nextLine();
+                if (users.existeUser(cJog)) {
+                    System.out.println("Insira o código do Piloto a adicionar : ");
+                    String cPl = ler.nextLine();
+                    if (pil.existsPiloto(cPl) ){
+                        System.out.println("Insira o código do Carro a adicionar : ");
+                        String cCar = ler.nextLine();
+                        camp.addRegisto(cJog, cPl, cCar, cCamp);
+                    }
+                    else {
+                        System.out.println("Piloto inexistente");
+                        menuCampeonatos();
+                    }
+                }
+                else{
+                    System.out.println("User inexistente");
+                    menuCampeonatos();
+                }
+            }
+            else{
+                    System.out.println("Campeonato inexistente");
+
+                    menuCampeonatos();
+                }
+            }
         if (p==8){
             System.out.println("Insira o código do Campeonato onde pertende adiconar a Corrida : ");
             String cCamp=ler.nextLine();
@@ -819,20 +837,7 @@ public class Main  {
     }
 
     public static void main(String[] args) throws SQLException, NonExistantKey, IOException {
-        int type = -1;
-        while(type<0){
-            type = menuLogin();
+        menuLogin();
         }
-        switch (type){
-            case 0:
-                //menujogador
-                break;
-            case 1:
-                menuadmin();
-                break;
-            case 2:
-                //menuguest
-                break;
-        }
-    }
+
 }

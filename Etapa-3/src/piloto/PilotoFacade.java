@@ -105,7 +105,7 @@ public class PilotoFacade implements SGestPiloto  {
     @Override
     public boolean existsPiloto(String codPiloto) {
 
-        return this.pilotos.containsKey(codPiloto);
+        return this.pilotoDAO.containsKey(codPiloto);
 
     }
 }

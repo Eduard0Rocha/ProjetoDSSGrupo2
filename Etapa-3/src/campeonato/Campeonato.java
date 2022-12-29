@@ -2,6 +2,7 @@ package campeonato;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import Data.*;
 
 /**
  * Classe responsável armazenar a informação sobre um campeonato e operar sobre a sua informação
@@ -14,6 +15,18 @@ public class Campeonato {
     private HashMap<String, Integer> classificacaoH;
     private ArrayList<Registo> registo;
     private HashMap<String, Corrida> corridas;
+
+    @Override
+    public String toString() {
+        return "Campeonato{" +
+                "nomeCamp='" + nomeCamp + '\'' +
+                ", codCamp='" + codCamp + '\'' +
+                ", classificacao=" + classificacao +
+                ", classificacaoH=" + classificacaoH +
+                ", registo=" + registo +
+                ", corridas=" + corridas +
+                '\n';
+    }
 
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação de um campeonato
@@ -106,7 +119,7 @@ public class Campeonato {
      * @return Retorna as classificações
      */
     public HashMap<String, Integer> getClassificacao() {
-        return this.classificacao;
+        return  new HashMap<>(this.classificacao);
     }
 
     /**
@@ -121,7 +134,7 @@ public class Campeonato {
      * @return Retorna as classificações dos hibridos
      */
     public HashMap<String, Integer> getClassificacaoH() {
-        return this.classificacaoH;
+        return new HashMap<>(this.classificacaoH) ;
     }
 
     /**
@@ -136,7 +149,7 @@ public class Campeonato {
      * @return Retorna a lista dos registos
      */
     public ArrayList<Registo> getRegisto() {
-        return this.registo;
+        return  new ArrayList<>(this.registo);
     }
 
     /**
@@ -177,5 +190,9 @@ public class Campeonato {
      */
     public void addRegisto(Registo registo){
         this.registo.add(registo);
+    }
+
+    public Campeonato clone(){
+        return new Campeonato(this);
     }
 }
