@@ -224,4 +224,15 @@ public class UserFacade implements SGestaoUser {
         return new HashMap<>(this.jogadores);
     }
 
+    public boolean existeJogador(String key) throws SQLException {
+        return JogadorDAO.existsKey(key);
+    }
+
+    public Jogador getJogadorByUname(String username) throws SQLException {
+        if (existeJogador(username)) {
+            return JogadorDAO.getJogador(username);
+        }
+        return new AuthenticatedPlayer("","","","");
+    }
+
 }

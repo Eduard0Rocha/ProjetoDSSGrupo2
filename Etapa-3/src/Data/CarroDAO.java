@@ -380,7 +380,6 @@ public class CarroDAO {
                      stm.executeQuery("SELECT * FROM carro WHERE codCarro='"+key.toString()+"'")) {
             r = rs.next();
         } catch (SQLException e) {
-            // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }

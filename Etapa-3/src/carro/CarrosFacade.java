@@ -159,14 +159,19 @@ public class CarrosFacade implements SGestCarros {
         return new HashMap<>(this.carros);
     }
 
-    public boolean removeCarro(String codCirc){
+    public boolean removeCarro(String codCarro){
 
-        if (carroAcess.containsKey(codCirc)){
-            this.carros.remove(codCirc);
-            carroAcess.remove(codCirc);
+        if (carroAcess.containsKey(codCarro)){
+            this.carros.remove(codCarro);
+            carroAcess.remove(codCarro);
             return true;
         }
         else return false;
+    }
+
+    public boolean existeCarros(String codCarro){
+
+       return this.carroAcess.containsKey(codCarro);
     }
 
 

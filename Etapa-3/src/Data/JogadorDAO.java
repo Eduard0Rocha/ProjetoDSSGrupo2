@@ -108,6 +108,20 @@ public class JogadorDAO {
         }
     }
 
+    public boolean existsKey (String key) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT * FROM jogador WHERE codJogador" +
+                "='"+key+"'");
+        {
+            if (rs.next()) {
+                return true;
+            }
+            return false;
+        }
+    }
+
     public boolean containsUsername(String username) {
             try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
                  Statement stm = conn.createStatement()) {
@@ -155,6 +169,31 @@ public class JogadorDAO {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
+    }
+
+
+    public AuthenticatedPlayer getJogador(String username) throws SQLException {
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement s = conn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM jogador WHERE username" +
+                    "='"+username+"'");
+                if (rs.next()) {
+                    int cod =  rs.getInt("codJogador");
+                    String classe = rs.getString("classe");
+                    if (classe.equals("AP")){
+                        AuthenticatedPlayer n = jogadorAutenticadoDAO.get(Integer.toString(cod));
+                        return n;
+                    }
+                }
+            }
+
+
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return null;
     }
 
 
