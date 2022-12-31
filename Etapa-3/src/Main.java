@@ -1,5 +1,7 @@
 import campeonato.Campeonato;
 import campeonato.CampeonatosFacade;
+import campeonato.Corrida;
+import campeonato.Registo;
 import carro.*;
 import Data.*;
 import circuito.*;
@@ -35,9 +37,9 @@ public class Main  {
         System.out.println("|Insira as operações que pretende realizar  :        |");
         System.out.println("|1-> Operações relativas a circuitos                 |");
         System.out.println("|2-> Operações relativas a pilotos                   |");
-        System.out.println("|3-> Operações relativas a Jogadores                 |");
-        System.out.println("|4-> Operações relativas a Campeonatos               |");
-        System.out.println("|5-> Operações relativas a Carros                    |");
+        System.out.println("|3-> Operações relativas a Campeonatos               |");
+        System.out.println("|4-> Operações relativas a Carros                    |");
+        System.out.println("|                                                    |");
         System.out.println("|Outro-> Sair                                        |");
         System.out.println("-----------------------------------------------------|");
         int p=ler.nextInt();
@@ -49,11 +51,11 @@ public class Main  {
         {
          menuPilotos();
         }
-        if (p==4)
+        if (p==3)
         {
             menuCampeonatos();
         }
-        if(p==5)
+        if(p==4)
         {
             menuCarros();
         }
@@ -201,6 +203,9 @@ public class Main  {
         System.out.println("------------------------------------------------------");
     }
 
+
+
+
     public static void imprimeMenuPlayer() throws SQLException, IOException, NonExistantKey, CloneNotSupportedException {
         System.out.println("---------------Menu-Player---------------------------");
         System.out.println("|Insira a opcao que pretende Realizar                 |");
@@ -250,38 +255,30 @@ public class Main  {
         ler.nextLine();
         if (i==1){
             printCampeonatos(busi.getCampeonatos().values());
-            //printCampeonatos(camp.getCampeonatos().values());
             imprimeMenuEnterCampeonato();
         }
         if (i==2){
            printPilotos(busi.getpilotos().values());
-           // printPilotos(pil.getPilotos().values());
             imprimeMenuEnterCampeonato();
         }
         if (i==3){
            printCarros(busi.getCarros().values());
-           // printCarros(carr.getCarros().values());
             imprimeMenuEnterCampeonato();
         }
         if (i==4){
             System.out.println("Insira o código do Campeonato onde pertende adiconar o Registo : ");
             String cCamp=ler.nextLine();
             if (busi.existsCampeonato(cCamp)){
-            //if (camp.existsCampeonato(cCamp)) {
                 System.out.println("Insira o código do Jogador a adicionar : ");
                 String cJog = ler.nextLine();
-                if (busi.existsUser(cJog)){
-                //if (users.existeJogador(cJog)) {
+                if (busi.existsCodJog(cJog)){
                     System.out.println("Insira o código do Piloto a adicionar : ");
                     String cPl = ler.nextLine();
                     if(busi.existsPil(cPl)){
-                    //if (pil.existsPiloto(cPl) ){
                         System.out.println("Insira o código do Carro a adicionar : ");
                         String cCar = ler.nextLine();
                         if (busi.existsCarro(cCar)){
-                       // if (carr.existeCarros(cCar)){
                             busi.addRegisto(cJog,cPl,cCar,cCamp);
-                            //camp.addRegisto(cJog, cPl, cCar, cCamp);
                             imprimeMenuEnterCampeonato();
                         }
                         else {
@@ -493,7 +490,8 @@ public class Main  {
                 menuLogin();
             }
             if (p==4){
-                System.out.println(busi.getPlayers());
+                //System.out.println(busi.getPlayers());
+                printJogadores(busi.getPlayers().values());
                 //System.out.println(users.getPlayers());
                 menuLogin();
             }
@@ -818,8 +816,9 @@ public class Main  {
             menuCircuitos();
         }
         if (p==2){
-           System.out.println(busi.getCircuitos().values());
+           //System.out.println(busi.getCircuitos().values());
             //System.out.println(circ.getCircuitos().values());
+            printCircuitos(busi.getCircuitos().values());
             menuCircuitos();
         }
         if (p==3){
@@ -856,39 +855,33 @@ public class Main  {
             String ncamp=ler.nextLine();
             System.out.println(ncamp);
             busi.createCampeonato(ncamp);
-            //camp.createCampeonato(ncamp);
             menuCampeonatos();
         }
         if (p==2){
-            //System.out.println(camp.getCampeonatos().values());
             printCampeonatos(busi.getCampeonatos().values());
-           // printCampeonatos(camp.getCampeonatos().values());
             menuCampeonatos();
         }
         if (p==3){
-            System.out.println("nao testado");
             System.out.println("Insira o codigo do campeonato que pretente remover: ");
             String cod =ler.nextLine();
             boolean aux = busi.removeCamp(cod);
-           // boolean aux = camp.removeCampeonato(cod);
             if (!aux) System.out.println("Campeonato não existe!");
             else System.out.println("Campeonato removido!");
             menuCampeonatos();
         }
         if (p==4){
-            System.out.println("nao testado");
             System.out.println("Insira o codigo do campeonato  : ");
             String cod =ler.nextLine();
-            System.out.println(busi.getCircuitosCamp(cod));
-           // System.out.println(camp.getCircuitos(cod));
+            printCircuitos(busi.getCircuitosCamp(cod));
             menuCampeonatos();
         }
         if (p==5){
-            System.out.println("nao testado");
             System.out.println("Insira o codigo do campeonato  : ");
             String cod =ler.nextLine();
-            System.out.println(busi.getJogadoresCamp(cod));
-           // System.out.println(camp.getJogadores(cod));
+            if (busi.existsCampeonato(cod)) {
+                printJogadores(busi.getJogadoresCamp(cod));
+            }
+            else System.out.println("Campeonato inexistente");
             menuCampeonatos();
         }
         if (p==6){
@@ -915,7 +908,7 @@ public class Main  {
             if (busi.existsCampeonato(cCamp)) {
                 System.out.println("Insira o código do Jogador a adicionar : ");
                 String cJog = ler.nextLine();
-                if (busi.existsUser(cJog)) {
+                if (busi.existsCodJog(cJog)) {
                     System.out.println("Insira o código do Piloto a adicionar : ");
                     String cPl = ler.nextLine();
                     if (busi.existsPil(cPl) ){
@@ -923,7 +916,6 @@ public class Main  {
                         String cCar = ler.nextLine();
                         if (busi.existsCarro(cCar)){
                             busi.addRegisto(cJog, cPl, cCar, cCamp);
-                            //camp.addRegisto(cJog, cPl, cCar, cCamp);
                             menuCampeonatos();
                         }
                         else {
@@ -947,28 +939,87 @@ public class Main  {
                     menuCampeonatos();
                 }
             }
-        if (p==8){
+        if (p==8) {
             System.out.println("nao testado");
             System.out.println("Insira o código do Campeonato onde pertende adiconar a Corrida : ");
-            String cCamp=ler.nextLine();
-            System.out.println("Insira o código do Circuito da Corrida a adicionar : ");
-            String cCir=ler.nextLine();
-            busi.addCorridaCamp(cCamp,cCir);
-            //camp.addCorrida(cCamp, cCir);
-            menuCampeonatos();
-        }
+            String cCamp = ler.nextLine();
+            if (busi.existsCampeonato(cCamp))
+            {
+                System.out.println("Insira o código do Circuito da Corrida a adicionar : ");
+                String cCir = ler.nextLine();
+                if (busi.existsCircuito(cCir)) {
+                    busi.addCorridaCamp(cCamp, cCir);
+                    System.out.println("Corrida adicionada");
+                    menuCampeonatos();
+                }
+                else {
+                    System.out.println("Circuito Inexistente ");
+                    menuCampeonatos();
+                    }
+            }
+            else{
+                System.out.println("Campeonato Inexistente ");
+                menuCampeonatos();
+            }
+                    ;
+                }
         else menuadmin();
-    }
+            }
 
 
 
 
-    public  static void printCampeonatos(Collection<Campeonato> c){
+
+    public  static void printCampeonatos(Collection<Campeonato> c) throws SQLException, NonExistantKey {
         Object[] AUX= c.toArray();
         for (int i =0;i<AUX.length;i++){
-            System.out.println(AUX[i]);
+            System.out.println("##############Campeonato#################");
+            Campeonato toprint = (Campeonato)AUX[i];
+            System.out.println("CódigoCampeonato: " +toprint.getCodCamp()+" , "+
+                    "NomeCampeonato: " +toprint.getNomeCamp());
+            printCorridas(toprint.getCorridas().values());
+            printRegistos(toprint.getRegisto());
+            System.out.println("#####################################################");
         }
+
+        }
+
+    public  static void printCorridas(Collection<Corrida> c) throws SQLException, NonExistantKey {
+        Object[] AUX= c.toArray();
+        System.out.println("------------------Corridas----------------");
+        for (int i =0;i<AUX.length;i++){
+
+            Corrida toprint = (Corrida) AUX[i];
+            Circuito cir = busi.getCircuito(toprint.getCodCirc());
+            System.out.println("CódigoCorrida: " +toprint.getCodCorr()+" , "+
+                    "CódigoCircuito: " +toprint.getCodCirc()+" , "+
+                    "NomeCircuito: " +cir.getNomeCircuito());
+            System.out.println("-----------------------------------------------------------");
+        }
+
     }
+
+    public  static void printRegistos(Collection<Registo> c){
+        Object[] AUX= c.toArray();
+        System.out.println("-------------------------Registos----------------------");
+        for (int i =0;i<AUX.length;i++){
+
+            Registo toprint = (Registo) AUX[i];
+            System.out.println("CódigoRegisto: " +toprint.getCodRegisto()+" , "+
+                    "CódigoJogador: " +toprint.getJogador().getCodJogador()+" , "+
+                    "Username: " +toprint.getJogador().getNome()+" , "+
+                    "CódigoPiloto: " +toprint.getPiloto().getCodPiloto()+" , "+
+                    "NomePiloto: " +toprint.getPiloto().getNome()+" , "+
+                    "CódigoCarro: " +toprint.getCarro().getCodCarro()+" , "+
+                    "Marca: " +toprint.getCarro().getMarca()+" , "+
+                    "Modelo: " +toprint.getCarro().getModelo());
+            System.out.println("-----------------------------------------------------------");
+        }
+
+    }
+
+
+
 
 
     public  static void printAdmins(Collection<Admin> c){
@@ -981,6 +1032,54 @@ public class Main  {
                     "Username: "+toprint.getUsername()+" , "+
                     "Contacto: "+toprint.getContactoTLM()+" , "+
                     "Password: "+toprint.getCredenciais().getPassword());
+        }
+        System.out.println("-----------------------------------------------------------");
+
+    }
+
+
+    public  static void printCircuitos(Collection<Circuito> c){
+        Object[] AUX= c.toArray();
+        System.out.println("---------------------Admins-Registados-------------------");
+        for (int i =0;i<AUX.length;i++){
+            Circuito toprint =  (Circuito) AUX[i];
+            System.out.println("CódigoCircuito: " +toprint.getCodCircuito()+" , "+
+                    "NomeCircuito: " +toprint.getNomeCircuito()+" , "+
+                    "Localização: "+toprint.getLocalizacao()+" , "+
+                    "NrVoltas: "+toprint.getNvoltas()+" , "+
+                    "Distância: "+toprint.getDistancia()+" , "+
+                    "NrRetas: "+toprint.getRetasGDU().size()+" , "+
+                    "NrCurvas: "+toprint.getCurvasGDU().size()+" , "+
+                    "NrChicanes: "+toprint.getChicanesGDU().size()+"|"+
+                    "TemperaturaAsfalto: "+toprint.getCondicoesATM().getTemperaturaAsf()+" "+
+                    "Temperatura: "+toprint.getCondicoesATM().getTemperatura()+" , "+
+                    "Humidade: "+toprint.getCondicoesATM().getHumidade()+" , "+
+                    "EstadoClimaterico: "+toprint.getCondicoesATM().getEstado_climaterico());
+        }
+        System.out.println("-----------------------------------------------------------");
+
+    }
+    public  static void printJogadores(Collection<Jogador> c){
+        Object[] AUX= c.toArray();
+        System.out.println("---------------------Jogadores-Registados-------------------");
+        for (int i =0;i<AUX.length;i++){
+            Jogador toprint =  (Jogador) AUX[i];
+            System.out.print("CodigoJogador: " +toprint.getCodJogador()+" , "+
+                    "Username: " +toprint.getNome()+" , "+
+                    "Pontos Globais: "+toprint.getPontosGlob()+" , "+
+                    "Classe: "+toprint.getclasse());
+
+            if (toprint.getclasse().equals("AP")){
+                AuthenticatedPlayer aux = (AuthenticatedPlayer) toprint;
+                System.out.print(" , "+ "Nome: "+aux.getCredenciais().getUsername()+" , ");
+                System.out.print( "Password: "+aux.getCredenciais().getPassword());
+                System.out.print("\n");
+            }
+            else if (toprint.getclasse().equals("G")){
+                Guest aux = (Guest) toprint;
+                System.out.print(" , "+ "CódigoGuest: "+aux.getIdGuest());
+                System.out.print("\n");
+            }
         }
         System.out.println("-----------------------------------------------------------");
 
@@ -999,6 +1098,8 @@ public class Main  {
         System.out.println("-----------------------------------------------------------");
 
     }
+
+
     public  static void printCarros(Collection<Carro> c){
         Object[] AUX= c.toArray();
         System.out.println("---------------------Carros-Disponíveis-------------------");

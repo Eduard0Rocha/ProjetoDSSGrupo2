@@ -15,7 +15,7 @@ public class Corrida {
     private String codCirc;
     private HashMap<String, Float> tempos;
     private ArrayList<String> classificacao;
-    private Circuito circuito;
+
 
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação de uma corrida
@@ -26,7 +26,7 @@ public class Corrida {
         this.codCirc = null;
         this.tempos = new HashMap<String, Float>();
         this.classificacao = new ArrayList<String>();
-        this.circuito = new Circuito();
+
     }
 
     /**
@@ -36,15 +36,22 @@ public class Corrida {
      * @param codCirc código identificador do circuito
      * @param circuito Circuito associado ao código identificador do circuito
      */
-    public Corrida(String codCorr, String codCamp, String codCirc, Circuito circuito){
+    public Corrida(String codCorr, String codCamp, String codCirc){
         this.codCorr = codCorr;
         this.codCamp = codCamp;
         this.codCirc = codCirc;
         this.tempos = new HashMap<String, Float>();
         this.classificacao = new ArrayList<String>();
-        this.circuito = circuito;
     }
 
+
+    public Corrida (Corrida c){
+        this.codCorr = c.getCodCorr();
+        this.codCamp = c.getCodCamp();
+        this.codCirc = c.getCodCirc();
+        this.tempos = c.getTempos();
+        this.classificacao = c.getClassificacao();
+    }
     /**
      * @return Retorna o código identificador da corrida
      */
@@ -123,17 +130,12 @@ public class Corrida {
     /**
      * @return Retorna o circuito associado à corrida
      */
-    public Circuito getCircuito() {
-        return this.circuito;
+
+    public Corrida clone(){
+        return new Corrida(this);
     }
 
-    /**
-     * Atualiza o circuito associado à corrida
-     * @param circuito Novo circuito
-     */
-    public void setCircuito(Circuito circuito) {
-        this.circuito = circuito;
-    }
+
 
     @Override
     public String toString() {
@@ -142,7 +144,6 @@ public class Corrida {
                 ", codCamp='" + codCamp + '\'' +
                 ", codCirc='" + codCirc + '\'' +
                 ", tempos=" + tempos +
-                ", classificacao=" + classificacao.toString() +
-                ", circuito=" + circuito.toString()  +"\n";
+                ", classificacao=" + classificacao.toString() ;
     }
 }

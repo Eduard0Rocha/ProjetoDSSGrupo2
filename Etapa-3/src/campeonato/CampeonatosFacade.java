@@ -16,6 +16,7 @@ import users.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,8 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
     private HashMap<String, Campeonato> campeonatos;
     private int campCounter;
+    private int RegistoCounter;
+    private  int CorridaCounter;
     private CampeonatoDAO campeonatoDAO;
 
     /**
@@ -38,6 +41,8 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
 
         this.campCounter = campeonatoDAO.getmaxkey();
+        this.CorridaCounter = CampeonatoDAO.getInstance().getmaxkeyCorrida();
+        this.RegistoCounter = campeonatoDAO.getmaxkeyRegisto();
     }
 
     /**
@@ -46,13 +51,14 @@ public class CampeonatosFacade implements SGestCampeonatos{
      */
     @Override
     public HashMap<String, Campeonato> getCampeonatos() throws SQLException{
-        HashMap<String, Campeonato> result = campeonatoDAO.getCampeonatosDB();
-        /*
-        for (Map.Entry<String, Campeonato> x : this.campeonatos.entrySet()){
-            result.put(x.getKey(), x.getValue());
-        }
-         */
+        this.campeonatos=new HashMap<>(campeonatoDAO.getCampeonatosDB());
+        HashMap<String, Campeonato> result = new HashMap<>(campeonatoDAO.getCampeonatosDB());
         return result;
+    }
+
+    @Override
+    public ArrayList<Circuito> getCircuitos(String codCamp) throws SQLException {
+        return null;
     }
 
     /**
@@ -60,15 +66,9 @@ public class CampeonatosFacade implements SGestCampeonatos{
      * @param codCamp código identificador do Campeonato
      * @return ArrayList com os circuitos existentes num dado campeonato
      */
-    @Override
-    public ArrayList<Circuito> getCircuitos(String codCamp) {
-        if (codCamp==null) return null;
-        ArrayList<Circuito> result = new ArrayList<>();
-        Campeonato c = this.campeonatos.get(codCamp);
-        for(Map.Entry<String,Corrida> x : c.getCorridas().entrySet()){
-            result.add(x.getValue().getCircuito());
-        }
-        return result;
+
+    public HashMap<String, Corrida> getCorridasA(String codCamp) throws SQLException {
+       return campeonatoDAO.getCorridas(Integer.parseInt(codCamp));
     }
 
     /**
@@ -79,15 +79,10 @@ public class CampeonatosFacade implements SGestCampeonatos{
      */
     @Override
     public boolean addCorrida(String codCamp, String codCirc) throws SQLException, NonExistantKey {
-        if(codCamp==null || codCirc==null || !this.campeonatoDAO.containsKey(codCamp)) return false;
-        //Campeonato c = this.campeonatos.get(codCamp);
-        CircuitosFacade x = new CircuitosFacade();
-        Map<String, Circuito> circuitos = x.getCircuitos();
-        Circuito circuito = circuitos.get(codCirc);
-        if(circuito==null) return false;
-        int codCorr = this.campeonatoDAO.sizeCorr() + 1;
-        Corrida nova = new Corrida(Integer.toString(codCorr), codCamp, codCirc, circuito);
-        //c.addCorrida(codCorr, nova);
+
+        this.CorridaCounter++;
+        String codCorr = new String( Integer.toString(this.CorridaCounter));
+        Corrida nova = new Corrida(codCorr, codCamp, codCirc);
         this.campeonatoDAO.addCorr(nova);
         return true;
     }
@@ -112,20 +107,19 @@ public class CampeonatosFacade implements SGestCampeonatos{
         return this.campeonatos.get(codCamp).getClassificacaoH();
     }
 
+
+
     /**
      * Método que retorna os jogadores de um dado campeonato
      * @param codCamp código identificador do Campeonato
      * @return ArrayList com os Jogadores
      */
-    @Override
-    public ArrayList<Jogador> getJogadores(String codCamp) {
-        if(codCamp==null) return null;
-        ArrayList<Jogador> result = new ArrayList<>();
-        Campeonato c = this.campeonatos.get(codCamp);
-        for(Registo r : c.getRegisto()){
-            result.add(r.getJogador());
+
+    public ArrayList<Registo> getRegistos(String codCamp) throws SQLException {
+        if(existsCampeonato(codCamp)){
+        return campeonatoDAO.getRegistos(Integer.parseInt(codCamp));
         }
-        return result;
+        else return new ArrayList<>();
     }
 
     /**
@@ -170,16 +164,10 @@ public class CampeonatosFacade implements SGestCampeonatos{
     @Override
     public boolean addRegisto(String codJog, String codPiloto, String codCarro, String codCamp) throws SQLException {
         if(codJog==null || codPiloto==null || codCarro==null || codCamp==null || !this.campeonatoDAO.containsKey(codCamp)) return false;
-        /*Campeonato c = this.campeonatos.get(codCamp);
-        UserFacade u = new UserFacade();
-        Jogador j = u.getJogador(codJog);
-        PilotoFacade p = new PilotoFacade();
-        Piloto p1 = p.getP(codPiloto);
-        CarrosFacade carros = new CarrosFacade();
-        Carro carro = carros.getCarro(codCarro);
-        Registo novo = new Registo(j, carro, p1);
-        c.addRegisto(novo);*/
-        this.campeonatoDAO.addReg(codJog, codPiloto, codCarro, codCamp);
+
+        this.RegistoCounter++;
+        String codRes = new String( Integer.toString(this.RegistoCounter));
+        this.campeonatoDAO.addReg(codJog, codPiloto, codCarro, codCamp,codRes);
         return true;
     }
 
@@ -236,7 +224,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
     @Override
      public boolean removeCampeonato(String codCamp){
 
-         if (campeonatoDAO.containsKey(codCamp)){
+         if (existsCampeonato(codCamp)){
              campeonatoDAO.remove(codCamp);
              return true;
          }

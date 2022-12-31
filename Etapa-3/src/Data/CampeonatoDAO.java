@@ -4,6 +4,7 @@ import campeonato.Campeonato;
 import campeonato.Corrida;
 import campeonato.Registo;
 import carro.Carro;
+import carro.Pneu;
 import piloto.Piloto;
 import users.Jogador;
 
@@ -139,7 +140,7 @@ public class CampeonatoDAO {
                             try(ResultSet co = stm.executeQuery("select * from corrida where codCorr" + "='"+n+"'");
                                 ResultSet tp = stm.executeQuery("select * from tempos where codCorr" + "='"+n+"'");
                                 ResultSet cl = stm.executeQuery("select * from classificacaoCorr where codCorr" + "='"+n+"'");){
-                                Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")),Integer.toString(co.getInt("codCirc")), CircuitoDAO.getInstance().get(co.getInt("codCirc")));
+                                Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")),Integer.toString(co.getInt("codCirc")));
                                 HashMap<String, Float> tempos = new HashMap<>();
                                 while(tp.next()){
                                     tempos.put(Integer.toString(tp.getInt("chave")),tp.getFloat("tempo"));
@@ -217,34 +218,39 @@ public class CampeonatoDAO {
         return classificacaoH;
     }
     public  Corrida getCorrida(int n) throws SQLException {
-        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
-        Statement stm = conn.createStatement();
-        try (ResultSet co = stm.executeQuery("select * from corrida where codCorr" + "='" + n + "'")) {
-          Corrida  aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")), Integer.toString(co.getInt("codCirc")), CircuitoDAO.get(co.getInt("codCirc")));
-            return aux;
+        if (existsCorrida(n) ){
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement stm = conn.createStatement();
+            try (ResultSet co = stm.executeQuery("select * from corrida where codCorr" + "='" + n + "'")) {
+                if (co.next()) {
+                    Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")), Integer.toString(co.getInt("codCirc")));
+                    return aux;
+                }
+            }
         }
+
+        return null;
     }
 
     public  HashMap<String,Corrida> getCorridas(int  key) throws SQLException {
         Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
         Statement stm = conn.createStatement();
-        HashMap<String, Corrida> corridas = new HashMap<>();
-        try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='" + key + "'");) {
-            while (cr4.next()) {
-                System.out.println("entrei");
-                Corrida aux ;
-                int n = cr4.getInt("codCorr");
-                HashMap<String, Float> tempos = this.getTempos(n);
-                ArrayList<String> classCorr =this.getClassificacaoCorr(n);
+        HashMap<String, Corrida> corridas ;
+        try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCamp" + "='" + key + "'")) {
+            corridas=new HashMap<>();
+               while (cr4.next()) {
+                   Corrida aux ;
+                   int n = cr4.getInt("codCorr");
+                   HashMap<String, Float> tempos = this.getTempos(n);
+                   ArrayList<String> classCorr = this.getClassificacaoCorr(n);
+                   aux = getCorrida(n);
+                   aux.setTempos(tempos);
+                   aux.setClassificacao(classCorr);
 
-
-                aux=getCorrida(n);
-                aux.setTempos(tempos);
-                aux.setClassificacao(classCorr);
-                corridas.put(Integer.toString(n), aux);
-            }
-        }
-        return corridas;
+                   corridas.put(Integer.toString(n), aux);
+               }
+            return corridas;
+           }
     }
 
     public HashMap<String, Float> getTempos(int n) throws SQLException {
@@ -282,7 +288,7 @@ public class CampeonatoDAO {
                     Jogador novo = JogadorDAO.get(Integer.toString(  cr3.getInt("codJogador")));
                     Carro car=CarroDAO.get(cr3.getInt("codCarro"));
                     Piloto pil = PilotoDAO.get(cr3.getInt("codPiloto"));
-                    Registo aux = new Registo(novo,car,pil);
+                    Registo aux = new Registo(novo,car,pil,Integer.toString(n));
                     aux.setNrAfinacoes(cr3.getInt("nrAfinacoes"));
                     registo.add(aux);
                 }
@@ -323,6 +329,20 @@ public class CampeonatoDAO {
         return r;
     }
 
+    public boolean existsCorrida(Object key) {
+        boolean r;
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs =
+                     stm.executeQuery("SELECT * FROM corrida WHERE codCorr='"+key.toString()+"'")) {
+            r = rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return r;
+    }
+
     public void put( Campeonato t) {
         HashMap<String, Integer> classificacao = t.getClassificacao();
         HashMap<String, Integer> classificacaoH = t.getClassificacaoH();
@@ -338,7 +358,7 @@ public class CampeonatoDAO {
                 stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<registo.size();i++) {
-                stm.executeUpdate("INSERT INTO registo VALUES ('"+ i +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<corridas.size();i++) {
                 stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+Integer.parseInt(t.getCodCamp())+"', '"+Integer.parseInt(corridas.get(i).getCodCirc())+"')");
@@ -370,15 +390,71 @@ public class CampeonatoDAO {
         }
     }
 
+    public int getmaxkeyCorrida() {
+        int res = 0;
+        if (this.size() == 0) return 0;
+        else {
+            try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+                 Statement stm = conn.createStatement()) {
+                ResultSet rs = stm.executeQuery("SELECT MAX(codCorr) FROM corrida");
+                if (rs.next()) {
+                    res = rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                // Database error!
+                e.printStackTrace();
+                throw new NullPointerException(e.getMessage());
+            }
+            return res;
+        }
+    }
+
+
+    public int getmaxkeyRegisto() {
+        int res = 0;
+        if (this.size() == 0) return 0;
+        else {
+            try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+                 Statement stm = conn.createStatement()) {
+                ResultSet rs = stm.executeQuery("SELECT MAX(codRegisto) FROM registo");
+                if (rs.next()) {
+                    res = rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                // Database error!
+                e.printStackTrace();
+                throw new NullPointerException(e.getMessage());
+            }
+            return res;
+        }
+    }
+
     public boolean remove(Object key) {
-        Campeonato t = this.get(key);
         boolean k = false;
         try {
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
             Statement stm = conn.createStatement();
-            stm.executeUpdate("DELETE FROM campeonato WHERE codCamp='"+key+"'");
-            k=true;
+            try (ResultSet cr1 = stm.executeQuery("select * from corrida where codCamp" +
+                    "='" + key + "'");) {
+                if (cr1.next()) {
+                    while (cr1.next()) {
+                        int codCorr = cr1.getInt("codCorr");
+                        System.out.println(codCorr);
+                        stm.executeUpdate("DELETE FROM classificacaocorr WHERE codCorr='" + codCorr + "'");
+                        stm.executeUpdate("DELETE FROM tempos WHERE codCorr='" + codCorr + "'");
+                    }
+                }
+
+                 stm.executeUpdate("DELETE FROM corrida WHERE codCamp='" + key + "'");
+                 stm.executeUpdate("DELETE FROM classificacao WHERE codCamp='" + key + "'");
+                 stm.executeUpdate("DELETE FROM classificacaoH WHERE codCamp='" + key + "'");
+                 stm.executeUpdate("DELETE FROM registo WHERE codCamp='" + key + "'");
+                 stm.executeUpdate("DELETE FROM campeonato WHERE codCamp='" + key + "'");
+                 k = true;
+             } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
+    }
         catch (Exception e) {
             // Database error!
             e.printStackTrace();
@@ -404,6 +480,7 @@ public class CampeonatoDAO {
     }
 
     public void addCorr(Corrida cr) {
+
         HashMap<String, Float> tempos = cr.getTempos();
         ArrayList<String> classificacaoCorr = cr.getClassificacao();
 
@@ -441,11 +518,11 @@ public class CampeonatoDAO {
         return i;
     }
 
-    public void addReg(String codJog, String codPiloto, String codCarro, String codCamp) {
+    public void addReg(String codJog, String codPiloto, String codCarro, String codCamp,String codReg) {
         int sReg = sizeReg() + 1;
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            stm.executeUpdate("INSERT INTO registo VALUES ('"+sReg+"', '"+Integer.parseInt(codJog)+"', '"+Integer.parseInt(codCarro)+"', '"+Integer.parseInt(codPiloto)+"', '"+0+"', '"+Integer.parseInt(codCamp)+"')");
+            stm.executeUpdate("INSERT INTO registo VALUES ('"+Integer.parseInt(codReg)+"', '"+Integer.parseInt(codJog)+"', '"+Integer.parseInt(codCarro)+"', '"+Integer.parseInt(codPiloto)+"', '"+0+"', '"+Integer.parseInt(codCamp)+"')");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();

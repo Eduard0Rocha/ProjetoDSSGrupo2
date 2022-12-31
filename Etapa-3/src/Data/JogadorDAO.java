@@ -142,6 +142,26 @@ public class JogadorDAO {
         }
 
 
+    public boolean containskey(String cod) {
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+
+
+            ResultSet rs = stm.executeQuery("SELECT * FROM jogador WHERE codJogador" +
+                    "='"+cod+"'");
+            if (rs.next()) {
+                return true;
+            }
+
+            return false;
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+
     public HashMap<String,Jogador> getJogadoresDB() throws SQLException {
         try {
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
@@ -187,6 +207,33 @@ public class JogadorDAO {
                     }
                 }
             }
+
+
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return null;
+    }
+
+    public Jogador getJogadorAG(String cod) throws SQLException {
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement s = conn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT * FROM jogador WHERE codJogador" +
+                    "='"+cod+"'");
+            if (rs.next()) {
+                String classe = rs.getString("classe");
+                if (classe.equals("AP")){
+                    AuthenticatedPlayer n = jogadorAutenticadoDAO.get(cod);
+                    return n;
+                }
+                if (classe.equals("G")){
+                    Guest g = guestDAO.get(cod);
+                    return g;
+                }
+            }
+        }
 
 
         catch (SQLException e) {

@@ -64,5 +64,20 @@ public class CircuitosFacade implements SGestCircuitos {
         else return false;
     }
 
+    public Circuito getCrcuito(String codCirc){
+
+        if (circuitoDAO.containsKey(codCirc)){
+            return this.circuitoDAO.get(codCirc);
+        }
+        return new Circuito();
+    }
+
+    public boolean existsCircuito(String codCirc){
+
+        if (circuitoDAO.containsKey(codCirc)){
+            return true;
+        }
+        return false;
+    }
 
 }

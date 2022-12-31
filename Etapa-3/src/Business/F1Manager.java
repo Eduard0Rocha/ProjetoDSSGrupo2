@@ -53,8 +53,8 @@ public interface F1Manager {
 
      boolean  removeCamp(String cod);
 
-     ArrayList<Circuito> getCircuitosCamp(String cod);
-     ArrayList<Jogador> getJogadoresCamp(String cod);
+     ArrayList<Circuito> getCircuitosCamp(String cod) throws SQLException, NonExistantKey;
+     ArrayList<Jogador> getJogadoresCamp(String cod) throws SQLException;
      HashMap<String, Integer> getClassificacaoC(String cod);
 
     public HashMap<String, Integer> getClassificacaoCH(String cod);

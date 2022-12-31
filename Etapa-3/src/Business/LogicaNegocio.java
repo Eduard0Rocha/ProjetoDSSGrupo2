@@ -2,6 +2,8 @@ package Business;
 
 import campeonato.Campeonato;
 import campeonato.CampeonatosFacade;
+import campeonato.Corrida;
+import campeonato.Registo;
 import carro.Carro;
 import carro.CarrosFacade;
 import circuito.Circuito;
@@ -74,7 +76,10 @@ public class LogicaNegocio implements  F1Manager{
     }
 
     public boolean existsUser(String cJog) throws SQLException {
-        return users.existeJogador(cJog);
+        return users.existeUser(cJog);
+    }
+    public boolean existsCodJog(String cJog) throws SQLException {
+        return users.existscodJog(cJog);
     }
 
     public boolean existsPil(String codPil) throws SQLException {
@@ -166,18 +171,51 @@ public class LogicaNegocio implements  F1Manager{
     public HashMap<String, Circuito>  getCircuitos() throws SQLException, NonExistantKey {
         return  circ.getCircuitos();
     }
+    public Circuito  getCircuito(String codCircuito) throws SQLException, NonExistantKey {
+        return  circ.getCrcuito(codCircuito);
+    }
     public boolean  removeCircuito(String cod)  {
         return  circ.removeCircuito(cod);
+    }
+
+    public boolean  existsCircuito(String codCirc)  {
+        return circ.existsCircuito(codCirc);
     }
     public boolean  removeCamp(String cod) {
         return camp.removeCampeonato(cod);
     }
-    public ArrayList<Circuito> getCircuitosCamp(String cod) {
-        return camp.getCircuitos(cod);
-    }
 
-    public ArrayList<Jogador> getJogadoresCamp(String cod) {
-        return camp.getJogadores(cod);
+    public Jogador  getJogadorAG(String cod) throws SQLException {
+        return users.getJogadorAG(cod);
+    }
+    public ArrayList<Circuito> getCircuitosCamp(String cod) throws SQLException, NonExistantKey {
+            if (existsCampeonato(cod)){
+                HashMap<String, Corrida> corr = camp.getCorridasA(cod);
+                Object[] col=corr.values().toArray();
+                ArrayList<Circuito> circ= new ArrayList<>();
+                for(int i =0;i<col.length;i++){
+                    Corrida c = (Corrida) col[i];
+                     String codCircuito=c.getCodCirc();
+                     Circuito novo = this.getCircuito(codCircuito);
+                     circ.add(novo);
+                }
+                return circ;
+            }
+            else return new ArrayList<>();
+        }
+
+
+    public ArrayList<Jogador> getJogadoresCamp(String cod) throws SQLException {
+        if (existsCampeonato(cod)) {
+            ArrayList<Registo> regs=camp.getRegistos(cod);
+            ArrayList<Jogador> players=new ArrayList<>();
+            for(int i =0;i<regs.size();i++){
+                Jogador a = this.getJogadorAG(regs.get(i).getJogador().getCodJogador());
+                players.add(a);
+            }
+            return  players;
+        }
+        else return new ArrayList<>();
     }
 
     public HashMap<String, Integer> getClassificacaoC(String cod)  {
@@ -187,6 +225,7 @@ public class LogicaNegocio implements  F1Manager{
         return camp.getClassificacaoCH(cod);
     }
     public boolean addCorridaCamp(String cCamp,String cCir) throws SQLException, NonExistantKey {
+
         return camp.addCorrida(cCamp, cCir);
     }
 }

@@ -193,6 +193,12 @@ public class UserFacade implements SGestaoUser {
         }
         return false;
         }
+    public boolean existscodJog(String cod) throws SQLException {
+        if (JogadorDAO.containskey(cod)) {
+            return true;
+        }
+        return false;
+    }
 
     public boolean existeAdmin(String userName) throws SQLException {
         if (AdminDAO.existsAdmin(userName)) {
@@ -233,6 +239,10 @@ public class UserFacade implements SGestaoUser {
             return JogadorDAO.getJogador(username);
         }
         return new AuthenticatedPlayer("","","","");
+    }
+
+    public Jogador getJogadorAG(String cod) throws SQLException {
+            return JogadorDAO.getJogadorAG(cod);
     }
 
 }

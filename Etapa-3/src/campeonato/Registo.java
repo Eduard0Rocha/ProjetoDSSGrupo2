@@ -9,6 +9,7 @@ import users.Jogador;
  */
 public class Registo {
 
+    private String codRegisto;
     private Jogador jogador;
     private Carro carro;
     private Piloto piloto;
@@ -18,6 +19,7 @@ public class Registo {
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação de um registo
      */
     public Registo(){
+        this.codRegisto=null;
         this.jogador = null;
         this.carro = null;
         this.piloto = null;
@@ -30,13 +32,22 @@ public class Registo {
      * @param carro Carro associado ao Jogador
      * @param piloto Piloto associado ao Jogador
      */
-    public Registo(Jogador jogador, Carro carro, Piloto piloto){
+    public Registo(Jogador jogador, Carro carro, Piloto piloto,String codRegisto){
+        this.codRegisto=codRegisto;
         this.jogador = jogador;
         this.carro = carro;
         this.piloto = piloto;
         this.nrAfinacoes = 0;
     }
 
+
+    public Registo(Registo r){
+        this.codRegisto=r.getCodRegisto();
+        this.jogador = r.getJogador();
+        this.carro = r.getCarro();
+        this.piloto = r.getPiloto();
+        this.nrAfinacoes = r.getNrAfinacoes();
+    }
     /**
      * @return Retorna Jogador
      */
@@ -57,6 +68,14 @@ public class Registo {
      */
     public Carro getCarro() {
         return this.carro;
+    }
+
+    public String getCodRegisto() {
+        return codRegisto;
+    }
+
+    public void setCodRegisto(String codRegisto) {
+        this.codRegisto = codRegisto;
     }
 
     /**
@@ -97,6 +116,10 @@ public class Registo {
         this.nrAfinacoes = nrAfinacoes;
     }
 
+
+    public Registo clone(){
+        return new Registo(this);
+    }
     @Override
     public String toString() {
         return "Registo{" +
