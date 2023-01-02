@@ -216,6 +216,21 @@ public class JogadorDAO {
         return null;
     }
 
+    public void addPontos(String cod,int pontos) throws SQLException {
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement s = conn.createStatement();
+             s.executeUpdate("update jogador set pontosGlobais = '" +pontos+"' where codJogador = '"+cod+"'");
+
+        }
+
+
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
     public Jogador getJogadorAG(String cod) throws SQLException {
         try {
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);

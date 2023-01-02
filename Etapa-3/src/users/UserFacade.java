@@ -244,5 +244,10 @@ public class UserFacade implements SGestaoUser {
     public Jogador getJogadorAG(String cod) throws SQLException {
             return JogadorDAO.getJogadorAG(cod);
     }
+    public void setpontosDB(String cod,int pts) throws SQLException {
+        if (this.existeJogador(cod)) {
+             JogadorDAO.addPontos(cod, pts);
+        }
+    }
 
 }

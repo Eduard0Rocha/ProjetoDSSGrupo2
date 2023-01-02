@@ -241,7 +241,7 @@ public class LogicaNegocio implements  F1Manager{
         HashMap<String,Integer> pontosCamp=new HashMap<>();
 
         for(int i =0;i<registos.size();i++){
-            pontosCamp.put(registos.get(i).getJogador(),0);
+            pontosCamp.put(registos.get(i).getJogador(),this.getJogadorAG(registos.get(i).getJogador()).getPontosGlob());
         }
 
         Object[] aux = corridas.keySet().toArray();
@@ -251,9 +251,20 @@ public class LogicaNegocio implements  F1Manager{
                 HashMap<String,Integer> classcorr=atribuipontos(simularCorrida(corr.getCodCorr(),corr.getCodCamp()));
                 pontosCamp = simulaCorr(pontosCamp,classcorr);
         }
-        return pontosCamp;
 
+        for (int i=0;i<registos.size();i++)
+        {
+            this.setpontosJogdb(registos.get(i).getJogador(),pontosCamp.get(registos.get(i).getJogador()));
+        }
+        return pontosCamp;
     }
+
+    public void setpontosJogdb(String codJog,int pts) throws SQLException {
+        users.setpontosDB(codJog,pts);
+    }
+
+
+
     public HashMap<String,Integer> atribuipontos(HashMap<String,Integer> classificacoes){
         HashMap<String,Integer> pontos=new HashMap<>();
         Object[] aux = classificacoes.keySet().toArray();
