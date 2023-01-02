@@ -108,4 +108,10 @@ public class PilotoFacade implements SGestPiloto  {
         return this.pilotoDAO.containsKey(codPiloto);
 
     }
+
+    public Piloto getPiloto(String codPiloto) throws SQLException {
+
+        return this.pilotoDAO.getPiloto(codPiloto);
+
+    }
 }

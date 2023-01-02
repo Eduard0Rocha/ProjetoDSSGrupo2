@@ -106,7 +106,7 @@ public abstract class Carro
     }
 
 
- //   public abstract boolean DNF(int volta, int totalVoltas, int clima);
+     public abstract boolean DNF(int volta, int totalVoltas, int clima);
 
  //   public abstract void setFiabilidade(int volta, int clima);
 
@@ -259,4 +259,25 @@ public abstract class Carro
         return 0;
     }
 
+    public float getEquipamento()
+    {
+
+         if (this.getclasse().equals("C1H")){
+             C1H carr = (C1H)this;
+             return this.PAC * this.potencia * this.cilindrada * carr.getPotEletrico() /1000;
+        }
+        else if (this.getclasse().equals("C2")){
+             C2 carr = (C2) this;
+             return this.PAC * this.potencia * this.cilindrada * carr.getAfinacao_mecanica() /1000;
+        }
+        else if (this.getclasse().equals("GTH")){
+             GTH carr = (GTH) this;
+             return this.PAC * this.potencia * this.cilindrada *carr.getPotEletrico()/1000;
+        }
+        else if (this.getclasse().equals("C2H")){
+             C2H carr = (C2H) this;
+             return this.PAC * this.potencia * this.cilindrada *carr.getPotEletrico() * carr.getAfinacao_mecanica()/1000;
+        }
+        else return this.PAC * this.potencia * this.cilindrada;
+    }
 }

@@ -34,7 +34,6 @@ public class Corrida {
      * @param codCorr código identificador da corrida
      * @param codCamp código identificador do campeonato
      * @param codCirc código identificador do circuito
-     * @param circuito Circuito associado ao código identificador do circuito
      */
     public Corrida(String codCorr, String codCamp, String codCirc){
         this.codCorr = codCorr;

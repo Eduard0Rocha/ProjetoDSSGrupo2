@@ -80,6 +80,26 @@ public class PilotoDAO {
         }
     }
 
+    public Piloto getPiloto(String codPiloto) throws SQLException{
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement s = conn.createStatement();
+            try (ResultSet rs = s.executeQuery("select * from piloto")) {
+                HashMap<String,Piloto> pilotos = new HashMap<>();
+                if  (rs.next()) {
+                    Piloto a  =new Piloto(rs.getString("nome"),rs.getFloat("cts"),rs.getFloat("sva"),Integer.toString(rs.getInt("codPiloto")));
+                return  a.clone();
+                }
+
+                return null;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
     /*
      *Devolve o número de Pilotos na BD
      */

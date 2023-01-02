@@ -234,8 +234,6 @@ public class JogadorDAO {
                 }
             }
         }
-
-
         catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());

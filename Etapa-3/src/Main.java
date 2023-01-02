@@ -209,9 +209,10 @@ public class Main  {
     public static void imprimeMenuPlayer() throws SQLException, IOException, NonExistantKey, CloneNotSupportedException {
         System.out.println("---------------Menu-Player---------------------------");
         System.out.println("|Insira a opcao que pretende Realizar                 |");
-        System.out.println("|1->Entrar num Campeonato                             |");
+        System.out.println("|1->Adicionar Registo num Campeonato                  |");
         System.out.println("|2->Obter lista de Camepeonatos existentes            |");
         System.out.println("|3->Criar Campeonato                                  |");
+        System.out.println("|4->Simular Campeonato                                |");
         System.out.println("|                                                     |");
         System.out.println("|Outro-> Voltar                                       |");
         System.out.println("------------------------------------------------------");
@@ -221,19 +222,29 @@ public class Main  {
             imprimeMenuEnterCampeonato();
         }
         if (i==2){
-           // printCampeonatos(camp.getCampeonatos().values());
+
             printCampeonatos(busi.getCampeonatos().values());
             imprimeMenuEnterCampeonato();
         }
         if (i==3){
             System.out.println("Insira o nome do Campeonato a adicionar: ");
             String ncamp=ler.nextLine();
-            System.out.println(ncamp);
-            //camp.createCampeonato(ncamp);
             busi.createCampeonato(ncamp);
             System.out.println("Campeonato Criado");
             imprimeMenuPlayer();
         }
+        if (i==4){
+            System.out.println("Insira o código do Campeonato a Simular: ");
+            String ncamp=ler.nextLine();
+            if (busi.existsCampeonato(ncamp)) {
+                System.out.println( busi.simulaCampeonato(ncamp));
+            }else {
+                System.out.println("Campeonato invalido");
+            }
+            imprimeMenuPlayer();
+        }
+
+
         else {
             System.out.println("Opção Inválida");
             menuLogin();
@@ -999,20 +1010,23 @@ public class Main  {
 
     }
 
-    public  static void printRegistos(Collection<Registo> c){
+    public  static void printRegistos(Collection<Registo> c) throws SQLException, NonExistantKey {
         Object[] AUX= c.toArray();
         System.out.println("-------------------------Registos----------------------");
         for (int i =0;i<AUX.length;i++){
 
             Registo toprint = (Registo) AUX[i];
+            Carro a = busi.getCarro(toprint.getCarro());
+            Piloto p = busi.getPiloto(toprint.getPiloto());
+            Jogador jg= busi.getJogadorAG(toprint.getJogador());
             System.out.println("CódigoRegisto: " +toprint.getCodRegisto()+" , "+
-                    "CódigoJogador: " +toprint.getJogador().getCodJogador()+" , "+
-                    "Username: " +toprint.getJogador().getNome()+" , "+
-                    "CódigoPiloto: " +toprint.getPiloto().getCodPiloto()+" , "+
-                    "NomePiloto: " +toprint.getPiloto().getNome()+" , "+
-                    "CódigoCarro: " +toprint.getCarro().getCodCarro()+" , "+
-                    "Marca: " +toprint.getCarro().getMarca()+" , "+
-                    "Modelo: " +toprint.getCarro().getModelo());
+                    "CódigoJogador: "+jg.getCodJogador()+" , "+
+                    "Username: " +jg.getNome()+" , "+
+                    "CódigoPiloto: " +p.getCodPiloto()+" , "+
+                    "NomePiloto: " +p.getNome()+" , "+
+                    "CódigoCarro: " +a.getCodCarro()+" , "+
+                    "Marca: " +a.getMarca()+" , "+
+                    "Modelo: " +a.getModelo());
             System.out.println("-----------------------------------------------------------");
         }
 

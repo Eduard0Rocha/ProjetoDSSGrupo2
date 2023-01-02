@@ -13,11 +13,9 @@ import piloto.Piloto;
 import piloto.PilotoFacade;
 import users.*;
 
+import java.security.Key;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class LogicaNegocio implements  F1Manager{
 
@@ -71,6 +69,9 @@ public class LogicaNegocio implements  F1Manager{
         return carr.getCarros();
     }
 
+    public  Carro getCarro(String codCarro) throws SQLException {
+        return carr.getCarro(codCarro);
+    }
     public boolean existsCampeonato(String cCamp) {
         return camp.existsCampeonato(cCamp);
     }
@@ -174,6 +175,9 @@ public class LogicaNegocio implements  F1Manager{
     public Circuito  getCircuito(String codCircuito) throws SQLException, NonExistantKey {
         return  circ.getCrcuito(codCircuito);
     }
+    public Piloto  getPiloto(String codPiloto) throws SQLException, NonExistantKey {
+        return  pil.getPiloto(codPiloto);
+    }
     public boolean  removeCircuito(String cod)  {
         return  circ.removeCircuito(cod);
     }
@@ -210,7 +214,7 @@ public class LogicaNegocio implements  F1Manager{
             ArrayList<Registo> regs=camp.getRegistos(cod);
             ArrayList<Jogador> players=new ArrayList<>();
             for(int i =0;i<regs.size();i++){
-                Jogador a = this.getJogadorAG(regs.get(i).getJogador().getCodJogador());
+                Jogador a = this.getJogadorAG(regs.get(i).getJogador());
                 players.add(a);
             }
             return  players;
@@ -228,5 +232,191 @@ public class LogicaNegocio implements  F1Manager{
 
         return camp.addCorrida(cCamp, cCir);
     }
+
+    public HashMap<String,Integer> simulaCampeonato(String codCamp) throws SQLException {
+        HashMap<String,Corrida> corridas = camp.getCorridasA(codCamp);
+        Corrida c = this.camp.getCorrida(codCamp);
+        ArrayList<Registo> registos = this.camp.getRegistos(codCamp);
+
+        HashMap<String,Integer> pontosCamp=new HashMap<>();
+
+        for(int i =0;i<registos.size();i++){
+            pontosCamp.put(registos.get(i).getJogador(),0);
+        }
+
+        Object[] aux = corridas.keySet().toArray();
+        for (int k =0;k<aux.length;k++){
+                String au = (String) aux[k];
+               Corrida corr = corridas.get(au);
+                HashMap<String,Integer> classcorr=atribuipontos(simularCorrida(corr.getCodCorr(),corr.getCodCamp()));
+                pontosCamp = simulaCorr(pontosCamp,classcorr);
+        }
+        return pontosCamp;
+
+    }
+    public HashMap<String,Integer> atribuipontos(HashMap<String,Integer> classificacoes){
+        HashMap<String,Integer> pontos=new HashMap<>();
+        Object[] aux = classificacoes.keySet().toArray();
+        for (int i=0;i<aux.length;i++){
+            String n1=(String) aux[i];
+            switch (classificacoes.get(n1)){
+                case 1 : {
+                    pontos.put(n1,12);
+                    break;
+                }
+                case 2 :{
+                    pontos.put(n1,10);
+                    break;
+                }
+                case 3 : {
+                    pontos.put(n1,8);
+                    break;
+                }
+                case 4 :{
+                    pontos.put(n1,7);
+                    break;
+                }
+                case 5 : {
+                    pontos.put(n1,4);
+                    break;
+                }
+                case 6 :{
+                    pontos.put(n1,4);
+                    break;
+                }
+                case 7 : {
+                    pontos.put(n1,4);
+                    break;
+                }
+                case 8 :{
+                    pontos.put(n1,4);
+                    break;
+                }
+                case 9 : {
+                    pontos.put(n1,4);
+                    break;
+                }
+                case 10 :{
+                    pontos.put(n1,4);
+                    break;
+                } default :break;
+
+            }
+        }
+        return pontos;
+
+    }
+
+
+    public HashMap<String,Integer> simulaCorr(HashMap<String,Integer> glob,HashMap<String,Integer> corr)
+    {
+        Object[] arr= corr.keySet().toArray();
+        for (int i =0;i<arr.length;i++){
+            String a = (String)  arr[i];
+            int pts =glob.get(a);
+            glob.put(a,pts+corr.get(a));
+        }
+        return glob;
+    }
+
+    public  HashMap<String,Integer> simularCorrida(String corr_cod, String cod_camp) throws SQLException {
+
+        Corrida c = this.camp.getCorrida(corr_cod);
+        Circuito circuito = this.circ.getCrcuito(c.getCodCirc());
+        ArrayList<Registo> registos = this.camp.getRegistos(cod_camp);
+        HashMap<String,Float> tempos = new HashMap<>();
+
+        int nvoltas=circuito.getNvoltas();
+
+
+
+        for (int i = 0; i < registos.size(); i++)
+        {
+            Registo registo = registos.get(i);
+            Piloto piloto = pil.getPiloto(registo.getPiloto());
+            Carro carro = carr.getCarro(registo.getCarro());
+            Jogador jogador = users.getJogadorAG(registo.getJogador());
+            float tempo =0;
+                for (int k =0;k<nvoltas;k++)
+                {
+                tempo+=simularVolta(piloto,carro,circuito);
+                    if (carro.DNF(k+1,nvoltas,circuito.getCondicoesATM().getHumidade())) {
+                        k=nvoltas;
+                        tempo=-1;
+                    }
+                }
+            tempos.put(jogador.getCodJogador(),tempo);
+        }
+
+        HashMap<String,Integer> classificacao= new HashMap<>();
+        String aux;
+        int pos=1;
+        while ((aux = returnlowerFinish(tempos))!=null){
+            classificacao.put(aux,pos);
+            pos++;
+            tempos.remove(aux);
+        }
+
+        while (tempos.size()>0){
+            aux=(String)tempos.keySet().toArray()[0];
+            classificacao.put(aux,pos);
+            pos++;
+            tempos.remove(aux);
+        }
+        return classificacao;
+    }
+    public String returnlowerFinish(HashMap<String,Float>tempos){
+    float min= Float.MAX_VALUE;
+    String key =null;
+        for (String k:tempos.keySet()) {
+            if (tempos.get(k) == -1) continue;
+                if (tempos.get(k) < min) {
+                    key = k;
+                    min = tempos.get(k);
+                }
+            }
+        return key;
+    }
+
+
+
+    public  float simularVolta(Piloto piloto, Carro carro, Circuito circuito) {
+        float tempoVolta = 0;
+
+        List<Integer> retas = circuito.getRetasGDU();
+        List<Integer> curvas = circuito.getCurvasGDU();
+        List<Integer> chicanes = circuito.getChicanesGDU();
+
+        for (int i = 0; i < retas.size(); i++) {
+            int grauDificuldade = retas.get(i);
+            tempoVolta += simularReta(piloto, carro, grauDificuldade);
+        }
+        for (int i = 0; i < curvas.size(); i++) {
+            int grauDificuldade = curvas.get(i);
+            tempoVolta += simularCurva(piloto, carro, grauDificuldade);
+        }
+        for (int i = 0; i < chicanes.size(); i++) {
+            int grauDificuldade = chicanes.get(i);
+            tempoVolta += simularChicane(piloto, carro, grauDificuldade);
+        }
+
+        return tempoVolta;
+    }
+
+    public static float simularReta(Piloto piloto, Carro carro, int grauDificuldade) {
+        float tempo = (grauDificuldade / piloto.getSVA()) * (grauDificuldade / carro.getEquipamento());
+        return tempo;
+    }
+
+    public static float simularCurva(Piloto piloto, Carro carro, int grauDificuldade) {
+        float tempo = (grauDificuldade / piloto.getSVA()) * (grauDificuldade / carro.getEquipamento());
+        return tempo;
+    }
+
+    public static float simularChicane(Piloto piloto, Carro carro, int grauDificuldade) {
+        float tempo = (grauDificuldade / piloto.getSVA()) * (grauDificuldade / carro.getEquipamento());
+        return tempo;
+    }
+
 }
 

@@ -125,9 +125,9 @@ public class CampeonatoDAO {
                         while (cr3.next()) {
                             int n = cr3.getInt("codRegisto");
                             try(ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='"+n+"'");){
-                              //  Registo aux = new Registo(JogadorDAO.getInstance().get(reg.getInt("codJogador")),CarroDAO.getInstance().get(reg.getInt("codCarro")), PilotoDAO.getInstance().get(reg.getInt("codPiloto")));
-                              //  aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
-                              //  registo.add(aux);
+                               Registo aux = new Registo(Integer.toString(reg.getInt("codJogador")),Integer.toString(reg.getInt("codCarro")), Integer.toString(reg.getInt("codPiloto")),Integer.toString(n));
+                               aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
+                               registo.add(aux);
                             }
                         }
                     }
@@ -253,6 +253,24 @@ public class CampeonatoDAO {
            }
     }
 
+    public  Corrida getCorrida(String  key) throws SQLException {
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        HashMap<String, Corrida> corridas ;
+        try (ResultSet cr4 = stm.executeQuery("select * from corrida where codCorr" + "='" + key + "'")) {
+            if (!cr4.next()) return null;
+            Corrida aux ;
+            int n = cr4.getInt("codCorr");
+            HashMap<String, Float> tempos = this.getTempos(n);
+            ArrayList<String> classCorr = this.getClassificacaoCorr(n);
+            aux = getCorrida(n);
+            aux.setTempos(tempos);
+            aux.setClassificacao(classCorr);
+
+            return aux;
+        }
+    }
+
     public HashMap<String, Float> getTempos(int n) throws SQLException {
         Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
         Statement stm = conn.createStatement();
@@ -285,9 +303,9 @@ public class CampeonatoDAO {
         try (ResultSet cr3 = stm.executeQuery("select * from registo where codCamp" + "='" + key + "'")) {
             while (cr3.next()) {
                 int n = cr3.getInt("codRegisto");
-                    Jogador novo = JogadorDAO.get(Integer.toString(  cr3.getInt("codJogador")));
-                    Carro car=CarroDAO.get(cr3.getInt("codCarro"));
-                    Piloto pil = PilotoDAO.get(cr3.getInt("codPiloto"));
+                    String novo = Integer.toString(  cr3.getInt("codJogador"));
+                    String car=Integer.toString(cr3.getInt("codCarro"));
+                    String pil = Integer.toString(cr3.getInt("codPiloto"));
                     Registo aux = new Registo(novo,car,pil,Integer.toString(n));
                     aux.setNrAfinacoes(cr3.getInt("nrAfinacoes"));
                     registo.add(aux);
@@ -358,7 +376,7 @@ public class CampeonatoDAO {
                 stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<registo.size();i++) {
-                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<corridas.size();i++) {
                 stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+Integer.parseInt(t.getCodCamp())+"', '"+Integer.parseInt(corridas.get(i).getCodCirc())+"')");

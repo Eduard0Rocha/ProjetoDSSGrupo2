@@ -2,6 +2,7 @@ package campeonato;
 
 
 import Data.CampeonatoDAO;
+import Data.CarroDAO;
 import Data.PilotoDAO;
 import carro.C2;
 import carro.Carro;
@@ -30,6 +31,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
     private int RegistoCounter;
     private  int CorridaCounter;
     private CampeonatoDAO campeonatoDAO;
+    private CarroDAO carroDAO;
 
     /**
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação dos campeonatos
@@ -43,6 +45,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
         this.campCounter = campeonatoDAO.getmaxkey();
         this.CorridaCounter = CampeonatoDAO.getInstance().getmaxkeyCorrida();
         this.RegistoCounter = campeonatoDAO.getmaxkeyRegisto();
+        this.carroDAO=new CarroDAO();
     }
 
     /**
@@ -184,16 +187,19 @@ public class CampeonatosFacade implements SGestCampeonatos{
         Campeonato c = this.campeonatos.get(codCamp);
         int n = (2 * c.getCorridas().size()) / 3;
         for(Registo r : c.getRegisto()){
-            if(r.getJogador().getCodJogador()==codJog){
-                if(r.getCarro().getCategoria() == "C2") {
+            if(r.getJogador()==codJog){
+              /*
+                if(  r.getCarro().getCategoria() == "C2") {
                     if (r.getNrAfinacoes() == n) return false;
                     r.setNrAfinacoes(r.getNrAfinacoes() + 1);
                     C2 nc2 = new C2((C2) r.getCarro());
                     nc2.setAfinacao_mecanica(downforce);
                     r.setCarro(nc2);
+                */
                 }else return false;
+
             }
-        }
+
         return true;
     }
 
@@ -209,8 +215,8 @@ public class CampeonatosFacade implements SGestCampeonatos{
         if (codCamp==null || codJog==null) return false;
         Campeonato c = this.campeonatos.get(codCamp);
         for(Registo r : c.getRegisto()){
-            if(r.getJogador().getCodJogador()==codJog){
-                r.getCarro().setPneus(pneus);
+            if(r.getJogador()==codJog){
+             //   r.getCarro().setPneus(pneus);
             }
         }
         return true;
@@ -229,5 +235,10 @@ public class CampeonatosFacade implements SGestCampeonatos{
              return true;
          }
          else return false;
+     }
+
+     public Corrida getCorrida(String key) throws SQLException {
+
+        return campeonatoDAO.getCorrida(key);
      }
 }
