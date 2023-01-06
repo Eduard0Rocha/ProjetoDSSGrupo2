@@ -13,6 +13,7 @@ public class Registo {
     private String codjogador;
     private String codCarro;
     private String codpiloto;
+    private int pontos;
     private int nrAfinacoes;
 
     /**
@@ -23,6 +24,7 @@ public class Registo {
         this.codpiloto = null;
         this.codRegisto = null;
         this.codjogador = null;
+        this.pontos=0;
         this.nrAfinacoes = 0;
     }
 
@@ -32,12 +34,13 @@ public class Registo {
      * @param carro Carro associado ao Jogador
      * @param piloto Piloto associado ao Jogador
      */
-    public Registo(String jogador, String carro, String piloto,String codRegisto){
+    public Registo(String jogador, String carro, String piloto,String codRegisto,int pontos){
         this.codRegisto=codRegisto;
         this.codjogador = jogador;
         this.codCarro = carro;
         this.codpiloto = piloto;
         this.nrAfinacoes = 0;
+        this.pontos=pontos;
     }
 
 
@@ -53,6 +56,14 @@ public class Registo {
      */
     public String getJogador() {
         return this.codjogador;
+    }
+
+    public int getPontos() {
+        return pontos;
+    }
+
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
     }
 
     /**

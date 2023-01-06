@@ -11,9 +11,9 @@ import java.util.HashMap;
 
 public class JogadorDAO {
 
-    private static JogadorAutenticadoDAO jogadorAutenticadoDAO = new JogadorAutenticadoDAO();
-    private static GuestDAO guestDAO = new GuestDAO();
-    private static JogadorDAO singleton = null;
+    private static JogadorAutenticadoDAO jogadorAutenticadoDAO ;
+    private static GuestDAO guestDAO ;
+    private  JogadorDAO singleton = null;
 
     public JogadorDAO(){
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
@@ -26,18 +26,17 @@ public class JogadorDAO {
                     "username varchar(45) NOT NULL)";
             stm.executeUpdate(sql);
 
+            guestDAO=new GuestDAO();
+            jogadorAutenticadoDAO=new JogadorAutenticadoDAO();
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
     }
 
-    public static JogadorDAO getInstance() {
-        if (JogadorDAO.singleton == null) {
-            JogadorDAO.singleton = new JogadorDAO();
-        }
-        return JogadorDAO.singleton;
-    }
+
+
 
 
     public static Jogador get(String key) {
@@ -231,7 +230,8 @@ public class JogadorDAO {
         }
     }
 
-    public Jogador getJogadorAG(String cod) throws SQLException {
+    public Jogador getJogadorAG(String cod) throws SQLException
+    {
         try {
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
             Statement s = conn.createStatement();

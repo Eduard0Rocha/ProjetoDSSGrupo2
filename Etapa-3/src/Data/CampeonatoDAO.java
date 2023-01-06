@@ -35,6 +35,7 @@ public class CampeonatoDAO {
                     "foreign key(codPiloto) references piloto(codPiloto)," +
                     "nrAfinacoes int," +
                     "codCamp int not null," +
+                    "pontos int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
 
@@ -46,12 +47,6 @@ public class CampeonatoDAO {
                     "foreign key(codCirc) references circuito(codCirc))";
             stm.executeUpdate(sql);
 
-            sql = "CREATE TABLE IF NOT EXISTS tempos(" +
-                    "chave int primary key not null," +
-                    "tempo float not null," +
-                    "codCorr int not null," +
-                    "foreign key(codCorr) references corrida(codCorr))";
-            stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS classificacaoCorr(" +
                     "id int primary key not null," +
@@ -125,7 +120,7 @@ public class CampeonatoDAO {
                         while (cr3.next()) {
                             int n = cr3.getInt("codRegisto");
                             try(ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='"+n+"'");){
-                               Registo aux = new Registo(Integer.toString(reg.getInt("codJogador")),Integer.toString(reg.getInt("codCarro")), Integer.toString(reg.getInt("codPiloto")),Integer.toString(n));
+                               Registo aux = new Registo(Integer.toString(reg.getInt("codJogador")),Integer.toString(reg.getInt("codCarro")), Integer.toString(reg.getInt("codPiloto")),Integer.toString(n),reg.getInt("pontos"));
                                aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
                                registo.add(aux);
                             }
@@ -296,6 +291,8 @@ public class CampeonatoDAO {
     }
 
 
+
+
     public ArrayList<Registo> getRegistos(int key) throws SQLException {
         Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
         Statement stm = conn.createStatement();
@@ -306,7 +303,8 @@ public class CampeonatoDAO {
                     String novo = Integer.toString(  cr3.getInt("codJogador"));
                     String car=Integer.toString(cr3.getInt("codCarro"));
                     String pil = Integer.toString(cr3.getInt("codPiloto"));
-                    Registo aux = new Registo(novo,car,pil,Integer.toString(n));
+                    int  pts = (cr3.getInt("pontos"));
+                    Registo aux = new Registo(novo,car,pil,Integer.toString(n),pts);
                     aux.setNrAfinacoes(cr3.getInt("nrAfinacoes"));
                     registo.add(aux);
                 }
@@ -362,6 +360,34 @@ public class CampeonatoDAO {
     }
 
     public void put( Campeonato t) {
+        HashMap<String, Integer> classificacao = t.getClassificacao();
+        HashMap<String, Integer> classificacaoH = t.getClassificacaoH();
+        ArrayList<Registo> registo = t.getRegisto();
+        HashMap<String, Corrida> corridas = t.getCorridas();
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            stm.executeUpdate("INSERT INTO campeonato VALUES ('"+Integer.parseInt(t.getCodCamp())+"', '"+t.getNomeCamp()+"')");
+            for(int i=0;i<classificacao.size();i++) {
+                stm.executeUpdate("INSERT INTO classificacao VALUES ('"+ i +"', '"+classificacao.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
+            }
+            for(int i=0;i<classificacaoH.size();i++) {
+                stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
+            }
+            for(int i=0;i<registo.size();i++) {
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"', '"+registo.get(i).getPontos()+"')");
+            }
+            for(int i=0;i<corridas.size();i++) {
+                stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+Integer.parseInt(t.getCodCamp())+"', '"+Integer.parseInt(corridas.get(i).getCodCirc())+"')");
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void addclassCorr( Campeonato t) {
         HashMap<String, Integer> classificacao = t.getClassificacao();
         HashMap<String, Integer> classificacaoH = t.getClassificacaoH();
         ArrayList<Registo> registo = t.getRegisto();
@@ -540,7 +566,19 @@ public class CampeonatoDAO {
         int sReg = sizeReg() + 1;
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            stm.executeUpdate("INSERT INTO registo VALUES ('"+Integer.parseInt(codReg)+"', '"+Integer.parseInt(codJog)+"', '"+Integer.parseInt(codCarro)+"', '"+Integer.parseInt(codPiloto)+"', '"+0+"', '"+Integer.parseInt(codCamp)+"')");
+            stm.executeUpdate("INSERT INTO registo VALUES ('"+Integer.parseInt(codReg)+"', '"+Integer.parseInt(codJog)+"', '"+Integer.parseInt(codCarro)+"', '"+Integer.parseInt(codPiloto)+"', '"+0+"', '"+Integer.parseInt(codCamp)+"', '"+0+"')");
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void addclassCorr(String a, Integer pts,String codcorr)
+    {
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            stm.executeUpdate("INSERT INTO classificacaocorr VALUES ('"+ Integer.parseInt(a) +"','"+pts+"',' "+Integer.parseInt(codcorr)+"')");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();

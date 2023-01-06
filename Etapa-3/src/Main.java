@@ -113,6 +113,7 @@ public class Main  {
         System.out.println("|2->Registar-me                                      |");
         System.out.println("|3->Obter Lista de Administradores                   |");
         System.out.println("|4->Obter lista de Jogadores                         |");
+        System.out.println("|5->PovoarBD                                         |");
         System.out.println("------------------------------------------------------");
     }
     public static void imprimeMenuLogin1(){
@@ -506,6 +507,16 @@ public class Main  {
                 //System.out.println(users.getPlayers());
                 menuLogin();
             }
+        if (p==5) {
+
+            if (busi.sizejog() > 0 || busi.sizecar() > 0 || busi.sizecamp() > 0 || busi.sizecirc() > 0 || busi.sizepil() > 0) {
+                System.out.println("Base de dados já povoada");
+                 menuLogin();
+            } else {
+                busi.povoarbasedados();
+                menuLogin();
+            }
+        }
             else menuLogin();
     }
 
@@ -1054,7 +1065,7 @@ public class Main  {
 
     public  static void printCircuitos(Collection<Circuito> c){
         Object[] AUX= c.toArray();
-        System.out.println("---------------------Admins-Registados-------------------");
+        System.out.println("---------------------Circuito-Registados-------------------");
         for (int i =0;i<AUX.length;i++){
             Circuito toprint =  (Circuito) AUX[i];
             System.out.println("CódigoCircuito: " +toprint.getCodCircuito()+" , "+

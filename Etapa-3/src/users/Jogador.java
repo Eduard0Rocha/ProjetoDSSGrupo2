@@ -119,6 +119,7 @@ public abstract class Jogador {
         return classe;
     }
 
+
     @Override
     public String toString() {
         return "Jogador{" +

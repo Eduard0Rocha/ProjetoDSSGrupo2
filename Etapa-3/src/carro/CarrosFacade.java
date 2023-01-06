@@ -174,5 +174,8 @@ public class CarrosFacade implements SGestCarros {
        return this.carroAcess.containsKey(codCarro);
     }
 
+    public int size(){
+        return this.carroAcess.size();
+    }
 
 }

@@ -241,4 +241,16 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
         return campeonatoDAO.getCorrida(key);
      }
+    public int  sizecamp() {
+    return campeonatoDAO.size();
+    }
+
+    public void addClassCorr(HashMap<String,Integer> pts,String codCorr)
+    {
+        Object[] arr =pts.keySet().toArray();
+        for (int i=0;i<arr.length;i++){
+            String a = (String) arr[i];
+            campeonatoDAO.addclassCorr(a,pts.get(a),codCorr);
+        }
+    }
 }

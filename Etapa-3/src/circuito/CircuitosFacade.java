@@ -79,5 +79,8 @@ public class CircuitosFacade implements SGestCircuitos {
         }
         return false;
     }
+    public int sizecirc(){
+        return circuitoDAO.size();
+    }
 
 }

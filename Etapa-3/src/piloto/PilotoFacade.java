@@ -45,8 +45,8 @@ public class PilotoFacade implements SGestPiloto  {
      * @return true se foi bem sucedido, false caso contrário
      */
 
-    @Override
-    public boolean addPiloto(String nome, int cts, int sva) {
+
+    public boolean addPiloto(String nome, float cts, float sva) {
 
         if (nome == null) return false;
         pilotosCounter++;
@@ -113,5 +113,8 @@ public class PilotoFacade implements SGestPiloto  {
 
         return this.pilotoDAO.getPiloto(codPiloto);
 
+    }
+    public int  sizepil(){
+        return pilotoDAO.size();
     }
 }

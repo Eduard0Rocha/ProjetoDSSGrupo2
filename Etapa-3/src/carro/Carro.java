@@ -17,6 +17,7 @@ public abstract class Carro
     private long tempo;
     private String codCarro;
     private ArrayList<Pneu> pneus;
+    private int used;
 
     public Carro() {
 
@@ -30,6 +31,7 @@ public abstract class Carro
         this.DNF = false;
         this.tempo = -1;
         this.codCarro = null;
+        this.used=0;
 
         this.pneus = new ArrayList<Pneu>();
 
@@ -40,6 +42,7 @@ public abstract class Carro
     }
 
     public Carro(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float PAC, String codCarro) {
+        this.used=0;
 
         this.marca = new String(marca);
         this.modelo = new String(modelo);
@@ -72,6 +75,7 @@ public abstract class Carro
         this.DNF = false;
         this.tempo = 0;
         this.codCarro = new String(codCarro);
+        this.used=0;
 
         this.pneus = new ArrayList<Pneu>();
 
@@ -94,6 +98,7 @@ public abstract class Carro
         this.DNF = c.DNF;
         this.tempo = c.tempo;
         this.codCarro = new String(c.codCarro);
+        this.used=c.getUsed();
 
         this.pneus = new ArrayList<Pneu>();
 
@@ -105,8 +110,15 @@ public abstract class Carro
         }
     }
 
+    public int getUsed() {
+        return used;
+    }
 
-     public abstract boolean DNF(int volta, int totalVoltas, int clima);
+    public void setUsed(int used) {
+        this.used = used;
+    }
+
+    public abstract boolean DNF(int volta, int totalVoltas, int clima);
 
  //   public abstract void setFiabilidade(int volta, int clima);
 

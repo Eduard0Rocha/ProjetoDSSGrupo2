@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface F1Manager {
-     void addPiloto(String nome, int cts, int sva);
+     void addPiloto(String nome, float cts, float sva);
      HashMap<String, Piloto> getpilotos() throws SQLException;
      boolean removePiloto(String codigo);
      HashMap<String, Campeonato> getCampeonatos() throws SQLException;
