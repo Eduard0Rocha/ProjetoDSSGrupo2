@@ -26,7 +26,6 @@ public class JogadorAutenticadoDAO {
     }
 
     public AuthenticatedPlayer put( AuthenticatedPlayer t) {
-        System.out.println(t.getCodJogador());
         AuthenticatedPlayer res = null;
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {

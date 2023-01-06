@@ -1027,9 +1027,10 @@ public class Main  {
         for (int i =0;i<AUX.length;i++){
 
             Registo toprint = (Registo) AUX[i];
-            Carro a = busi.getCarro(toprint.getCarro());
-            Piloto p = busi.getPiloto(toprint.getPiloto());
-            Jogador jg= busi.getJogadorAG(toprint.getJogador());
+            Carro a = toprint.getCarro();
+            Piloto p = toprint.getPiloto();
+            Jogador jg= toprint.getJogador()
+                    ;
             System.out.println("CódigoRegisto: " +toprint.getCodRegisto()+" , "+
                     "CódigoJogador: "+jg.getCodJogador()+" , "+
                     "Username: " +jg.getNome()+" , "+

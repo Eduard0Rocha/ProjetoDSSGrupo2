@@ -139,7 +139,6 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
         else {
             Campeonato c = new Campeonato(nomeCamp,codCamp);
-            System.out.println("vou por :"+c.toString());
             this.campeonatos.put(c.getCodCamp(),c.clone());
             this.campeonatoDAO.put( c.clone());
             return true;
@@ -186,19 +185,20 @@ public class CampeonatosFacade implements SGestCampeonatos{
         if (codCamp==null || codJog==null) return false;
         Campeonato c = this.campeonatos.get(codCamp);
         int n = (2 * c.getCorridas().size()) / 3;
-        for(Registo r : c.getRegisto()){
-            if(r.getJogador()==codJog){
-              /*
-                if(  r.getCarro().getCategoria() == "C2") {
+        for(Registo r : c.getRegisto()) {
+            if (r.getJogador().getCodJogador() == codJog) {
+
+                if (r.getCarro().getCategoria() == "C2") {
                     if (r.getNrAfinacoes() == n) return false;
                     r.setNrAfinacoes(r.getNrAfinacoes() + 1);
                     C2 nc2 = new C2((C2) r.getCarro());
                     nc2.setAfinacao_mecanica(downforce);
                     r.setCarro(nc2);
-                */
-                }else return false;
+
+                } else return false;
 
             }
+        }
 
         return true;
     }
@@ -215,8 +215,8 @@ public class CampeonatosFacade implements SGestCampeonatos{
         if (codCamp==null || codJog==null) return false;
         Campeonato c = this.campeonatos.get(codCamp);
         for(Registo r : c.getRegisto()){
-            if(r.getJogador()==codJog){
-             //   r.getCarro().setPneus(pneus);
+            if(r.getJogador().getCodJogador()==codJog){
+                r.getCarro().setPneus(pneus);
             }
         }
         return true;

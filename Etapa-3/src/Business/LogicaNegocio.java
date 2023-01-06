@@ -214,7 +214,7 @@ public class LogicaNegocio implements  F1Manager{
             ArrayList<Registo> regs=camp.getRegistos(cod);
             ArrayList<Jogador> players=new ArrayList<>();
             for(int i =0;i<regs.size();i++){
-                Jogador a = this.getJogadorAG(regs.get(i).getJogador());
+                Jogador a = this.getJogadorAG(regs.get(i).getJogador().getCodJogador());
                 players.add(a);
             }
             return  players;
@@ -242,7 +242,7 @@ public class LogicaNegocio implements  F1Manager{
         HashMap<String,Integer> pontosCamp=new HashMap<>();
 
         for(int i =0;i<registos.size();i++){
-            pontosCamp.put(registos.get(i).getJogador(),this.getJogadorAG(registos.get(i).getJogador()).getPontosGlob());
+            pontosCamp.put(registos.get(i).getJogador().getCodJogador(),this.getJogadorAG(registos.get(i).getJogador().getCodJogador()).getPontosGlob());
         }
 
         Object[] aux = corridas.keySet().toArray();
@@ -256,8 +256,11 @@ public class LogicaNegocio implements  F1Manager{
 
         for (int i=0;i<registos.size();i++)
         {
-            this.setpontosJogdb(registos.get(i).getJogador(),pontosCamp.get(registos.get(i).getJogador()));
+            this.setpontosJogdb(registos.get(i).getJogador().getCodJogador(),pontosCamp.get(registos.get(i).getJogador()));
         }
+
+       //TODO :PASSAR HASHMAPS DE PONTOS QUER NO FINAL DE UMA CORRIDA QUER NO FINAL DO CAMPEONATO PARA POR NA BD  PARA HASMAP <IDPLAYER,POSICAO>.
+        // TODO : COM ESTES HASHMAPS POR NA BASE DE DADOS
         return pontosCamp;
     }
 
@@ -346,9 +349,9 @@ public class LogicaNegocio implements  F1Manager{
         for (int i = 0; i < registos.size(); i++)
         {
             Registo registo = registos.get(i);
-            Piloto piloto = pil.getPiloto(registo.getPiloto());
-            Carro carro = carr.getCarro(registo.getCarro());
-            Jogador jogador = users.getJogadorAG(registo.getJogador());
+            Piloto piloto = registo.getPiloto();
+            Carro carro = registo.getCarro();
+            Jogador jogador = registo.getJogador();
             float tempo =0;
                 for (int k =0;k<nvoltas;k++)
                 {
@@ -442,6 +445,9 @@ public class LogicaNegocio implements  F1Manager{
         createAPlayer("Guilherme", "Gu1lherme", "678");
         createAPlayer("Alex", "Al3x", "012");
         createAPlayer("Hugo", "Hu6o", "345");
+        createAPlayer("ALS10", "ALS", "123");
+        createAPlayer("Creissac", "Creissac10", "789");
+        createAPlayer("Nestor", "ANestor15", "678");
 // Guest: createGuest(String username)
         createGuest("Guest0");
         createGuest("Guest1");

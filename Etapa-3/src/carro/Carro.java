@@ -12,9 +12,8 @@ public abstract class Carro
     private int potencia;
     private int fiabilidade;
     private float PAC;
-    private float distPerc;
     private boolean DNF;
-    private long tempo;
+
     private String codCarro;
     private ArrayList<Pneu> pneus;
     private int used;
@@ -27,9 +26,7 @@ public abstract class Carro
         this.potencia = -1;
         this.fiabilidade = -1;
         this.PAC = -1;
-        this.distPerc = -1;
         this.DNF = false;
-        this.tempo = -1;
         this.codCarro = null;
         this.used=0;
 
@@ -50,9 +47,7 @@ public abstract class Carro
         this.potencia = potencia;
         this.fiabilidade = fiabilidade;
         this.PAC = PAC;
-        this.distPerc = 0;
         this.DNF = false;
-        this.tempo = 0;
         this.codCarro = new String(codCarro);
 
         this.pneus = new ArrayList<Pneu>();
@@ -71,11 +66,8 @@ public abstract class Carro
         this.potencia = potencia;
         this.fiabilidade = fiabilidade;
         this.PAC = PAC;
-        this.distPerc = 0;
         this.DNF = false;
-        this.tempo = 0;
         this.codCarro = new String(codCarro);
-        this.used=0;
 
         this.pneus = new ArrayList<Pneu>();
 
@@ -94,9 +86,7 @@ public abstract class Carro
         this.potencia = c.potencia;
         this.fiabilidade = c.fiabilidade;
         this.PAC = c.PAC;
-        this.distPerc = c.distPerc;
         this.DNF = c.DNF;
-        this.tempo = c.tempo;
         this.codCarro = new String(c.codCarro);
         this.used=c.getUsed();
 
@@ -139,9 +129,7 @@ public abstract class Carro
                 ", potencia=" + potencia +
                 ", fiabilidade=" + fiabilidade +
                 ", PAC=" + PAC +
-                ", distPerc=" + distPerc +
                 ", DNF=" + DNF +
-                ", tempo=" + tempo +
                 ", pneus=" + pneus.toString() ;
     }
     public String getCategoria()
@@ -199,13 +187,8 @@ public abstract class Carro
         this.PAC = PAC;
     }
 
-    public float getDistPerc() {
-        return this.distPerc;
-    }
 
-    public void setDistPerc(float distPerc) {
-        this.distPerc = distPerc;
-    }
+
 
     public boolean getDNF() {
         return this.DNF;
@@ -215,13 +198,7 @@ public abstract class Carro
         this.DNF = DNF;
     }
 
-    public long getTempo() {
-        return this.tempo;
-    }
 
-    public void setTempo(long tempo) {
-        this.tempo = tempo;
-    }
 
     public String getCodCarro() {
         return this.codCarro;

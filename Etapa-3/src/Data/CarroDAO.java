@@ -68,9 +68,7 @@ public class CarroDAO {
                     "potencia int," +
                     "fiabilidade int," +
                     "PAC float ," +
-                    "distPerc float ," +
                     "DNF int(1)," +
-                    "tempo long ," +
                     "classe varchar(10))";
             stm.executeUpdate(sql);
 
@@ -147,7 +145,7 @@ public class CarroDAO {
     }
 */
 
-    public static Carro get(Object key) {
+    public  Carro get(Object key) {
         try {
 
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
@@ -164,9 +162,7 @@ public class CarroDAO {
                     int potencia = rs.getInt("potencia");
                     int fiabilidade = rs.getInt("fiabilidade");
                     float pac = rs.getFloat("PAC");
-                    float distPerc = rs.getFloat("distPerc");
                     int DNF = rs.getInt("DNF");
-                    int tempo = rs.getInt("tempo");
 
 
                     ArrayList<Pneu> pneus = new ArrayList<>();
@@ -308,9 +304,7 @@ public class CarroDAO {
                             c.getPotencia() + "', '" +
                             c.getFiabilidade() + "', '" +
                             c.getPAC() + "', '" +
-                            c.getDistPerc() + "', '" +
                             c.getDNFINT() + "', '" +
-                            c.getTempo() + "', '" +
                             c.getclasse() + "') ");
 
             if (c.getCategoria().equals("class carro.SC")) {

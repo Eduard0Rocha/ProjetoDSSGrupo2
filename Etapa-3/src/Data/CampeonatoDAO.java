@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CampeonatoDAO {
+    private  JogadorDAO jogadorDAO;
+    private PilotoDAO pilotoDAO;
+    private  CarroDAO carroDAO;
     private static CampeonatoDAO singleton = null;
 
 
@@ -68,6 +71,11 @@ public class CampeonatoDAO {
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
+
+            this.carroDAO=new CarroDAO();
+            this.jogadorDAO=new JogadorDAO();
+            this.pilotoDAO=new PilotoDAO();
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
@@ -120,7 +128,7 @@ public class CampeonatoDAO {
                         while (cr3.next()) {
                             int n = cr3.getInt("codRegisto");
                             try(ResultSet reg = stm.executeQuery("select * from registo where codRegisto" + "='"+n+"'");){
-                               Registo aux = new Registo(Integer.toString(reg.getInt("codJogador")),Integer.toString(reg.getInt("codCarro")), Integer.toString(reg.getInt("codPiloto")),Integer.toString(n),reg.getInt("pontos"));
+                               Registo aux = new Registo(jogadorDAO.getJogadorAG(Integer.toString(reg.getInt("codJogador"))), carroDAO.get(Integer.toString(reg.getInt("codCarro"))), pilotoDAO.getPiloto(  Integer.toString(reg.getInt("codPiloto"))),Integer.toString(n),reg.getInt("pontos"));
                                aux.setNrAfinacoes(reg.getInt("nrAfinacoes"));
                                registo.add(aux);
                             }
@@ -304,7 +312,7 @@ public class CampeonatoDAO {
                     String car=Integer.toString(cr3.getInt("codCarro"));
                     String pil = Integer.toString(cr3.getInt("codPiloto"));
                     int  pts = (cr3.getInt("pontos"));
-                    Registo aux = new Registo(novo,car,pil,Integer.toString(n),pts);
+                    Registo aux = new Registo(jogadorDAO.getJogadorAG(novo), carroDAO.get(car), pilotoDAO.getPiloto(pil),Integer.toString(n),pts);
                     aux.setNrAfinacoes(cr3.getInt("nrAfinacoes"));
                     registo.add(aux);
                 }
@@ -374,7 +382,7 @@ public class CampeonatoDAO {
                 stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<registo.size();i++) {
-                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"', '"+registo.get(i).getPontos()+"')");
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"', '"+registo.get(i).getPontos()+"')");
             }
             for(int i=0;i<corridas.size();i++) {
                 stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+Integer.parseInt(t.getCodCamp())+"', '"+Integer.parseInt(corridas.get(i).getCodCirc())+"')");
@@ -402,7 +410,7 @@ public class CampeonatoDAO {
                 stm.executeUpdate("INSERT INTO classificacaoH VALUES ('"+ i +"', '"+classificacaoH.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<registo.size();i++) {
-                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
+                stm.executeUpdate("INSERT INTO registo VALUES ('"+ Integer.parseInt(registo.get(i).getCodRegisto()) +"', '"+Integer.parseInt(registo.get(i).getJogador().getCodJogador())+"', '"+Integer.parseInt(registo.get(i).getCarro().getCodCarro())+"', '"+Integer.parseInt(registo.get(i).getPiloto().getCodPiloto())+"', '"+registo.get(i).getNrAfinacoes()+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
             for(int i=0;i<corridas.size();i++) {
                 stm.executeUpdate("INSERT INTO corrida VALUES ('"+ i +"', '"+Integer.parseInt(t.getCodCamp())+"', '"+Integer.parseInt(corridas.get(i).getCodCirc())+"')");
@@ -483,7 +491,6 @@ public class CampeonatoDAO {
                 if (cr1.next()) {
                     while (cr1.next()) {
                         int codCorr = cr1.getInt("codCorr");
-                        System.out.println(codCorr);
                         stm.executeUpdate("DELETE FROM classificacaocorr WHERE codCorr='" + codCorr + "'");
                         stm.executeUpdate("DELETE FROM tempos WHERE codCorr='" + codCorr + "'");
                     }
@@ -580,7 +587,6 @@ public class CampeonatoDAO {
              Statement stm = conn.createStatement()) {
             stm.executeUpdate("INSERT INTO classificacaocorr VALUES ('"+ Integer.parseInt(a) +"','"+pts+"',' "+Integer.parseInt(codcorr)+"')");
         } catch (SQLException e) {
-            // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }

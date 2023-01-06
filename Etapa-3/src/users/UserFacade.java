@@ -27,7 +27,6 @@ public class UserFacade implements SGestaoUser {
     public UserFacade() throws SQLException {
 
         this.JogadorDAO = new JogadorDAO();
-        System.out.println("passou");
         this.GuestDAO = new GuestDAO();
         this.AdminDAO= new AdminDAO();
         this.JogadorAutenticadoDAO = new JogadorAutenticadoDAO();

@@ -10,9 +10,9 @@ import users.Jogador;
 public class Registo {
 
     private String codRegisto;
-    private String codjogador;
-    private String codCarro;
-    private String codpiloto;
+    private Jogador jogador;
+    private Carro carro;
+    private Piloto piloto;
     private int pontos;
     private int nrAfinacoes;
 
@@ -20,10 +20,10 @@ public class Registo {
      * Contrutor da classe que inicializa as estruturas de dados que contém a informação de um registo
      */
     public Registo(){
-        this.codRegisto=null;
-        this.codpiloto = null;
+        this.jogador=null;
+        this.carro = null;
+        this.piloto = null;
         this.codRegisto = null;
-        this.codjogador = null;
         this.pontos=0;
         this.nrAfinacoes = 0;
     }
@@ -34,11 +34,11 @@ public class Registo {
      * @param carro Carro associado ao Jogador
      * @param piloto Piloto associado ao Jogador
      */
-    public Registo(String jogador, String carro, String piloto,String codRegisto,int pontos){
+    public Registo(Jogador jogador, Carro carro, Piloto piloto,String codRegisto,int pontos){
         this.codRegisto=codRegisto;
-        this.codjogador = jogador;
-        this.codCarro = carro;
-        this.codpiloto = piloto;
+        this.jogador = jogador;
+        this.carro = carro;
+        this.piloto = piloto;
         this.nrAfinacoes = 0;
         this.pontos=pontos;
     }
@@ -46,16 +46,16 @@ public class Registo {
 
     public Registo(Registo r){
         this.codRegisto=r.getCodRegisto();
-        this.codjogador = r.getJogador();
-        this.codCarro = r.getCarro();
-        this.codpiloto = r.getPiloto();
+        this.jogador = r.getJogador();
+        this.carro = r.getCarro();
+        this.piloto = r.getPiloto();
         this.nrAfinacoes = r.getNrAfinacoes();
     }
     /**
      * @return Retorna Jogador
      */
-    public String getJogador() {
-        return this.codjogador;
+    public Jogador getJogador() {
+        return this.jogador;
     }
 
     public int getPontos() {
@@ -70,15 +70,15 @@ public class Registo {
      * Atualiza o Jogador
      * @param jogador Jogador novo
      */
-    public void setJogador(String  jogador) {
-        this.codjogador = jogador;
+    public void setJogador(Jogador  jogador) {
+        this.jogador = jogador;
     }
 
     /**
      * @return Retorna o Carro
      */
-    public String getCarro() {
-        return this.codCarro;
+    public Carro getCarro() {
+        return this.carro;
     }
 
     public String getCodRegisto() {
@@ -93,23 +93,23 @@ public class Registo {
      * Atualiza o Carro
      * @param carro Carro novo
      */
-    public void setCarro(String carro) {
-        this.codCarro = carro;
+    public void setCarro(Carro carro) {
+        this.carro = carro;
     }
 
     /**
      * @return Retorna o Piloto
      */
-    public String getPiloto() {
-        return this.codpiloto;
+    public Piloto getPiloto() {
+        return this.piloto.clone();
     }
 
     /**
      * Atualiza o Piloto
      * @param piloto Piloto novo
      */
-    public void setPiloto(String piloto) {
-        this.codpiloto = piloto;
+    public void setPiloto(Piloto piloto) {
+        this.piloto = piloto;
     }
 
     /**
@@ -134,9 +134,9 @@ public class Registo {
     @Override
     public String toString() {
         return "Registo{" +
-                "jogador=" + codjogador +
-                ", carro=" + codCarro +
-                ", piloto=" + codpiloto +
+                "jogador=" + jogador.getCodJogador() +
+                ", carro=" + carro.getCodCarro() +
+                ", piloto=" + piloto.getCodPiloto() +
                 ", nrAfinacoes=" + nrAfinacoes +
                 '}';
     }
