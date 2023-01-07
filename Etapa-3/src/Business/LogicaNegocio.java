@@ -239,6 +239,7 @@ public class LogicaNegocio implements  F1Manager{
         Corrida c = this.camp.getCorrida(codCamp);
         ArrayList<Registo> registos = this.camp.getRegistos(codCamp);
 
+
         HashMap<String,Integer> pontosCamp=new HashMap<>();
 
         for(int i =0;i<registos.size();i++){
@@ -250,17 +251,24 @@ public class LogicaNegocio implements  F1Manager{
                 String au = (String) aux[k];
                Corrida corr = corridas.get(au);
                 HashMap<String,Integer> classcorr=atribuipontos(simularCorrida(corr.getCodCorr(),corr.getCodCamp()));
-                camp.addClassCorr(classcorr,corr.getCodCorr());
-                pontosCamp = simulaCorr(pontosCamp,classcorr);
-        }
+                // no fim de cada corrida tenho de meter as classificacoes numa tabela
 
+                camp.addClassCorr(classcorr,corr.getCodCorr());
+
+                //no fim de cada
+                pontosCamp = simulaCorr(pontosCamp,classcorr);
+
+        }
+        System.out.println(pontosCamp);
+        /*
         for (int i=0;i<registos.size();i++)
         {
             this.setpontosJogdb(registos.get(i).getJogador().getCodJogador(),pontosCamp.get(registos.get(i).getJogador()));
         }
-
+*/
        //TODO :PASSAR HASHMAPS DE PONTOS QUER NO FINAL DE UMA CORRIDA QUER NO FINAL DO CAMPEONATO PARA POR NA BD  PARA HASMAP <IDPLAYER,POSICAO>.
         // TODO : COM ESTES HASHMAPS POR NA BASE DE DADOS
+        camp.setSimulate(codCamp);
         return pontosCamp;
     }
 
@@ -434,12 +442,13 @@ public class LogicaNegocio implements  F1Manager{
         return tempo;
     }
 
-    public void  povoarbasedados() throws SQLException, CloneNotSupportedException {
+    public void  povoarbasedados() throws SQLException, CloneNotSupportedException, NonExistantKey {
         createCampeonato("CampeonatoMIEI");
         createCampeonato("CampeonatoLEI");
         createCampeonato("CampeonatoDSS");
         createCampeonato("CampeonatoDI");
 // APlayer: createAPlayer(String name, String username, String password)
+        createAPlayer("novo", "novo", "novo");
         createAPlayer("Eduardo", "Edu4rd0", "123");
         createAPlayer("Bernardo", "Bern4rdo", "456");
         createAPlayer("Guilherme", "Gu1lherme", "678");
@@ -462,14 +471,14 @@ public class LogicaNegocio implements  F1Manager{
         createC2("Pagani", "Huarya", 4000, 500, 75, 0.5F, "Duro", 5);
         createC2("Koenigsegg", "Regera", 4000, 400, 75, 0.5F, "Macio", 5);
 // C2H: createC2H(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipo_de_pneus, int afinacao_mecanica, int potencia_motor_eletrico)
-        createC2H("Zenvo", "TS1", 4000, 500, 75, 0.5F, "Duro", 5, 400);
-        createC2H("Arash", "AF10", 4000, 400, 75, 0.5F, "Macio", 5, 500);
-        // GT: createGT(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus)
-        createGT("Bentley", "Continental", 3000, 300, 80, 0.5F, "Macio");
-        createGT("Lexus", "LC500", 3000, 250, 80, 0.5F, "Duro");
-// GTH: createGTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus, int potencia_motor_eletrico)
-        createGTH("Mercedes", "AMG", 3000, 300, 80, 0.5F, "Macio", 250);
-        createGTH("Porsche", "Taycan", 3000, 250, 80, 0.5F, "Duro", 300);
+            createC2H("Zenvo", "TS1", 4000, 500, 75, 0.5F, "Duro", 5, 400);
+            createC2H("Arash", "AF10", 4000, 400, 75, 0.5F, "Macio", 5, 500);
+            // GT: createGT(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus)
+            createGT("Bentley", "Continental", 3000, 300, 80, 0.5F, "Macio");
+            createGT("Lexus", "LC500", 3000, 250, 80, 0.5F, "Duro");
+    // GTH: createGTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus, int potencia_motor_eletrico)
+            createGTH("Mercedes", "AMG", 3000, 300, 80, 0.5F, "Macio", 250);
+            createGTH("Porsche", "Taycan", 3000, 250, 80, 0.5F, "Duro", 300);
 // SC: createSC(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus)
         this.createSC("Subaru", "Impreza", 2500, 200, 75, 0.5F, "Macio");
         this.createSC("Mazda", "RX-7", 2500, 190, 75, 0.5F, "Duro");
@@ -559,7 +568,11 @@ public class LogicaNegocio implements  F1Manager{
 // Admin: createAdmin(String name, String contacto, String email, String username, String password)
 
         this.createAdmin("Admin", "910 000 000", "admin@f1manager.com", "Adm1n", "admin123");
-
+        this.createAdmin("Joao", "910 000 000", "admin@f1manager.com", "admin", "admin");
+        this.addCorridaCamp("3","1");
+        this.addCorridaCamp("3","2");
+        this.addCorridaCamp("3","3");
+        this.addCorridaCamp("3","4");
     }
     public int sizepil(){
         return pil.sizepil();
@@ -575,6 +588,10 @@ public class LogicaNegocio implements  F1Manager{
     }
     public int sizecamp(){
         return camp.sizecamp();
+    }
+    public boolean abletoSimulate(String codCamp) throws SQLException {
+        return (camp.canSimulate(codCamp));
+
     }
 
 }

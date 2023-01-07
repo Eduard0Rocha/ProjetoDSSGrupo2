@@ -16,6 +16,8 @@ public class Campeonato {
     private ArrayList<Registo> registo;
     private HashMap<String, Corrida> corridas;
 
+    private int simulated;
+
     @Override
     public String toString() {
         return "Campeonato{" +
@@ -24,6 +26,7 @@ public class Campeonato {
                 ", classificacao=" + classificacao +
                 ", classificacaoH=" + classificacaoH +
                 ", registo=" + registo +
+                ", corridas=" + corridas +
                 ", corridas=" + corridas +
                 '\n';
     }
@@ -38,6 +41,7 @@ public class Campeonato {
         this.classificacaoH = new HashMap<String, Integer>();
         this.registo = new ArrayList<Registo>();
         this.corridas = new HashMap<String, Corrida>();
+        this.simulated=0;
     }
 
     /**
@@ -52,6 +56,7 @@ public class Campeonato {
         this.classificacaoH = new HashMap<String, Integer>();
         this.registo = new ArrayList<Registo>();
         this.corridas = new HashMap<String, Corrida>();
+        this.simulated=0;
     }
 
     /**
@@ -63,13 +68,14 @@ public class Campeonato {
      * @param registo Lista de registos
      * @param corridas HashMap de Corridas
      */
-    public Campeonato(String nomeCamp, String codCamp, HashMap<String, Integer> classificacao, HashMap<String, Integer> classificacaoH, ArrayList<Registo> registo, HashMap<String, Corrida> corridas){
+    public Campeonato(String nomeCamp, String codCamp, HashMap<String, Integer> classificacao, HashMap<String, Integer> classificacaoH, ArrayList<Registo> registo, HashMap<String, Corrida> corridas,int simulated){
         this.nomeCamp = nomeCamp;
         this.codCamp = codCamp;
         this.classificacao = classificacao;
         this.classificacaoH = classificacaoH;
         this.registo = registo;
         this.corridas = corridas;
+        this.simulated=simulated;
     }
 
     /**
@@ -83,6 +89,15 @@ public class Campeonato {
         this.classificacaoH = c.getClassificacaoH();
         this.registo = c.getRegisto();
         this.corridas = c.getCorridas();
+        this.simulated=c.getSimulated();
+    }
+
+    public int getSimulated() {
+        return simulated;
+    }
+
+    public void setSimulated(int simulated) {
+        this.simulated = simulated;
     }
 
     /**

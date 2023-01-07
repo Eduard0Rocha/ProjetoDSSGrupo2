@@ -25,7 +25,8 @@ public class CampeonatoDAO {
              Statement stm = conn.createStatement()) {
             String sql = "CREATE TABLE IF NOT EXISTS campeonato (" +
                     "codCamp int primary key not null," +
-                    "nomeCamp varchar(45) NOT NULL)";
+                    "nomeCamp varchar(45) NOT NULL,"+
+                    "simulated int not null)";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS registo (" +
@@ -52,7 +53,8 @@ public class CampeonatoDAO {
 
 
             sql = "CREATE TABLE IF NOT EXISTS classificacaoCorr(" +
-                    "id int primary key not null," +
+                    "chave int not null," +
+                    "foreign key(chave) references jogador(codJogador),"+
                     "classificacao varchar(45) not null," +
                     "codCorr int not null," +
                     "foreign key(codCorr) references corrida(codCorr))";
@@ -60,6 +62,7 @@ public class CampeonatoDAO {
 
             sql = "CREATE TABLE IF NOT EXISTS classificacao(" +
                     "chave int primary key not null," +
+                    "foreign key(chave) references jogador(codJogador),"+
                     "classificacao integer not null," +
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
@@ -67,6 +70,7 @@ public class CampeonatoDAO {
 
             sql = "CREATE TABLE IF NOT EXISTS classificacaoH(" +
                     "chave int primary key not null," +
+                    "foreign key(chave) references jogador(codJogador),"+
                     "classificacaoH integer not null," +
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
@@ -92,6 +96,7 @@ public class CampeonatoDAO {
     public Campeonato get(Object key) {
         Campeonato c = new Campeonato();
         String nomeCamp = "";
+        int simulated = 0;
         String codCamp = "0";
         HashMap<String, Integer> classificacao = new HashMap<>();
         HashMap<String, Integer> classificacaoH = new HashMap<>();
@@ -107,6 +112,7 @@ public class CampeonatoDAO {
                 if (rs.next()) {
                     nomeCamp = rs.getString("nomeCamp");
                     codCamp = Integer.toString(rs.getInt("codCamp"));
+                    simulated=rs.getInt("simulated");
                 }
                 {
                     try (ResultSet cr1 = stm.executeQuery("select * from classificacao where codCamp" + "='"+key+"'");)
@@ -141,13 +147,10 @@ public class CampeonatoDAO {
                         while (cr4.next()) {
                             int n = cr4.getInt("codCorr");
                             try(ResultSet co = stm.executeQuery("select * from corrida where codCorr" + "='"+n+"'");
-                                ResultSet tp = stm.executeQuery("select * from tempos where codCorr" + "='"+n+"'");
+
                                 ResultSet cl = stm.executeQuery("select * from classificacaoCorr where codCorr" + "='"+n+"'");){
                                 Corrida aux = new Corrida(Integer.toString(n), Integer.toString(co.getInt("codCamp")),Integer.toString(co.getInt("codCirc")));
                                 HashMap<String, Float> tempos = new HashMap<>();
-                                while(tp.next()){
-                                    tempos.put(Integer.toString(tp.getInt("chave")),tp.getFloat("tempo"));
-                                }
                                 ArrayList<String> classCorr = new ArrayList<>();
                                 while(cl.next()){
                                     classCorr.add(cl.getString("classificacao"));
@@ -159,7 +162,7 @@ public class CampeonatoDAO {
                         }
                     }
 
-                     c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas);
+                     c = new Campeonato(nomeCamp, codCamp, classificacao, classificacaoH, registo, corridas,simulated);
                 }
             }
         }
@@ -173,6 +176,7 @@ public class CampeonatoDAO {
     public HashMap<String, Campeonato> getCampeonatosDB() throws SQLException {
         Campeonato c ;
         String nomeCamp = "";
+        int simulated=0;
 
         HashMap<String, Campeonato> campeonatos = new HashMap<>();
 
@@ -183,7 +187,8 @@ public class CampeonatoDAO {
                 while(rs.next()) {
                     int key = rs.getInt("codCamp");
                      nomeCamp = rs.getString("nomeCamp");
-                            c = new Campeonato(nomeCamp, Integer.toString(key), getClassificacoes(key), getClassificacoesH(key), getRegistos(key), getCorridas(key));
+                    simulated = rs.getInt("simulated");
+                            c = new Campeonato(nomeCamp, Integer.toString(key), getClassificacoes(key), getClassificacoesH(key), getRegistos(key), getCorridas(key),simulated);
                             campeonatos.put(Integer.toString(key), c);
                         }
                         }
@@ -207,6 +212,21 @@ public class CampeonatoDAO {
             }
         }
         return classificacao;
+    }
+
+    public boolean  getIsSimulated(int key) throws SQLException {
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        HashMap<String, Integer> classificacao = new HashMap<>();
+        try (ResultSet cr1 = stm.executeQuery("select * from campeonato where codCamp" + "='" + key + "'");) {
+
+            if (cr1.next()) {
+               int simulated = cr1.getInt("simulated");
+               if (simulated==0) return  false;
+               else return true;
+            }
+        }
+        return false;
     }
 
     public  HashMap<String, Integer> getClassificacoesH(int key) throws SQLException {
@@ -244,10 +264,8 @@ public class CampeonatoDAO {
                while (cr4.next()) {
                    Corrida aux ;
                    int n = cr4.getInt("codCorr");
-                   HashMap<String, Float> tempos = this.getTempos(n);
                    ArrayList<String> classCorr = this.getClassificacaoCorr(n);
                    aux = getCorrida(n);
-                   aux.setTempos(tempos);
                    aux.setClassificacao(classCorr);
 
                    corridas.put(Integer.toString(n), aux);
@@ -264,28 +282,16 @@ public class CampeonatoDAO {
             if (!cr4.next()) return null;
             Corrida aux ;
             int n = cr4.getInt("codCorr");
-            HashMap<String, Float> tempos = this.getTempos(n);
+
             ArrayList<String> classCorr = this.getClassificacaoCorr(n);
             aux = getCorrida(n);
-            aux.setTempos(tempos);
             aux.setClassificacao(classCorr);
 
             return aux;
         }
     }
 
-    public HashMap<String, Float> getTempos(int n) throws SQLException {
-        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
-        Statement stm = conn.createStatement();
-        HashMap<String, Float> tempos = new HashMap<>();
-        try ( ResultSet tp = stm.executeQuery("select * from tempos where codCorr" + "='" + n + "'")){
 
-            while (tp.next()) {
-                tempos.put(Integer.toString(tp.getInt("chave")), tp.getFloat("tempo"));
-            }
-        }
-        return tempos;
-    }
     public ArrayList<String>  getClassificacaoCorr(int n) throws SQLException {
         Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
         Statement stm = conn.createStatement();
@@ -374,7 +380,7 @@ public class CampeonatoDAO {
         HashMap<String, Corrida> corridas = t.getCorridas();
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            stm.executeUpdate("INSERT INTO campeonato VALUES ('"+Integer.parseInt(t.getCodCamp())+"', '"+t.getNomeCamp()+"')");
+            stm.executeUpdate("INSERT INTO campeonato VALUES ('"+Integer.parseInt(t.getCodCamp())+"', '"+t.getNomeCamp()+"', '"+t.getSimulated()+"')");
             for(int i=0;i<classificacao.size();i++) {
                 stm.executeUpdate("INSERT INTO classificacao VALUES ('"+ i +"', '"+classificacao.get(i)+"', '"+Integer.parseInt(t.getCodCamp())+"')");
             }
@@ -586,6 +592,17 @@ public class CampeonatoDAO {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
             stm.executeUpdate("INSERT INTO classificacaocorr VALUES ('"+ Integer.parseInt(a) +"','"+pts+"',' "+Integer.parseInt(codcorr)+"')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void setSimulated(String codCamp)
+    {
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            stm.executeUpdate("update  campeonato set simulated = '"+1+"', where codCamp ='"+Integer.parseInt(codCamp)+"')");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());

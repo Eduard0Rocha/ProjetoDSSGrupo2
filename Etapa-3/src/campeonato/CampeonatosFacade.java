@@ -253,4 +253,14 @@ public class CampeonatosFacade implements SGestCampeonatos{
             campeonatoDAO.addclassCorr(a,pts.get(a),codCorr);
         }
     }
+    public boolean canSimulate(String codCamp) throws SQLException {
+
+           if ( campeonatoDAO.getIsSimulated(Integer.parseInt(codCamp))) return false;
+           return true;
+
+    }
+
+    public void setSimulate(String codCamp){
+         campeonatoDAO.setSimulated(codCamp);
+    }
 }

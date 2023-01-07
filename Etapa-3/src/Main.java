@@ -225,7 +225,7 @@ public class Main  {
         if (i==2){
 
             printCampeonatos(busi.getCampeonatos().values());
-            imprimeMenuEnterCampeonato();
+            imprimeMenuPlayer();
         }
         if (i==3){
             System.out.println("Insira o nome do Campeonato a adicionar: ");
@@ -238,8 +238,13 @@ public class Main  {
             System.out.println("Insira o código do Campeonato a Simular: ");
             String ncamp=ler.nextLine();
             if (busi.existsCampeonato(ncamp)) {
-                System.out.println( busi.simulaCampeonato(ncamp));
-            }else {
+                if (busi.abletoSimulate(ncamp)) {
+                    System.out.println(busi.simulaCampeonato(ncamp));
+                }
+                else System.out.println("Campeonato já simulado");
+                imprimeMenuPlayer();
+            }
+            else {
                 System.out.println("Campeonato invalido");
             }
             imprimeMenuPlayer();
@@ -998,13 +1003,15 @@ public class Main  {
             System.out.println("##############Campeonato#################");
             Campeonato toprint = (Campeonato)AUX[i];
             System.out.println("CódigoCampeonato: " +toprint.getCodCamp()+" , "+
-                    "NomeCampeonato: " +toprint.getNomeCamp());
+                    "NomeCampeonato: " +toprint.getNomeCamp()+
+                    "Simulated: " +toprint.getSimulated());
             printCorridas(toprint.getCorridas().values());
             printRegistos(toprint.getRegisto());
             System.out.println("#####################################################");
         }
-
         }
+
+
 
     public  static void printCorridas(Collection<Corrida> c) throws SQLException, NonExistantKey {
         Object[] AUX= c.toArray();
