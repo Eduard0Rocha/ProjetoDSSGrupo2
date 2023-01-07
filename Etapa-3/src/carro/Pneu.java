@@ -24,6 +24,7 @@ public class Pneu {
 
         this.tipo = new String(tipo);
         this.codCarro = new String(codCarro);
+        this.estado=100;
     }
 
     public Pneu(String tipo, int estado, String codCarro) {
@@ -31,6 +32,10 @@ public class Pneu {
         this.tipo = new String(tipo);
         this.estado = estado;
         this.codCarro = new String(codCarro);
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getTipo() {

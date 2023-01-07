@@ -224,6 +224,12 @@ public class LogicaNegocio implements  F1Manager{
         else return new ArrayList<>();
     }
 
+    public ArrayList<Registo> getRegistos(String cod) throws SQLException {
+        return  new ArrayList<>(camp.getRegistos(cod));
+    }
+
+
+
     public HashMap<String, Integer> getClassificacaoC(String cod)  {
 
         return camp.getClassificacaoC(cod);
@@ -231,9 +237,15 @@ public class LogicaNegocio implements  F1Manager{
     public HashMap<String, Integer> getClassificacaoCH(String cod)  {
         return camp.getClassificacaoCH(cod);
     }
-    public boolean addCorridaCamp(String cCamp,String cCir) throws SQLException, NonExistantKey {
+    public boolean addCorridaCamp(String cCamp,String cCir) throws SQLException, NonExistantKey
+    {
 
         return camp.addCorrida(cCamp, cCir);
+    }
+
+    public HashMap<String,Corrida> getCorridas(String cCamp) throws SQLException, NonExistantKey {
+
+        return camp.getCorridasA(cCamp);
     }
 
     public HashMap<Integer,String> simulaCampeonato(String codCamp) throws SQLException {
@@ -434,6 +446,10 @@ public class LogicaNegocio implements  F1Manager{
         return glob;
     }
 
+
+
+
+
     public  HashMap<String,Integer> simularCorrida(String corr_cod, String cod_camp) throws SQLException {
 
         Corrida c = this.camp.getCorrida(corr_cod);
@@ -521,17 +537,17 @@ public class LogicaNegocio implements  F1Manager{
         return tempoVolta;
     }
 
-    public static float simularReta(Piloto piloto, Carro carro, int grauDificuldade) {
+    public  float simularReta(Piloto piloto, Carro carro, int grauDificuldade) {
         float tempo = (grauDificuldade / piloto.getSVA()) * (grauDificuldade / carro.getEquipamento());
         return tempo;
     }
 
-    public static float simularCurva(Piloto piloto, Carro carro, int grauDificuldade) {
+    public  float simularCurva(Piloto piloto, Carro carro, int grauDificuldade) {
         float tempo = (grauDificuldade / piloto.getSVA()) * (grauDificuldade / carro.getEquipamento());
         return tempo;
     }
 
-    public static float simularChicane(Piloto piloto, Carro carro, int grauDificuldade) {
+    public  float simularChicane(Piloto piloto, Carro carro, int grauDificuldade) {
         float tempo = (grauDificuldade / piloto.getSVA()) * (grauDificuldade / carro.getEquipamento());
         return tempo;
     }
@@ -771,6 +787,43 @@ public class LogicaNegocio implements  F1Manager{
         }
     return null;
     }
+    public HashMap<Integer, String> getClassificacaoALLChampH(String ccamp) throws SQLException {
+        if (this.existsCampeonato(ccamp)){
+            return camp.getClassificacaoALLChampH(ccamp);
+        }
+        return null;
+    }
 
+    public HashMap<Integer, String> getClassificaoCorr(String ccorr,String ccamp) throws SQLException {
+        if (this.existsCampeonato(ccamp)){
+            return camp.getClassificacaoCorr(ccorr,ccamp);
+        }
+        return null;
+    }
+
+     public HashMap<String ,Registo> getRegistosMap(String ncamp) throws SQLException {
+
+        HashMap<String,Registo> aux =new HashMap<>();
+        for (int i=0;i<this.getRegistos(ncamp).size();i++){
+        aux.put(this.getRegistos(ncamp).get(i).getCodRegisto(),this.getRegistos(ncamp).get(i));
+        }
+        return aux;
+     }
+
+     public void setPneus(String idRes,String Changes,String codCamp) throws SQLException {
+        camp.setPneus( idRes, Changes,codCamp);
+     }
+
+     public boolean removeRegistoCamp(String idguest,String ccamp) throws SQLException {
+        if (existsCodJog(idguest)&& existsCampeonato(ccamp)) {
+            if (getJogadorAG(idguest).getclasse().equals("G")) {
+                return camp.removeregisto(idguest, ccamp);
+
+            }
+            else return false;
+        }
+
+        else return false ;
+     }
 }
 

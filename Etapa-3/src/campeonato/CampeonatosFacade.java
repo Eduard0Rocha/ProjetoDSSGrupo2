@@ -59,10 +59,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
         return result;
     }
 
-    @Override
-    public ArrayList<Circuito> getCircuitos(String codCamp) throws SQLException {
-        return null;
-    }
+
 
     /**
      * Método que retorna os circuitos existentes num dado campeonato
@@ -86,6 +83,10 @@ public class CampeonatosFacade implements SGestCampeonatos{
         this.CorridaCounter++;
         String codCorr = new String( Integer.toString(this.CorridaCounter));
         Corrida nova = new Corrida(codCorr, codCamp, codCirc);
+           Campeonato c = this.campeonatos.get(codCamp);
+           c.addCorrida(codCorr,nova);
+           campeonatos.put(codCorr,c);
+
         this.campeonatoDAO.addCorr(nova);
         return true;
     }
@@ -264,11 +265,32 @@ public class CampeonatosFacade implements SGestCampeonatos{
      public HashMap<Integer, String> getClassificacaoALLChamp(String ccamp) throws SQLException {
         return  new HashMap<>(campeonatoDAO.getclassificacaoChamp(ccamp));
     }
+
+    public HashMap<Integer, String> getClassificacaoALLChampH(String ccamp) throws SQLException {
+        return  new HashMap<>(campeonatoDAO.getclassificacaoChampH(ccamp));
+    }
     public void addClassH(int i , String codJog,String codCamp){
         campeonatoDAO.addClassHibrido(codJog,i,codCamp);
     }
 
     public void addclassTot(int i,String codJog,String codCamp){
         campeonatoDAO.addClassTotal(codJog,i,codCamp);
+    }
+
+    public HashMap<Integer,String> getClassificacaoCorr(String ccor,String ccamp) throws SQLException {
+        return  new HashMap<> (campeonatoDAO.getClassificacaoCorr(ccor,ccamp));
+    }
+
+
+    public void setPneus(String codRes,String pneus,String codCamp) throws SQLException {
+       ArrayList<Registo> r= this.getRegistos(codCamp);
+        for (int i =0;i<r.size();i++){
+            if (r.get(i).getCodRegisto().equals(codRes)){
+                r.get(i).getCarro().changePneus(pneus);
+            }
+        }
+    }
+    public boolean removeregisto(String codRes,String codCamp) throws SQLException {
+        return campeonatoDAO.removeReg(codRes,codCamp);
     }
 }

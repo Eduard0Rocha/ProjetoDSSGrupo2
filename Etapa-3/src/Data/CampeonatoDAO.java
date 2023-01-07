@@ -63,15 +63,15 @@ public class CampeonatoDAO {
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS classificacao(" +
-                    "codJog int key not null," +
+                    "codJog int not null," +
                     "foreign key(codJog) references jogador(codJogador),"+
-                    "classificacao integer not null," +
+                    "classificacao int not null," +
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS classificacaoH(" +
-                    "codJog int  key not null," +
+                    "codJog int not null," +
                     "foreign key(codJog) references jogador(codJogador),"+
                     "classificacaoH integer not null," +
                     "codCamp int not null," +
@@ -652,5 +652,48 @@ public class CampeonatoDAO {
             }
         }
         return classificacao;
+    }
+
+    public HashMap<Integer, String> getclassificacaoChampH(String ccamp) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        HashMap<Integer, String> classificacao = new HashMap<>();
+        try (ResultSet cr1 = stm.executeQuery("select * from classificacaoh where codCamp" + "='" + ccamp + "'");) {
+
+            while (cr1.next()) {
+                classificacao.put(( cr1.getInt("classificacaoH")), Integer.toString(cr1.getInt("codJog")));
+            }
+        }
+        return classificacao;
+    }
+
+    public HashMap<Integer,String> getClassificacaoCorr(String ccor,String ccamp) throws SQLException {
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        HashMap<Integer, String> classificacao = new HashMap<>();
+        try (ResultSet cr1 = stm.executeQuery("select * from classificacaocorr where codCorr= '"+Integer.parseInt(ccor)+"' and  codCamp" + "='" + Integer.parseInt(ccamp) + "'");) {
+
+            while (cr1.next()) {
+                classificacao.put(( cr1.getInt("classificacao")), Integer.toString(cr1.getInt("codJog")));
+            }
+        }
+        return classificacao;
+    }
+    public boolean removeReg(String codjog,String ccamp) throws SQLException {
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        try{
+            stm.executeUpdate("delete  from classificacaocorr where codJog = '"+Integer.parseInt(codjog)+"' and  codCamp" + "='" + Integer.parseInt(ccamp) + "'");
+            stm.executeUpdate("delete  from classificacao where codJog = '"+Integer.parseInt(codjog)+"' and  codCamp" + "='" + Integer.parseInt(ccamp) + "'");
+            stm.executeUpdate("delete  from classificacaoh where codJog = '"+Integer.parseInt(codjog)+"' and  codCamp" + "='" + Integer.parseInt(ccamp) + "'");
+            stm.executeUpdate("delete  from registo where codJogador = '"+Integer.parseInt(codjog)+"' and  codCamp" + "='" + Integer.parseInt(ccamp) + "'");
+            return true;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

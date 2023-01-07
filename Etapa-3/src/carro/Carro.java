@@ -215,6 +215,12 @@ public abstract class Carro
     public void setPneus(ArrayList<Pneu> pneus) {
         this.pneus = pneus;
     }
+    public void changePneus(String tipo) {
+        for (Pneu p: this.pneus) {
+            p.setTipo(tipo);
+
+        }
+    }
 
     public String getclasse()
     {
