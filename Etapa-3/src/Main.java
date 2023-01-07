@@ -20,10 +20,7 @@ import java.util.*;
 public class Main  {
 
      private static Scanner ler = new Scanner(System.in);
-    private AuthenticatedPlayer jogadorAutenticado;
-    private Guest guest;
-    private Admin admin;
-    private static LogicaNegocio busi;
+     private static LogicaNegocio busi;
 
 
 
@@ -82,11 +79,12 @@ public class Main  {
             System.out.println("Insira o grau SVA do Piloto a adicionar : ");
             int sva=ler.nextInt();
             ler.nextLine();
-            //pil.addPiloto(nome,cts,sva);
-           busi.addPiloto(nome,cts,sva);
+            busi.addPiloto(nome,cts,sva);
+            System.out.println("Piloto adicionado !");
+            menuPilotos();
+
         }
         if (p==2){
-            //printPilotos(pil.getPilotos().values());
             printPilotos(busi.getpilotos().values());
             menuPilotos();
         }
@@ -94,17 +92,15 @@ public class Main  {
             System.out.println("Insira o código do piloto que pretende remover");
             String codigo=ler.nextLine();
                if (busi.removePiloto(codigo )) System.out.println("Piloto removido com sucesso");
-                //if (pil.removePiloto(codigo)) System.out.println("Piloto removido com sucesso");
                 else System.out.println("Piloto inexistente");
             menuPilotos();
         }
        else menuadmin();
-
-
     }
 
 
-    public static void imprimeMenuLogin0(){
+    public static void imprimeMenuLogin0()
+    {
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
         System.out.println("|Bem-Vindo ao F1Manager                              |");
         System.out.println("------------------------------------------------------");
@@ -142,11 +138,6 @@ public class Main  {
         System.out.println("------------------------------------------------------");
     }
 
-    public static void imprimeInvalidUserPrompt(){
-        System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
-        System.out.println("|User not found                                      |");
-        System.out.println("------------------------------------------------------");
-    }
 
     public static void imprimeContactoPrompt(){
         System.out.println("---------------TP-DSS-GRUPO2-FASE3--------------------");
@@ -240,6 +231,7 @@ public class Main  {
             if (busi.existsCampeonato(ncamp)) {
                 if (busi.abletoSimulate(ncamp)) {
                     System.out.println(busi.simulaCampeonato(ncamp));
+                    System.out.println("Campeonato Simulado");
                 }
                 else System.out.println("Campeonato já simulado");
                 imprimeMenuPlayer();
@@ -296,6 +288,7 @@ public class Main  {
                         String cCar = ler.nextLine();
                         if (busi.existsCarro(cCar)){
                             busi.addRegisto(cJog,cPl,cCar,cCamp);
+                            System.out.println("Registo adicionado");
                             imprimeMenuEnterCampeonato();
                         }
                         else {
@@ -336,8 +329,8 @@ public class Main  {
         String username;
         String password;
         boolean valid;
-            if (p==1) {// login
-
+            if (p==1)
+            {
                 imprimeMenuLogin1();
                 int k = ler.nextInt();
                 ler.nextLine();
@@ -346,14 +339,12 @@ public class Main  {
                         imprimeUsernamePrompt();
                         username = systemIn.readLine();
                         if (busi.existsUser(username)){
-                        //if (users.existeUser(username) ){
                         int i = 0;
                         while (i < 3) {
                             imprimePasswordPrompt();
                             password = ler.nextLine();
                             if (busi.validUser(username,password)){
-                            //if (users.validUser(username, password)) {
-                               // this.jogadorAutenticado=users.getJogador(username);
+
                                 System.out.println("Login efetuado com sucesso como jogador");
                                 imprimeMenuPlayer();
                                 break;
@@ -374,13 +365,12 @@ public class Main  {
                         imprimeUsernamePrompt();
                         username = systemIn.readLine();
                         if (busi.existsAdmin(username)){
-                       // if (users.existeAdmin(username) ){
                             int i = 0;
                             while (i < 3) {
                                 imprimePasswordPrompt();
                                 password = ler.nextLine();
-                                if (busi.validPasswordAdmin(username,password)){
-                                //if (users.validPasswordAdmin(username, password)) {
+                                if (busi.validPasswordAdmin(username,password))
+                                {
                                     System.out.println("Login efetuado com sucesso como Admin");
                                     menuadmin();
                                     break;
@@ -399,7 +389,6 @@ public class Main  {
                         imprimeUsernamePrompt();
                         username = systemIn.readLine();
                         if (busi.validGuest(username)){
-                        //if (users.validGuest(username)){
                           menuGuest();
                         }
                        else {
@@ -433,7 +422,6 @@ public class Main  {
 
                     try {
                         valid = busi.createAPlayer(name, username, password);
-                        //valid = users.createAPlayer(name, username, password);
                     } catch (CloneNotSupportedException e) {
                         throw new RuntimeException(e);
                     }
@@ -465,7 +453,6 @@ public class Main  {
                     String contacto=ler.nextLine();
 
                     valid=busi.createAdmin(name,contacto,email,username,password);
-                    //valid = users.createAdmin(name,contacto,email,username,password);
 
                     if (valid) {
                         imprimeAdminCreatedPrompt();
@@ -563,7 +550,7 @@ public class Main  {
                 System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
                 String tipoPneus = ler.nextLine();
                 busi.createC1(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
-                //carr.createC1(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
 
@@ -590,7 +577,7 @@ public class Main  {
                 int potencia_motor_eletrico = ler.nextInt();
                 ler.nextLine();
                 busi.createC1H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
-                //carr.createC1H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
 
@@ -617,7 +604,7 @@ public class Main  {
                 int afinacao_mecanica = ler.nextInt();
                 ler.nextLine();
                 busi.createC2(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica);
-                //carr.createC2(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
 
@@ -647,14 +634,13 @@ public class Main  {
                 int potencia_motor_eletrico = ler.nextInt();
                 ler.nextLine();
                 busi.createC2H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica, potencia_motor_eletrico);
-               // carr.createC2H(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, afinacao_mecanica, potencia_motor_eletrico);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
 
             if (classe.equals("GT")) {
                 System.out.println("Insira a marca do Carro a adicionar : ");
                 String marca = ler.nextLine();
-
                 System.out.println("Insira o modelo do Carro a adicionar : ");
                 String modelo = ler.nextLine();
                 System.out.println("Insira a cilindrada do Carro a adicionar : ");
@@ -672,7 +658,7 @@ public class Main  {
                 System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
                 String tipoPneus = ler.nextLine();
                 busi.createGT(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
-                //carr.createGT(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
 
@@ -699,7 +685,7 @@ public class Main  {
                 int potencia_motor_eletrico = ler.nextInt();
                 ler.nextLine();
                 busi.createGTH(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
-                //carr.createGTH(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus, potencia_motor_eletrico);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
 
@@ -723,7 +709,7 @@ public class Main  {
                 System.out.println("Insira o tipo de pneus do Carro a adicionar : ");
                 String tipoPneus = ler.nextLine();
                 busi.createSC(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
-               // carr.createSC(marca, modelo, cilindrada, potencia, fiabilidade, pac, tipoPneus);
+                System.out.println("Carro adicionado");
                 menuCarros();
             }
             else System.out.println("Valor inválido");
@@ -731,14 +717,12 @@ public class Main  {
         if (p==2)
         {
             printCarros(busi.getCarros().values());
-            //printCarros(carr.getCarros().values());
             menuCarros();
         }
         if (p==3)
         {
             System.out.println("Insira o código do carro que pretende remover");
             String cod = ler.nextLine();
-            //if ( carr.removeCarro(cod))
             if (busi.removeCarro(cod))
                System.out.println("Carro removido com sucesso");
            else System.out.println("Carro inexistente");
@@ -761,13 +745,50 @@ public class Main  {
         int p = ler.nextInt();
         ler.nextLine();
         if (p == 1) {
-            System.out.println("entrar num campeonato");
-        } else if (p == 2) {
-            printCampeonatos(busi.getCampeonatos().values());
-           //printCampeonatos(camp.getCampeonatos().values());
+            System.out.println("Insira o código do Campeonato onde pertende adiconar o Registo : ");
+            String cCamp=ler.nextLine();
+            if (busi.existsCampeonato(cCamp)) {
+                System.out.println("Insira o código do Jogador a adicionar : ");
+                String cJog = ler.nextLine();
+                if (busi.existsCodJog(cJog)) {
+                    System.out.println("Insira o código do Piloto a adicionar : ");
+                    String cPl = ler.nextLine();
+                    if (busi.existsPil(cPl) ){
+                        System.out.println("Insira o código do Carro a adicionar : ");
+                        String cCar = ler.nextLine();
+                        if (busi.existsCarro(cCar)){
+                            busi.addRegisto(cJog, cPl, cCar, cCamp);
+                            System.out.println("Registo adicionado");
+                            menuGuest();
+                        }
+                        else {
+                            System.out.println("Carro Inexistente");
+                            menuGuest();
+                        }
 
-        } else if (p == 3) {
-            System.out.println("sair de um camponato");
+                    }
+                    else {
+                        System.out.println("Piloto inexistente");
+                        menuGuest();
+                    }
+                }
+                else{
+                    System.out.println("User inexistente");
+                    menuGuest();
+                }
+            }
+            else{
+                System.out.println("Campeonato inexistente");
+                menuGuest();
+            }
+        }
+         else if (p == 2) {
+            printCampeonatos(busi.getCampeonatos().values());
+            menuGuest();
+
+        }
+         else if (p == 3) {
+
         }
     }
 
@@ -839,12 +860,9 @@ public class Main  {
             System.out.println("Insira o estado climatérico :");
             String  estado_climaterico =ler.nextLine();
             busi.createCicruito(voltas,ncirc,local,dist,curvasList,retaslist,chicaneList,temperatura,humidade,temperatura_asf,estado_climaterico,DRS);
-            //circ.createCicruito(voltas,ncirc,local,dist,curvasList,retaslist,chicaneList,temperatura,humidade,temperatura_asf,estado_climaterico,DRS);
             menuCircuitos();
         }
         if (p==2){
-           //System.out.println(busi.getCircuitos().values());
-            //System.out.println(circ.getCircuitos().values());
             printCircuitos(busi.getCircuitos().values());
             menuCircuitos();
         }
@@ -852,7 +870,6 @@ public class Main  {
             System.out.println("Insira o codigo do circuito que pretente remover  ");
             String cod =ler.nextLine();
             boolean aux = busi.removeCircuito(cod);
-          //  boolean aux = circ.removeCircuito(cod);
             if (!aux) System.out.println("Circuito inexistente");
             else System.out.println("Circuito removido ");
             menuCircuitos();
@@ -870,8 +887,9 @@ public class Main  {
         System.out.println("|4-> Obter lista de Circuitos de um Campeonato       |");
         System.out.println("|5-> Obter lista de Jogadores de um Campeonato       |");
         System.out.println("|6-> Obter Classificações de um Campeonato           |");
-        System.out.println("|7-> Adicionar Registo a Campeonato                  |");
-        System.out.println("|8-> Adicionar Corrida a Campeonato                  |");
+        System.out.println("|7-> Obter Classificações de uma Corrida             |");
+        System.out.println("|8-> Adicionar Registo a Campeonato                  |");
+        System.out.println("|9-> Adicionar Corrida a Campeonato                  |");
         System.out.println("|                                                    |");
         System.out.println("|Outro -> voltar                                     |");
         System.out.println("-----------------------------------------------------|");
@@ -884,11 +902,11 @@ public class Main  {
             busi.createCampeonato(ncamp);
             menuCampeonatos();
         }
-        if (p==2){
+        else if (p==2){
             printCampeonatos(busi.getCampeonatos().values());
             menuCampeonatos();
         }
-        if (p==3){
+        else if (p==3){
             System.out.println("Insira o codigo do campeonato que pretente remover: ");
             String cod =ler.nextLine();
             boolean aux = busi.removeCamp(cod);
@@ -902,7 +920,7 @@ public class Main  {
             printCircuitos(busi.getCircuitosCamp(cod));
             menuCampeonatos();
         }
-        if (p==5){
+       else  if (p==5){
             System.out.println("Insira o codigo do campeonato  : ");
             String cod =ler.nextLine();
             if (busi.existsCampeonato(cod)) {
@@ -911,85 +929,94 @@ public class Main  {
             else System.out.println("Campeonato inexistente");
             menuCampeonatos();
         }
-        if (p==6){
+        else if (p==6){
             System.out.println("nao testado");
-            System.out.println("Classificação de carros Hibridos?(Sim/Nao): ");
-            String ans = ler.nextLine();
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod = ler.nextLine();
+            if (!busi.abletoSimulate(cod))
+            {
+                System.out.println("Classificação de carros Hibridos?(Sim/Nao): ");
+                String ans = ler.nextLine();
             if(ans == "Nao") {
-                System.out.println("Insira o codigo do campeonato  : ");
-                String cod = ler.nextLine();
-                System.out.println(busi.getClassificacaoC(cod));
-                //System.out.println(camp.getClassificacaoC(cod));
+
+                if (!busi.abletoSimulate(cod)) {
+                    System.out.println(busi.getClassificacaoC(cod));
+                }
+
                 menuCampeonatos();
             }else{
-                System.out.println("Insira o codigo do campeonato  : ");
-                String cod = ler.nextLine();
                 System.out.println(busi.getClassificacaoCH(cod));
-                //System.out.println(camp.getClassificacaoCH(cod));
+                menuCampeonatos();
+            }
+            }
+            else {
+                System.out.println("Impossível obter classificações , campeonato ainda não simulado ");
                 menuCampeonatos();
             }
         }
-        if (p==7){
-            System.out.println("Insira o código do Campeonato onde pertende adiconar o Registo : ");
-            String cCamp=ler.nextLine();
-            if (busi.existsCampeonato(cCamp)) {
-                System.out.println("Insira o código do Jogador a adicionar : ");
-                String cJog = ler.nextLine();
-                if (busi.existsCodJog(cJog)) {
-                    System.out.println("Insira o código do Piloto a adicionar : ");
-                    String cPl = ler.nextLine();
-                    if (busi.existsPil(cPl) ){
-                        System.out.println("Insira o código do Carro a adicionar : ");
-                        String cCar = ler.nextLine();
-                        if (busi.existsCarro(cCar)){
-                            busi.addRegisto(cJog, cPl, cCar, cCamp);
-                            menuCampeonatos();
+        else if (p==7) {
+        }
+        else  if (p==8) {
+                System.out.println("Insira o código do Campeonato onde pertende adiconar o Registo : ");
+                String cCamp=ler.nextLine();
+                if (busi.existsCampeonato(cCamp)) {
+                    System.out.println("Insira o código do Jogador a adicionar : ");
+                    String cJog = ler.nextLine();
+                    if (busi.existsCodJog(cJog)) {
+                        System.out.println("Insira o código do Piloto a adicionar : ");
+                        String cPl = ler.nextLine();
+                        if (busi.existsPil(cPl) ){
+                            System.out.println("Insira o código do Carro a adicionar : ");
+                            String cCar = ler.nextLine();
+                            if (busi.existsCarro(cCar)){
+                                busi.addRegisto(cJog, cPl, cCar, cCamp);
+                                menuCampeonatos();
+                            }
+                            else {
+                                System.out.println("Carro Inexistente");
+                                menuCampeonatos();
+                            }
+
                         }
                         else {
-                            System.out.println("Carro Inexistente");
+                            System.out.println("Piloto inexistente");
                             menuCampeonatos();
                         }
-
                     }
-                    else {
-                        System.out.println("Piloto inexistente");
+                    else{
+                        System.out.println("User inexistente");
                         menuCampeonatos();
                     }
                 }
                 else{
-                    System.out.println("User inexistente");
-                    menuCampeonatos();
-                }
-            }
-            else{
                     System.out.println("Campeonato inexistente");
                     menuCampeonatos();
                 }
             }
-        if (p==8) {
-            System.out.println("nao testado");
-            System.out.println("Insira o código do Campeonato onde pertende adiconar a Corrida : ");
-            String cCamp = ler.nextLine();
-            if (busi.existsCampeonato(cCamp))
-            {
-                System.out.println("Insira o código do Circuito da Corrida a adicionar : ");
-                String cCir = ler.nextLine();
-                if (busi.existsCircuito(cCir)) {
-                    busi.addCorridaCamp(cCamp, cCir);
-                    System.out.println("Corrida adicionada");
-                    menuCampeonatos();
-                }
-                else {
-                    System.out.println("Circuito Inexistente ");
-                    menuCampeonatos();
-                    }
-            }
-            else{
-                System.out.println("Campeonato Inexistente ");
-                menuCampeonatos();
-            }
-                    ;
-                }
+
+       else  if (p==9)
+       {
+           System.out.println("Insira o código do Campeonato onde pretende adiconar a Corrida : ");
+           String cCamp = ler.nextLine();
+           if (busi.existsCampeonato(cCamp))
+           {
+               System.out.println("Insira o código do Circuito da Corrida a adicionar : ");
+               String cCir = ler.nextLine();
+               if (busi.existsCircuito(cCir)) {
+                   busi.addCorridaCamp(cCamp, cCir);
+                   System.out.println("Corrida adicionada");
+                   menuCampeonatos();
+               }
+               else {
+                   System.out.println("Circuito Inexistente ");
+                   menuCampeonatos();
+               }
+           }
+           else{
+               System.out.println("Campeonato Inexistente ");
+               menuCampeonatos();
+           }
+        }
         else menuadmin();
             }
 

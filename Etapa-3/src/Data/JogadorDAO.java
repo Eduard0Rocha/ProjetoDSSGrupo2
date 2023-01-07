@@ -224,12 +224,29 @@ public class JogadorDAO {
              s.executeUpdate("update jogador set pontosGlobais = '" +pontos+"' where codJogador = '"+cod+"'");
 
         }
-
-
         catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
+    }
+
+    public int  getpontosGlob(String codJogador){
+
+        try {
+            Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+            Statement s = conn.createStatement();
+            ResultSet rs= s.executeQuery("SELECT * FROM jogador WHERE codJogador" +
+                    "='"+codJogador+"'");
+            if (rs.next()){
+                int aux = rs.getInt("pontosGlobais");
+                return aux;
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return 0;
     }
 
     public Jogador getJogadorAG(String cod) throws SQLException
@@ -257,7 +274,5 @@ public class JogadorDAO {
         }
         return null;
     }
-
-
 
 }

@@ -1,5 +1,7 @@
 package Business;
 
+import Data.JogadorAutenticadoDAO;
+import Data.JogadorDAO;
 import campeonato.Campeonato;
 import campeonato.CampeonatosFacade;
 import campeonato.Corrida;
@@ -234,42 +236,94 @@ public class LogicaNegocio implements  F1Manager{
         return camp.addCorrida(cCamp, cCir);
     }
 
-    public HashMap<String,Integer> simulaCampeonato(String codCamp) throws SQLException {
+    public HashMap<Integer,String> simulaCampeonato(String codCamp) throws SQLException {
         HashMap<String,Corrida> corridas = camp.getCorridasA(codCamp);
         Corrida c = this.camp.getCorrida(codCamp);
         ArrayList<Registo> registos = this.camp.getRegistos(codCamp);
-
+        ArrayList<String> hibridos=new ArrayList<>();
 
         HashMap<String,Integer> pontosCamp=new HashMap<>();
+        HashMap<Integer,String> classH=new HashMap<>();
+
 
         for(int i =0;i<registos.size();i++){
-            pontosCamp.put(registos.get(i).getJogador().getCodJogador(),this.getJogadorAG(registos.get(i).getJogador().getCodJogador()).getPontosGlob());
+            pontosCamp.put(registos.get(i).getJogador().getCodJogador(),0);
+            if (registos.get(i).getCarro().getclasse().equals("C1H") ||
+                    registos.get(i).getCarro().getclasse().equals("C2H") ||
+                    registos.get(i).getCarro().getclasse().equals("GTH") ) hibridos.add(registos.get(i).getJogador().getCodJogador());
         }
 
         Object[] aux = corridas.keySet().toArray();
         for (int k =0;k<aux.length;k++){
                 String au = (String) aux[k];
                Corrida corr = corridas.get(au);
+
                 HashMap<String,Integer> classcorr=atribuipontos(simularCorrida(corr.getCodCorr(),corr.getCodCamp()));
-                // no fim de cada corrida tenho de meter as classificacoes numa tabela
 
-                camp.addClassCorr(classcorr,corr.getCodCorr());
-
-                //no fim de cada
                 pontosCamp = simulaCorr(pontosCamp,classcorr);
 
         }
-        System.out.println(pontosCamp);
-        /*
-        for (int i=0;i<registos.size();i++)
-        {
-            this.setpontosJogdb(registos.get(i).getJogador().getCodJogador(),pontosCamp.get(registos.get(i).getJogador()));
+        HashMap<Integer,String> posicoes = pontos_to_posicoes(pontosCamp);
+       for(Map.Entry<Integer,String> set : posicoes.entrySet()){
+           int ptsbefore= users.getPontosGlob(set.getValue());
+           int ptsafter=0;
+           camp.addclassTot(set.getKey(),set.getValue(),codCamp);
+          if (set.getKey()==1){
+              ptsafter=ptsbefore+12;
+              this.setpontosJogdb(set.getValue(),ptsafter);
+          }
+          else  if (set.getKey()==2){
+               ptsafter=ptsbefore+10;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+          else  if (set.getKey()==3){
+               ptsafter=ptsbefore+8;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+          else  if (set.getKey()==4){
+               ptsafter=ptsbefore+7;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+          else  if (set.getKey()==5){
+               ptsafter=ptsbefore+4;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+           else if (set.getKey()==6){
+               ptsafter=ptsbefore+4;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+           else if (set.getKey()==7){
+               ptsafter=ptsbefore+4;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+          else  if (set.getKey()==8){
+               ptsafter=ptsbefore+4;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+          else  if (set.getKey()==9){
+               ptsafter=ptsbefore+4;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+           else if (set.getKey()==10){
+               ptsafter=ptsbefore+4;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+           else {
+               ptsafter=ptsbefore;
+               this.setpontosJogdb(set.getValue(),ptsafter);
+           }
+       }
+       int i=1;
+        for(Map.Entry<Integer,String> set : posicoes.entrySet()) {
+            if (hibridos.contains(set.getValue())){
+                classH.put(i,set.getValue());
+                camp.addClassH(i,set.getValue(),codCamp);
+                i++;
+            }
         }
-*/
-       //TODO :PASSAR HASHMAPS DE PONTOS QUER NO FINAL DE UMA CORRIDA QUER NO FINAL DO CAMPEONATO PARA POR NA BD  PARA HASMAP <IDPLAYER,POSICAO>.
-        // TODO : COM ESTES HASHMAPS POR NA BASE DE DADOS
+
         camp.setSimulate(codCamp);
-        return pontosCamp;
+        return posicoes;
     }
 
     public void setpontosJogdb(String codJog,int pts) throws SQLException {
@@ -331,7 +385,44 @@ public class LogicaNegocio implements  F1Manager{
 
     }
 
+    private  String pop_key_do_maior(HashMap<String,Integer> pontos) {
 
+        String result = null;
+        int pontos_MAX = Integer.MIN_VALUE;
+
+        for (String key : pontos.keySet()) {
+
+            int pontos_key = pontos.get(key);
+
+            if (pontos_key > pontos_MAX) {
+
+                result = new String(key);
+                pontos_MAX = pontos_key;
+            }
+        }
+
+        pontos.remove(result);
+
+        return result;
+    }
+
+    public  HashMap<Integer,String> pontos_to_posicoes(HashMap<String,Integer> pontos) {
+
+        HashMap<Integer,String> tabela_posicoes = new HashMap<Integer,String>();
+
+        int position = 0;
+
+        while (pontos.size()>0) {
+
+            String cod_jogador = pop_key_do_maior(pontos);
+
+            position++;
+
+            tabela_posicoes.put(position,cod_jogador);
+        }
+
+        return tabela_posicoes;
+    }
     public HashMap<String,Integer> simulaCorr(HashMap<String,Integer> glob,HashMap<String,Integer> corr)
     {
         Object[] arr= corr.keySet().toArray();
@@ -377,16 +468,19 @@ public class LogicaNegocio implements  F1Manager{
         int pos=1;
         while ((aux = returnlowerFinish(tempos))!=null){
             classificacao.put(aux,pos);
+            camp.addclassCorrbd(aux,pos,corr_cod,cod_camp);
             pos++;
             tempos.remove(aux);
         }
 
         while (tempos.size()>0){
             aux=(String)tempos.keySet().toArray()[0];
+            camp.addclassCorrbd(aux,pos,corr_cod,cod_camp);
             classificacao.put(aux,pos);
             pos++;
             tempos.remove(aux);
         }
+
         return classificacao;
     }
     public String returnlowerFinish(HashMap<String,Float>tempos){
@@ -454,9 +548,11 @@ public class LogicaNegocio implements  F1Manager{
         createAPlayer("Guilherme", "Gu1lherme", "678");
         createAPlayer("Alex", "Al3x", "012");
         createAPlayer("Hugo", "Hu6o", "345");
-        createAPlayer("ALS10", "ALS", "123");
-        createAPlayer("Creissac", "Creissac10", "789");
-        createAPlayer("Nestor", "ANestor15", "678");
+        createAPlayer("Enzo", "En$o", "212");
+        createAPlayer("Paulinho", "P4ulinho", "111");
+        createAPlayer("Ten Hag", "10Hag", "222");
+        createAPlayer("Verstapencil", "Verstap3ncil", "333");
+
 // Guest: createGuest(String username)
         createGuest("Guest0");
         createGuest("Guest1");
@@ -471,25 +567,38 @@ public class LogicaNegocio implements  F1Manager{
         createC2("Pagani", "Huarya", 4000, 500, 75, 0.5F, "Duro", 5);
         createC2("Koenigsegg", "Regera", 4000, 400, 75, 0.5F, "Macio", 5);
 // C2H: createC2H(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipo_de_pneus, int afinacao_mecanica, int potencia_motor_eletrico)
-            createC2H("Zenvo", "TS1", 4000, 500, 75, 0.5F, "Duro", 5, 400);
-            createC2H("Arash", "AF10", 4000, 400, 75, 0.5F, "Macio", 5, 500);
-            // GT: createGT(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus)
-            createGT("Bentley", "Continental", 3000, 300, 80, 0.5F, "Macio");
-            createGT("Lexus", "LC500", 3000, 250, 80, 0.5F, "Duro");
-    // GTH: createGTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus, int potencia_motor_eletrico)
-            createGTH("Mercedes", "AMG", 3000, 300, 80, 0.5F, "Macio", 250);
-            createGTH("Porsche", "Taycan", 3000, 250, 80, 0.5F, "Duro", 300);
+        createC2H("Zenvo", "TS1", 4000, 500, 75, 0.5F, "Duro", 5, 400);
+        createC2H("Arash", "AF10", 4000, 400, 75, 0.5F, "Macio", 5, 500);
+        // GT: createGT(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus)
+        createGT("Bentley", "Continental", 3000, 300, 80, 0.5F, "Macio");
+        createGT("Lexus", "LC500", 3000, 250, 80, 0.5F, "Duro");
+        // GTH: createGTH(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus, int potencia_motor_eletrico)
+        createGTH("Mercedes", "AMG", 3000, 300, 80, 0.5F, "Macio", 250);
+        createGTH("Porsche", "Taycan", 3000, 250, 80, 0.5F, "Duro", 300);
 // SC: createSC(String marca, String modelo, int cilindrada, int potencia, int fiabilidade, float pac, String tipoPneus)
         this.createSC("Subaru", "Impreza", 2500, 200, 75, 0.5F, "Macio");
         this.createSC("Mazda", "RX-7", 2500, 190, 75, 0.5F, "Duro");
         this.createSC("BMW", "E36", 2500, 180, 75, 0.5F, "Macio");
         this.createSC("Ford", "Mustang", 2500, 170, 75, 0.5F, "Duro");
+
 // Piloto: addPiloto(String nome, int cts, int sva)
         this.addPiloto("Lewis Hamilton", 0.5F, 0.5F);
         this.addPiloto("Michael Schumacher", 0.3F, 0.7F);
-        this.addPiloto("Johnny Sins", 0, 1);
+        this.addPiloto("George Russell", 0.2F, 0.9F);
         this.addPiloto("Fernando Alonso,", 0.3F, 0.8F);
-        this.addPiloto("Philippe Adams", (float)0.9, 0.4F);
+        this.addPiloto("Philippe Adams",0.9F, 0.4F);
+        this.addPiloto("Max Verstappen",0.9F, 0.2F);
+        this.addPiloto("Sergio Perez", 0.9F, 0.3F);
+        this.addPiloto("Charles Leclerc",0.9F, 0.7F);
+        this.addPiloto("Carlos Sainz", 0.9F, 0.7F);
+        this.addPiloto("Sebastian Vettel", 0.9F, 0.6F);
+        this.addPiloto("Lance Stroll", 0.7F, 0.4F);
+        this.addPiloto("Valtteri Bottas", 0.6F, 0.6F);
+        this.addPiloto("Mick Schumacher", 0.5F, 0.6F);
+        this.addPiloto("Kevin Magnussen", 0.6F, 0.8F);
+        this.addPiloto("Yuki Tsunoda", 0.4F, 0.7F);
+
+
         // Circuito: createCircuito(int voltas, String ncirc, String local, float dist, List<Integer> curvasList, List<Integer> retaslist, List<Integer> chicaneList, float temperatura, int humidade, float temperatura_asf, String estado_climaterico, int DRS)
 
         ArrayList<Integer> curvasList1 = new ArrayList<Integer>();
@@ -556,23 +665,85 @@ public class LogicaNegocio implements  F1Manager{
         this.createCicruito(5, "Circuito de Albert Park", "Australia", 5.303F, curvasList2, retasList2, chicaneList2, 25, 10, 30, "Ceu limpo", 10);
         this.createCicruito(15, "Autodromo internacional do Algarve", "Portugal", 4.692F, curvasList3, retasList3, chicaneList3, 20, 20, 25, "Ceu nublado", 10);
         this.createCicruito(20, "Circuito das Americas", "Estados Unidos", 5.513F, curvasList4, retasList4, chicaneList4, 15, 10, 20, "Ceu limpo", 10);
+        this.createCicruito(25, "Circuito da Arábia ", "Arábia Saudita", 4.9F, curvasList4, retasList3, chicaneList1, 13, 11, 19, "Ceu limpo", 10);
+        this.createCicruito(25, "Circuito da Holanda ", "Holanda", 4.7F, curvasList3, retasList1, chicaneList2, 12, 14, 21, "Chuva", 10);
+        this.createCicruito(25, "Circuito de Adu Dhabi", "Emirados Árabes Unidos", 4.45F, curvasList3, retasList1, chicaneList1, 15, 12, 16, "Ceu limpo", 10);
 
 // Registo: addRegisto(String cJog, String cPl, String cCar, String cCamp)
 
-        this.addRegisto("1", "1", "1", "3");
-        this.addRegisto("2", "2", "2", "3");
-        this.addRegisto("3", "3", "3", "3");
-        this.addRegisto("4", "4", "4", "3");
-        this.addRegisto("5", "5", "5", "3");
+        this.addRegisto("1", "1", "1", "1");
+        this.addRegisto("2", "5", "5", "1");
+        this.addRegisto("3", "6", "6", "1");
+        this.addRegisto("4", "2", "4", "1");
+        this.addRegisto("5", "8", "12", "1");
+        this.addRegisto("6", "9", "13", "1");
+        this.addRegisto("7", "11", "16", "1");
+        this.addRegisto("8", "15", "3", "1");
+        this.addRegisto("9", "3", "7", "1");
+        this.addRegisto("10", "7", "9", "1");
+
+        this.addRegisto("1", "10", "11", "2");
+        this.addRegisto("2", "13", "5", "2");
+        this.addRegisto("3", "1", "2", "2");
+        this.addRegisto("4", "2", "4", "2");
+        this.addRegisto("5", "12", "12", "2");
+        this.addRegisto("6", "9", "13", "2");
+        this.addRegisto("7", "11", "6", "2");
+        this.addRegisto("8", "15", "3", "2");
+        this.addRegisto("9", "6", "7", "2");
+        this.addRegisto("10", "3", "10", "2");
+
+        this.addRegisto("1", "3", "3", "3");
+        this.addRegisto("2", "5", "5", "3");
+        this.addRegisto("3", "13", "6", "3");
+        this.addRegisto("4", "2", "4", "3");
+        this.addRegisto("5", "8", "10", "3");
+        this.addRegisto("6", "9", "1", "3");
+        this.addRegisto("7", "12", "16", "3");
+        this.addRegisto("8", "15", "2", "3");
+        this.addRegisto("9", "4", "7", "3");
+        this.addRegisto("10", "7", "9", "3");
+
+        this.addRegisto("1", "7", "3", "4");
+        this.addRegisto("2", "3", "5", "4");
+        this.addRegisto("3", "4", "6", "4");
+        this.addRegisto("4", "6", "12", "4");
+        this.addRegisto("5", "8", "11", "4");
+        this.addRegisto("6", "9", "13", "4");
+        this.addRegisto("7", "11", "16", "4");
+        this.addRegisto("8", "12", "4", "4");
+        this.addRegisto("9", "5", "7", "4");
+        this.addRegisto("10", "14", "9", "4");
+
+
 
 // Admin: createAdmin(String name, String contacto, String email, String username, String password)
 
         this.createAdmin("Admin", "910 000 000", "admin@f1manager.com", "Adm1n", "admin123");
         this.createAdmin("Joao", "910 000 000", "admin@f1manager.com", "admin", "admin");
-        this.addCorridaCamp("3","1");
-        this.addCorridaCamp("3","2");
+        this.addCorridaCamp("1","6");
+        this.addCorridaCamp("1","3");
+        this.addCorridaCamp("1","4");
+        this.addCorridaCamp("1","1");
+        this.addCorridaCamp("1","2");
+
+        this.addCorridaCamp("2","3");
+        this.addCorridaCamp("2","1");
+        this.addCorridaCamp("2","2");
+        this.addCorridaCamp("2","3");
+        this.addCorridaCamp("2","6");
+
         this.addCorridaCamp("3","3");
+        this.addCorridaCamp("3","7");
+        this.addCorridaCamp("3","2");
         this.addCorridaCamp("3","4");
+        this.addCorridaCamp("3","5");
+
+        this.addCorridaCamp("4","3");
+        this.addCorridaCamp("4","4");
+        this.addCorridaCamp("4","2");
+        this.addCorridaCamp("4","1");
+        this.addCorridaCamp("4","7");
     }
     public int sizepil(){
         return pil.sizepil();
@@ -592,6 +763,13 @@ public class LogicaNegocio implements  F1Manager{
     public boolean abletoSimulate(String codCamp) throws SQLException {
         return (camp.canSimulate(codCamp));
 
+    }
+
+    public HashMap<Integer, String> getClassificacaoALLChamp(String ccamp) throws SQLException {
+        if (this.existsCampeonato(ccamp)){
+           return camp.getClassificacaoALLChamp(ccamp);
+        }
+    return null;
     }
 
 }

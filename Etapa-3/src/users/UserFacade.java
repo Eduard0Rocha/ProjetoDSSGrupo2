@@ -159,15 +159,7 @@ public class UserFacade implements SGestaoUser {
      * @param codJogador código identificador do jogador
      * @return número de pontos do jogador identificado pelo código de input (ou -1 se não encontrar o jogador)
      */
-    @Override
-    public int getPontosGlob(String codJogador) {
 
-        if (codJogador == null) return -1;
-
-        Jogador j = this.jogadores.get(codJogador);
-
-        return (j != null) ? j.getPontosGlob() : -1;
-    }
 
     /**
      * @param codJogador código identificador do jogador
@@ -248,6 +240,15 @@ public class UserFacade implements SGestaoUser {
         if (this.existeJogador(cod)) {
              JogadorDAO.addPontos(cod, pts);
         }
+    }
+
+    @Override
+    public int getPontosGlob(String codJogador) throws SQLException {
+
+        if (this.existeJogador(codJogador)) {
+           return  JogadorDAO.getpontosGlob(codJogador);
+        }
+        return -1;
     }
     public int sizejog(){
         return JogadorDAO.size();

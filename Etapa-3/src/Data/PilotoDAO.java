@@ -84,7 +84,7 @@ public class PilotoDAO {
         try {
             Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
             Statement s = conn.createStatement();
-            try (ResultSet rs = s.executeQuery("select * from piloto")) {
+            try (ResultSet rs = s.executeQuery("select * from piloto where codPiloto ="+codPiloto)) {
                 HashMap<String,Piloto> pilotos = new HashMap<>();
                 if  (rs.next()) {
                     Piloto a  =new Piloto(rs.getString("nome"),rs.getFloat("cts"),rs.getFloat("sva"),Integer.toString(rs.getInt("codPiloto")));

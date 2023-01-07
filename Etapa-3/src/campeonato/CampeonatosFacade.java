@@ -245,14 +245,7 @@ public class CampeonatosFacade implements SGestCampeonatos{
     return campeonatoDAO.size();
     }
 
-    public void addClassCorr(HashMap<String,Integer> pts,String codCorr)
-    {
-        Object[] arr =pts.keySet().toArray();
-        for (int i=0;i<arr.length;i++){
-            String a = (String) arr[i];
-            campeonatoDAO.addclassCorr(a,pts.get(a),codCorr);
-        }
-    }
+
     public boolean canSimulate(String codCamp) throws SQLException {
 
            if ( campeonatoDAO.getIsSimulated(Integer.parseInt(codCamp))) return false;
@@ -262,5 +255,20 @@ public class CampeonatosFacade implements SGestCampeonatos{
 
     public void setSimulate(String codCamp){
          campeonatoDAO.setSimulated(codCamp);
+    }
+
+    public void addclassCorrbd(String codJog ,int pos,String codCorr,String codCamp){
+        campeonatoDAO.addclassCorrbd( codJog , pos, codCorr,codCamp);
+    }
+
+     public HashMap<Integer, String> getClassificacaoALLChamp(String ccamp) throws SQLException {
+        return  new HashMap<>(campeonatoDAO.getclassificacaoChamp(ccamp));
+    }
+    public void addClassH(int i , String codJog,String codCamp){
+        campeonatoDAO.addClassHibrido(codJog,i,codCamp);
+    }
+
+    public void addclassTot(int i,String codJog,String codCamp){
+        campeonatoDAO.addClassTotal(codJog,i,codCamp);
     }
 }

@@ -53,24 +53,26 @@ public class CampeonatoDAO {
 
 
             sql = "CREATE TABLE IF NOT EXISTS classificacaoCorr(" +
-                    "chave int not null," +
-                    "foreign key(chave) references jogador(codJogador),"+
+                    "codJog int not null," +
+                    "foreign key(codJog) references jogador(codJogador),"+
                     "classificacao varchar(45) not null," +
                     "codCorr int not null," +
-                    "foreign key(codCorr) references corrida(codCorr))";
+                    "foreign key(codCorr) references corrida(codCorr),"+
+                    "codCamp int not null," +
+                    "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS classificacao(" +
-                    "chave int primary key not null," +
-                    "foreign key(chave) references jogador(codJogador),"+
+                    "codJog int key not null," +
+                    "foreign key(codJog) references jogador(codJogador),"+
                     "classificacao integer not null," +
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
             stm.executeUpdate(sql);
 
             sql = "CREATE TABLE IF NOT EXISTS classificacaoH(" +
-                    "chave int primary key not null," +
-                    "foreign key(chave) references jogador(codJogador),"+
+                    "codJog int  key not null," +
+                    "foreign key(codJog) references jogador(codJogador),"+
                     "classificacaoH integer not null," +
                     "codCamp int not null," +
                     "foreign key(codCamp) references campeonato(codCamp))";
@@ -118,14 +120,14 @@ public class CampeonatoDAO {
                     try (ResultSet cr1 = stm.executeQuery("select * from classificacao where codCamp" + "='"+key+"'");)
                     {
                         while (cr1.next()) {
-                            classificacao.put(Integer.toString(cr1.getInt("chave")), cr1.getInt("classificacao"));
+                            classificacao.put(Integer.toString(cr1.getInt("codJog")), cr1.getInt("classificacao"));
                         }
                     }
 
                     try (ResultSet cr2 = stm.executeQuery("select * from classificacaoH where codCamp" + "='"+key+"'");)
                     {
                         while (cr2.next()) {
-                            classificacaoH.put(Integer.toString(cr2.getInt("chave")), cr2.getInt("classificacaoH"));
+                            classificacaoH.put(Integer.toString(cr2.getInt("codJog")), cr2.getInt("classificacaoH"));
                         }
                     }
 
@@ -157,7 +159,7 @@ public class CampeonatoDAO {
                                 }
                                 aux.setTempos(tempos);
                                 aux.setClassificacao(classCorr);
-                                corridas.put(Integer.toString(cr4.getInt("chave")), aux);
+                                corridas.put(Integer.toString(cr4.getInt("codJog")), aux);
                             }
                         }
                     }
@@ -201,14 +203,15 @@ public class CampeonatoDAO {
         return campeonatos;
     }
 
-    public  HashMap<String, Integer> getClassificacoes(int key) throws SQLException {
+    public  HashMap<String, Integer> getClassificacoes(int key) throws SQLException
+    {
         Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
         Statement stm = conn.createStatement();
         HashMap<String, Integer> classificacao = new HashMap<>();
         try (ResultSet cr1 = stm.executeQuery("select * from classificacao where codCamp" + "='" + key + "'");) {
 
             while (cr1.next()) {
-                classificacao.put(Integer.toString(cr1.getInt("chave")), cr1.getInt("classificacao"));
+                classificacao.put(Integer.toString(cr1.getInt("codJog")), cr1.getInt("classificacao"));
             }
         }
         return classificacao;
@@ -235,7 +238,7 @@ public class CampeonatoDAO {
         HashMap<String, Integer> classificacaoH = new HashMap<>();
         try (ResultSet cr2 = stm.executeQuery("select * from classificacaoH where codCamp" + "='" + key + "'");) {
             while (cr2.next()) {
-                classificacaoH.put(Integer.toString(cr2.getInt("chave")), cr2.getInt("classificacaoH"));
+                classificacaoH.put(Integer.toString(cr2.getInt("codJog")), cr2.getInt("classificacaoH"));
             }
         }
         return classificacaoH;
@@ -550,7 +553,7 @@ public class CampeonatoDAO {
             }
 
             for(int i=0; i<classificacaoCorr.size(); i++){
-                stm.executeUpdate("INSERT INTO classificacaoCorr VALUES ('"+ i +"', '"+classificacaoCorr.get(i)+"', '"+Integer.parseInt(cr.getCodCorr())+"')");
+                stm.executeUpdate("INSERT INTO classificacaoCorr VALUES ('"+ i +"', '"+classificacaoCorr.get(i)+"', '"+Integer.parseInt(cr.getCodCorr())+"', '"+Integer.parseInt(cr.getCodCamp())+"')");
             }
         } catch (SQLException e) {
             // Database error!
@@ -587,25 +590,67 @@ public class CampeonatoDAO {
         }
     }
 
-    public void addclassCorr(String a, Integer pts,String codcorr)
+
+
+    public void setSimulated(String codCamp)
     {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            stm.executeUpdate("INSERT INTO classificacaocorr VALUES ('"+ Integer.parseInt(a) +"','"+pts+"',' "+Integer.parseInt(codcorr)+"')");
+            stm.executeUpdate("update campeonato set simulated = '"+1+"' where codCamp ='"+Integer.parseInt(codCamp)+"';");
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
     }
 
-    public void setSimulated(String codCamp)
-    {
+    public void addclassCorrbd(String codJog, int pos, String codCorr,String codCamp) {
         try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            stm.executeUpdate("update  campeonato set simulated = '"+1+"', where codCamp ='"+Integer.parseInt(codCamp)+"')");
+            {
+                stm.executeUpdate("INSERT INTO classificacaocorr VALUES ('"+ Integer.parseInt(codJog) +"','"+pos+"',' "+Integer.parseInt(codCorr)+"',' "+Integer.parseInt(codCamp)+"')");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
+    }
+
+    public void addClassHibrido(String codJog, int pos, String codCorr) {
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            {
+                stm.executeUpdate("INSERT INTO classificacaoh VALUES ('"+ Integer.parseInt(codJog) +"','"+pos+"',' "+Integer.parseInt(codCorr)+"')");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+    public void addClassTotal(String codJog, int pos, String codCorr) {
+        try (Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+             Statement stm = conn.createStatement()) {
+            {
+                stm.executeUpdate("INSERT INTO classificacao VALUES ('"+ Integer.parseInt(codJog) +"','"+pos+"',' "+Integer.parseInt(codCorr)+"')");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+    }
+
+
+    public HashMap<Integer, String> getclassificacaoChamp(String ccamp) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(DAOConfig.URL, DAOConfig.USERNAME, DAOConfig.PASSWORD);
+        Statement stm = conn.createStatement();
+        HashMap<Integer, String> classificacao = new HashMap<>();
+        try (ResultSet cr1 = stm.executeQuery("select * from classificacao where codCamp" + "='" + ccamp + "'");) {
+
+            while (cr1.next()) {
+                classificacao.put(( cr1.getInt("classificacao")), Integer.toString(cr1.getInt("codJog")));
+            }
+        }
+        return classificacao;
     }
 }
