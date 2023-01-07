@@ -205,6 +205,10 @@ public class Main  {
         System.out.println("|2->Obter lista de Campeonatos existentes             |");
         System.out.println("|3->Criar Campeonato                                  |");
         System.out.println("|4->Simular Campeonato                                |");
+        System.out.println("|5-> Obter lista de Circuitos de um Campeonato        |");
+        System.out.println("|6-> Obter lista de Jogadores de um Campeonato        |");
+        System.out.println("|7-> Obter Classificações de um Campeonato            |");
+        System.out.println("|8-> Obter Classificações de uma Corrida              |");
         System.out.println("|                                                     |");
         System.out.println("|Outro-> Voltar                                       |");
         System.out.println("------------------------------------------------------");
@@ -272,6 +276,64 @@ public class Main  {
                 System.out.println("Campeonato invalido");
             }
             imprimeMenuPlayer();
+        }
+        if(i==5){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod =ler.nextLine();
+            printCircuitos(busi.getCircuitosCamp(cod));
+            imprimeMenuPlayer();
+        }
+        else if (i==6){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod =ler.nextLine();
+            if (busi.existsCampeonato(cod)) {
+                printJogadores(busi.getJogadoresCamp(cod));
+                imprimeMenuPlayer();
+            }
+            else {
+                System.out.println("campeonato inexistente");
+                imprimeMenuPlayer();
+            }
+        }
+        else if (i==7){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod = ler.nextLine();
+            if (!busi.abletoSimulate(cod))
+            {
+                System.out.println("Classificação apenas  de carros Hibridos?(Sim/Nao): ");
+                String ans = ler.nextLine();
+                if(ans.equals("Nao")) {
+                    printClassificacao(busi.getClassificacaoALLChamp(cod));
+                }
+                else printClassificacao(busi.getClassificacaoALLChampH(cod));
+
+                imprimeMenuPlayer();
+            }
+            else {
+                System.out.println("Impossível obter classificações , campeonato ainda não simulado ");
+                imprimeMenuPlayer();
+            }
+
+        }
+        else if (i==8){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod = ler.nextLine();
+            if (!busi.abletoSimulate(cod) && busi.existsCampeonato(cod))
+            {
+                printCorridas(busi.getCorridas(cod).values());
+                System.out.println("Insira o código da Corrida");
+                String ans = ler.nextLine();
+                if (busi.getCorridas(cod).containsKey(ans)){
+                    printClassificacao(busi.getClassificaoCorr(ans,cod));
+                }
+                else System.out.println("corrida invalida");
+                imprimeMenuPlayer();
+            }
+            else {
+                System.out.println("Impossível obter classificações");
+                imprimeMenuPlayer();
+            }
+
         }
 
 
@@ -772,6 +834,10 @@ public class Main  {
         System.out.println("|1-> Entrar num campeonato                           |");
         System.out.println("|2-> Obter lista de Campeonatos                      |");
         System.out.println("|3-> Sair de um campeonato                           |");
+        System.out.println("|4-> Obter lista de Circuitos de um Campeonato        |");
+        System.out.println("|5-> Obter lista de Jogadores de um Campeonato        |");
+        System.out.println("|6-> Obter Classificações de um Campeonato            |");
+        System.out.println("|7-> Obter Classificações de uma Corrida              |");
         System.out.println("|Outro -> voltar                                     |");
         System.out.println("-----------------------------------------------------|");
         int p = ler.nextInt();
@@ -792,6 +858,64 @@ public class Main  {
 
             boolean  b = busi.removeRegistoCamp(id,ccamp);
             System.out.println(b);
+        }
+        if(p==4){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod =ler.nextLine();
+            printCircuitos(busi.getCircuitosCamp(cod));
+            menuGuest();
+        }
+        else if (p==5){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod =ler.nextLine();
+            if (busi.existsCampeonato(cod)) {
+                printJogadores(busi.getJogadoresCamp(cod));
+                menuGuest();
+            }
+            else {
+                System.out.println("campeonato inexistente");
+                menuGuest();
+            }
+        }
+        else if (p==6){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod = ler.nextLine();
+            if (!busi.abletoSimulate(cod))
+            {
+                System.out.println("Classificação apenas  de carros Hibridos?(Sim/Nao): ");
+                String ans = ler.nextLine();
+                if(ans.equals("Nao")) {
+                    printClassificacao(busi.getClassificacaoALLChamp(cod));
+                }
+                else printClassificacao(busi.getClassificacaoALLChampH(cod));
+
+                menuGuest();
+            }
+            else {
+                System.out.println("Impossível obter classificações , campeonato ainda não simulado ");
+                menuGuest();
+            }
+
+        }
+        else if (p==7){
+            System.out.println("Insira o codigo do campeonato  : ");
+            String cod = ler.nextLine();
+            if (!busi.abletoSimulate(cod) && busi.existsCampeonato(cod))
+            {
+                printCorridas(busi.getCorridas(cod).values());
+                System.out.println("Insira o código da Corrida");
+                String ans = ler.nextLine();
+                if (busi.getCorridas(cod).containsKey(ans)){
+                    printClassificacao(busi.getClassificaoCorr(ans,cod));
+                }
+                else System.out.println("corrida invalida");
+                menuGuest();
+            }
+            else {
+                System.out.println("Impossível obter classificações");
+                menuGuest();
+            }
+
         }
     }
 
